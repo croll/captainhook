@@ -1,0 +1,165 @@
+#!/usr/bin/php -q
+<?php
+
+namespace tools;
+
+require(dirname(__FILE__).'/../core/Core.php');
+\core\Core::init(true, true);
+
+$scriptName = basename(__FILE__);
+$actions = array('list' => false, 'info' => true, 'install' => true, 'uninstall' => true, 'enable' => true, 'disable' => true, 'reinstall' => false); 
+$action = (isset($argv[1])) ? strtolower($argv[1]) : NULL;
+$moduleName = (isset($argv[2])) ? $argv[2] : NULL;
+//$moduleName = (isset($argv[2])) ? ucfirst(strtolower($argv[2])) : NULL;
+
+if ($argc == 1 || !isset($action) || !in_array($action, array_keys($actions)) || ($actions[$action] && empty($moduleName))) {
+	echo "Usage: $scriptName <action> [<module_name>]\n";
+	echo "action can be: \n";
+	foreach($actions as $act=>$needname) {
+		echo "\t $act".(($needname) ? ' <module_name>' : '')."\n";
+	}
+	exit;
+}
+
+switch($action) {
+  case 'install':
+  case 'enable':
+    triggerOn($action);
+    break;
+  case 'uninstall':
+  case 'disable':
+    triggerOff($action);
+    break;
+  case 'reinstall':
+    $mods=\core\Core::$db->getAll("select `name` from `ch_module` order by `mid`");
+    foreach (array_reverse($mods) as $mod) {
+      $moduleName=$mod['name'];
+      echo "uninstalling '$moduleName' ...\n";
+      triggerOff('uninstall');
+    }
+    foreach ($mods as $mod) {
+      $moduleName=$mod['name'];
+      echo "installing '$moduleName' ...\n";
+      triggerOn('install');
+    }
+    break;
+  default:
+    call_user_func('\tools\trigger'.ucfirst($action));  
+}
+	
+
+function triggerList() {
+	global $scriptName;
+	$mods = \core\ModuleInstaller::listModulesOnFilesystem();
+	if (!count($mods)) {
+		echo "No module found. Maybe inspect your 'mod' directory.\n";
+		exit;
+	}
+    printf("+--------------------------------------------+\n");
+    printf("|       module       | Installed |  Enabled  |\n");
+    printf("+--------------------------------------------+\n");
+	foreach($mods as $moduleName) {
+      $modDef = checkModule($moduleName);
+      printf("| %-19s|     %s     |     %s     |\n",
+             $moduleName,
+             is_null($modDef->id) ? ' ' : '*',
+             $modDef->active ? '*' : ' ');
+    }
+    printf("+--------------------------------------------+\n");
+	echo "Use \"$scriptName info <modulename>\" for more informations on a module\n";
+	exit;
+}
+
+function triggerInfo() {
+	global $moduleName;
+	$modDef = checkModule($moduleName);
+	echo "Informations:\n";
+	echo "\tName: ".$modDef->name."\n";
+	echo "\tDescription: ".$modDef->description."\n";
+	echo "\tInstalled: ".((!is_null($modDef->id)) ? 'Yes' : 'No')."\n";
+	echo "\tEnabled: ".(($modDef->active) ? 'Yes' : 'No')."\n";
+	$deps = \core\ModuleInstaller::getModuleDependencies($modDef->name);
+	echo "\tDependencies: ".((is_null($deps)) ? 'None' : '')."\n";
+	if (is_array($deps) && sizeof($deps) > 0)
+		foreach($deps as $name=>$object) {
+			echo "\t- $name : ".(($object->id) ? 'Installed' : 'Not installed')." / ".(($object->active) ? 'Enabled' : 'Disabled')."\n";
+		}
+}
+
+function triggerOn($action) {
+	global $scriptName, $moduleName;
+	$modDef = checkModule($moduleName);
+	if ($modDef->id) {
+	 	if ($action == 'install') {
+			echo "Module ".$modDef->name." is already installed\n";
+			exit;
+		} else if ($action == 'enable' && $modDef->active) {
+			echo "Module ".$modDef->name." is already enabled\n";
+			exit;
+		}
+	}
+	$deps = \core\ModuleInstaller::getModuleDependencies($modDef->name);
+	if (is_array($deps) && sizeof($deps) > 0) {
+		foreach($deps as $name=>$object) {
+			if (($action == 'install') && (!isset($object->id) || !$object->id)) {
+				echo "Module $name is not intalled and is a dependence of ".$modDef->name.". \n";
+				echo "Usage: $scriptName $action $name \n";
+				exit;
+			}
+			if (!isset($object->active) || !$object->active) {
+				echo "Module $name is not enabled and it's required by ".$modDef->name.". \n";
+				echo "Usage: $scriptName enable $name \n";
+				exit;
+			}
+		}
+	}
+
+  try {
+    \core\ModuleInstaller::process($modDef->name, $action);
+		echo "Operation successfully completed.\n";
+  } catch (\Exception $e) {
+		echo "Oops, unable to $action module : '".$e->getmessage()."'. Check logs for happy debugging...\n";
+  }
+}
+
+function triggerOff($action) {
+	global $scriptName, $moduleName;
+	$modDef = checkModule($moduleName);
+	if (!$modDef->id) {
+		echo "Module ".$modDef->name." is not installed\n";
+		exit;
+	} else if ($action == 'disable' && !$modDef->active) {
+		echo "Module ".$modDef->name." is already disabled\n";
+		exit;
+	}
+	$deps = null; //\core\ModuleInstaller::getEnabledDependentModules($modDef->name);
+	if (is_array($deps) && sizeof($deps) > 0) {
+		foreach($deps as $name=>$object) {
+			echo "Module $name is enabled and require ".$modDef->name.". \n";
+			echo "Disable it prior to $action ".$modDef->name.". \n";
+		}
+	}
+	try {
+    \core\ModuleInstaller::process($modDef->name, $action);
+		echo "Operation successfully completed.\n";
+  } catch (\Exception $e) {
+		echo "Oops, unable to $action module : '".$e->getmessage()."'. Check logs for happy debugging...\n";
+  }
+}
+
+function checkModule($moduleName) {
+	global $scriptName;
+	$realName = \core\ModuleInstaller::moduleExists($moduleName);
+	if (!$realName) {
+		echo "Module $moduleName not found.\n";
+		echo "Info: Module name is case insensitive.\n";
+		echo "Trick: Use \"$scriptName list\" to list available modules\n";
+		exit;
+	}
+	$modDef = \core\ModuleInstaller::getModuleDefinition($realName);
+	if (!is_object($modDef)) {
+		echo "Oops, unable to initialize module : '".$e->getmessage()."'. Check logs for happy debugging...\n";
+		exit;
+	}
+	return $modDef;
+}

@@ -1,0 +1,57 @@
+#!/usr/bin/php -q
+<?php
+
+namespace tools;
+
+$rootdir=dirname(dirname(__FILE__));
+$modsdir=$rootdir.'/mod';
+
+function deps_available() {
+  global $modsdir;
+  $deps_available=array();
+  $deps = scandir($modsdir);
+  foreach($deps as $dep)
+    if ($dep[0] != '.' && is_dir($modsdir.'/'.$dep))
+      $deps_available[]=$dep;
+  return $deps_available;
+}
+
+function _readline($prompt = '') {
+  echo $prompt;
+  return rtrim(fgets(STDIN), "\n");
+}
+
+$module_name=_readline("module name: ");
+$module_description=_readline("module description: ");
+$module_version=_readline("module version: ");
+$module_dependencies=_readline("module dependencies, coma separated (".implode(', ', deps_available())."): ");
+
+function dep_line_to_array($dependencies) {
+  $deps=explode(',', $dependencies);
+  $deps2=array();
+  $avail=deps_available();
+  foreach($deps as $dep) {
+    $dep=trim($dep);
+    if (!in_array($dep, $avail)) throw new \Exception("module '$dep' don't exists"); 
+    $deps2[]="'".$dep."'";
+  }
+  return implode(', ', $deps2);
+}
+
+$module_dependencies=dep_line_to_array($module_dependencies);
+
+mkdir($modsdir.'/'.$module_name);
+
+$moduledefinition = file_get_contents($rootdir."/tools/mkmod_tpls/ModuleDefinition.php.tpl");
+$moduledefinition = str_replace('#MODULENAME#', $module_name, $moduledefinition);
+$moduledefinition = str_replace('#MODULEDESCRIPTION#', addslashes($module_description), $moduledefinition);
+$moduledefinition = str_replace('#MODULEVERSION#', $module_version, $moduledefinition);
+$moduledefinition = str_replace('#MODULEDEPENDENCIES#', $module_dependencies, $moduledefinition);
+file_put_contents($modsdir.'/'.$module_name."/ModuleDefinition.php", $moduledefinition);
+
+$modulemain = file_get_contents($rootdir."/tools/mkmod_tpls/Main.php.tpl");
+$modulemain = str_replace('#MODULENAME#', $module_name, $modulemain);
+$modulemain = str_replace('#MODULEDESCRIPTION#', addslashes($module_description), $modulemain);
+$modulemain = str_replace('#MODULEVERSION#', $module_version, $modulemain);
+$modulemain = str_replace('#MODULEDEPENDENCIES#', $module_dependencies, $modulemain);
+file_put_contents($modsdir.'/'.$module_name."/Main.php", $modulemain);
