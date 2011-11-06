@@ -1,0 +1,4 @@
+logs/trace.log
+mod/smarty/cache/*
+mod/smarty/templates_c/*
+*~
