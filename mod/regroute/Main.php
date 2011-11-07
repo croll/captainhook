@@ -14,7 +14,7 @@ class Main {
   public static function hook_core_init_http($hookname, $userdata) {
     foreach (self::regroutes() as $regroute) {
       $matches=array();
-      if (preg_match($regroute['regexp'], $_SERVER['REQUEST_URI'], &$matches))
+      if (preg_match($regroute['regexp'], $_SERVER['REQUEST_URI'], $matches))
         \core\Hook::call($regroute['hook'], $matches);
     }
   }

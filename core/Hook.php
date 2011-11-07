@@ -78,7 +78,7 @@ class Hook {
     Core::log("Hook: call: ".$name);
 
     $args=func_get_args();
-    array_unshift(&$args, $name);
+    array_unshift($args, $name);
 
     if (!self::$callbacks) self::initCache();
     if (isset(self::$callbacks[$name])) {

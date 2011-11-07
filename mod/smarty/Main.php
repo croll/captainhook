@@ -73,7 +73,7 @@ class Main {
       $tpls=scandir($moddir.'/hooks_templates/');
       foreach($tpls as $tpl) {
         $matches=array();
-        if (preg_match('/^([^.].*)\.tpl$/', $tpl, &$matches)) {
+        if (preg_match('/^([^.].*)\.tpl$/', $tpl, $matches)) {
           \core\Hook::registerHookListener('mod_smarty_hook_mod_'.$module_definition->name.'_'.$matches[1], '\\mod\\smarty\\Main::_hook_template', 'mod/'.$module_definition->name.'/hooks_templates/'.$tpl, $self_id_module);
         }
       }
@@ -91,7 +91,7 @@ class Main {
       $tpls=scandir($moddir.'/hooks_templates/');
       foreach($tpls as $tpl) {
         $matches=array();
-        if (preg_match('/^([^.].*)\.tpl$/', $tpl, &$matches)) {
+        if (preg_match('/^([^.].*)\.tpl$/', $tpl, $matches)) {
           \core\Hook::unregisterHookListener($matches[1], '\\mod\\smarty\\Main::_hook_template');
         }
       }
@@ -139,7 +139,7 @@ class Main {
   }
 
   /* Smarty Plugins */
-  public function smartyFunction_hook($params, $template) {
+  public static function smartyFunction_hook($params, $template) {
     if (!isset($params['mod'])) throw new \Exception("smarty hook must have a 'mod' parameter");
     if (!isset($params['name'])) throw new \Exception("smarty hook must have a 'name' parameter");
     $result=new \stdClass();

@@ -2,7 +2,7 @@
 type = mysql
 host = localhost
 user = captainhook
-password = HyLrBRWsz8ZbBZGp
+password = clochette
 dbname = captainhook 
 
 [general]

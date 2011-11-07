@@ -31,6 +31,8 @@ class Core {
 	public static function init($initDb = true, $triggerHook = true) {
 		if (!empty($_GET["page"]) && !preg_match("/^[a-zA-Z]+$/", $_GET["page"])) die("No way");
 			self::$_rootDir = realpath(dirname(__FILE__).'/../');
+		if (!is_file(self::$_rootDir.'/conf/general.conf'))
+			die('Config file '.self::$_rootDir.'/conf/general.conf'.' does not exist. Take a look at '.self::$_rootDir.'/conf/general.conf.dist');
 		$ini = parse_ini_file(self::$_rootDir.'/conf/general.conf', true);
 		/* Database */
 		if (isset($ini['database']) && $initDb) {
