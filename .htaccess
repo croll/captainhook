@@ -1,2 +1,2 @@
 RewriteEngine on
-RewriteRule ^(.*)$ index.php?args=$1 [L]
+RewriteRule ^([^doc].*)$ index.php?args=$1 [L]
