@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<docblox>
+	<title>CaptainHook</title>
+	<parser>
+		<target>../doc</target>
+	</parser>
+	<transformer>
+		<target>../doc</target>
+	</transformer>
+	<extensions>
+		<extension>php</extension>
+		<extension>js</extension>
+	</extensions>
+	<files>
+		<directory>../core</directory>
+		<directory>../mod</directory>
+		<ignore>*/ext/*</ignore>
+		<ignore>*/mod/smarty/cache*</ignore>
+		<ignore>*/mod/smarty/smarty/source*</ignore>
+		<ignore>*/mod/smarty/templates*</ignore>
+		<ignore>*/mod/smarty/templates_c*</ignore>
+	</files>
+</docblox>
