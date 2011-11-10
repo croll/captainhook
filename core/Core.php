@@ -121,7 +121,7 @@ class Core {
 	}
 
 	/**
-	 * Logs the string passed as argument into the log/trace.log file.
+	 * Logs the string passed as argument into apache error log (or stderr if executed from a shell).
 	 *
 	 * This method is useful to perform quick debug/trace. 
 	 *
