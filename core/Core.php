@@ -121,7 +121,7 @@ class Core {
 	}
 
 	/**
-	 * Logs the string passed as argument into the log/trace.log file.
+	 * Logs the string passed as argument into apache error log (or stderr if executed from a shell).
 	 *
 	 * This method is useful to perform quick debug/trace. 
 	 *
@@ -132,19 +132,8 @@ class Core {
 	 * @return void
 	 */
 	public static function log($msg) {
-		if ( (!is_dir(self::$_rootDir.'/logs')) || (!is_writable(self::$_rootDir.'/logs')) ) die ('Log directory '.self::$_rootDir.'/logs does not exist or is not writable.');
-		$logFile = fopen(self::$_rootDir.'/logs/trace.log', 'a+');
-		if ($logFile) {
-			if (!is_array($msg)) {
-				fputs($logFile,'['.date('D m Y H:i:s').'] -- '.$msg."\n");
-			} else {
-				ob_start();
-				print_r($msg);
-				$buff = ob_get_contents();
-				ob_end_clean();
-				fputs($logFile,$buff."\n");
-			}
-		}
+    if (is_string($msg)) error_log($msg);
+    else error_log(var_export($msg, true));
 	}
 
 	/**
