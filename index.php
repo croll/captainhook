@@ -1,4 +1,4 @@
-<?php
+<?php  //  -*- mode:php; tab-width:2; c-basic-offset:2; -*-
 /** 
  * CaptainHook is designed by hackers for hackers for quickly and effiency build
  * web applications.

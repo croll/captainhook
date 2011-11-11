@@ -1,4 +1,4 @@
-<?php
+<?php  //  -*- mode:php; tab-width:2; c-basic-offset:2; -*-
 /**
  * CssMin - A (simple) css minifier with benefits
  * 
