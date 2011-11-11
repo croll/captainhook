@@ -9,7 +9,7 @@
  * Heavily based on Hooks, the Captain is able to undestand ship's boy requests and
  * perform the right actions.
  *
- * @author: Christophe Beveraggi (beve) and Nicolas Dimitrijevich (niclone)
+ * @author: Christophe Beveraggi (beve) and Nicolas Dimitrijevic (niclone)
  * @link: http://github.com/croll/captainhook
  * @license: LGPLv3
  *

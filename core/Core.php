@@ -6,7 +6,7 @@
  *
  * @category  CaptainHook
  * @package   Core 
- * @author    Christophe Beveraggi (beve) and Nicolas Dimitrijevich (niclone)
+ * @author    Christophe Beveraggi (beve) and Nicolas Dimitrijevic (niclone)
  * @copyright 2011 CROLL (http://www.croll.fr)
  * @link      http://github.com/croll/captainhook
  * @license   LGPLv3
