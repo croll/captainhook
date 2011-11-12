@@ -14,13 +14,9 @@ class ModuleDefinition extends \core\ModuleDefinition {
 
 	function install() {
 		parent::install();
-
-    // do things here by default (after parent::install)
 	}
 
 	function uninstall() {
-    // do things here by default (before parent::uninstall)
-
 		parent::uninstall();
 	}
 }

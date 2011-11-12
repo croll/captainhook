@@ -114,7 +114,6 @@ class Core {
 			Hook::call('core_init');
     if (isset($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
       Hook::call('core_init_http');
-      Hook::call('core_process_http');
 		} else
       Hook::call('core_init_shell');
 
