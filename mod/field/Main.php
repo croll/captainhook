@@ -36,6 +36,10 @@ class Main {
 		self::$curfield->addVerification($params['regexp'], $params['message']);
   }
 
+	public static function hook_mod_field_post($hookname, $userdata, $urlparams) {
+		\core\Hook::call('mod_field_post_'.$urlparams[1], $_POST);
+	}
+
 }
 
 class FieldForm {
@@ -117,6 +121,14 @@ class Element {
 class Text extends Element {
 	public function render() {
 		return sprintf("<input type='text' name='%s' value='%s'/>",
+									 $this->name, $this->value
+									 );
+	}
+}
+
+class Hidden extends Element {
+	public function render() {
+		return sprintf("<input type='hidden' name='%s' value='%s'/>",
 									 $this->name, $this->value
 									 );
 	}

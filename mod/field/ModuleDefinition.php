@@ -8,7 +8,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
 		$this->description = 'Allow to create html fields and validators for both PHP and JS';
 		$this->name = 'field';
 		$this->version = '0.1';
-		$this->dependencies = array('smarty');
+		$this->dependencies = array('smarty', 'regroute');
 		parent::__construct();
 	}
 
@@ -16,6 +16,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
 		parent::install();
 
     // do things here by default (after parent::install)
+		\mod\regroute\Main::registerRoute($this->id, '#/fieldpost/(.*)$#', 'mod_field_post');
 	}
 
 	function uninstall() {
