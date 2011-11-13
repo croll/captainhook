@@ -7,11 +7,12 @@ class Main {
   public $favicon = "mod/webpage/images/favicon.ico";
   public $csss = array();
   public $scripts = array();
-	public $layout = 'mod/webpage/hooks_templates/layout.tpl';
+	public $layout = 'mod/webpage/templates/webpage_main.tpl';
 
 	function __construct() {
     $sm=\mod\smarty\Main::$smarty;
-		$sm->registerFilter('output', array($this, 'processJsAndCss'));
+		$sm->assign('extends_webpage_main', 'mod/webpage/templates/webpage_html4.tpl');
+		//$sm->registerFilter('output', array($this, 'processJsAndCss'));
     $sm->assign('title', $this->title);
     $sm->assign('favicon', $this->favicon);
 	}
