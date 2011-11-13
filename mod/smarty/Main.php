@@ -3,19 +3,20 @@
 namespace mod\smarty {
 
 	class Main {
-		public static $smarty;
 		
-		public static function hook_core_init_http($hookname, $userdata) {
+		public static function newSmarty() {
 			$moddir=dirname(__FILE__);
 			define("SMARTY_DIR", $moddir.'/smarty/libs/');
 			require_once(SMARTY_DIR.'/Smarty.class.php');
-			self::$smarty = $sm = new \Smarty();
+			$sm = new \Smarty();
 			$sm->template_dir = $moddir.'/../../';
 			$sm->compile_dir = $moddir.'/templates_c/';
 			$sm->config_dir = $moddir.'/conf/';
 			$sm->cache_dir = $moddir.'/cache/';
 			
-			self::loadPlugins();    
+			self::loadPlugins($sm);    
+
+			return $sm;
 		}
 		
 		/*
@@ -124,10 +125,10 @@ namespace mod\smarty {
 			\core\Core::$db->execute($query, $vals);
 		}
 		
-		private static function loadPlugins() {
+		private static function loadPlugins($smarty) {
 			$plugins=\core\Core::$db->getAll('SELECT `type`, `name`, `method` FROM `ch_smarty_plugins`');
 			foreach($plugins as $plugin) {
-				self::$smarty->registerPlugin($plugin['type'], $plugin['name'], $plugin['method']);
+				$smarty->registerPlugin($plugin['type'], $plugin['name'], $plugin['method']);
 			}
 		}
 		
@@ -135,7 +136,7 @@ namespace mod\smarty {
 		public static function _hook_template($hookname, $userdata, $params, $template, $result) {
 			$name=str_replace('mod_smarty_hook_', '', $hookname);
 			error_log("_hook_template: $userdata ($hookname)");
-			$result->display.='<span class="'.$name.'">'.self::$smarty->fetch($userdata).'</span>';
+			$result->display.='<span class="'.$name.'">'.$template->smarty->fetch($userdata).'</span>';
 		}
 		
 		/* Smarty Plugins */
