@@ -7,7 +7,7 @@ class Main {
 
   public static function hook_core_init_http($hookname, $userdata) {
     $moddir=dirname(__FILE__);
-    define("SMARTY_DIR", $moddir.'/smarty/source/');
+    define("SMARTY_DIR", $moddir.'/smarty/libs/');
     require_once(SMARTY_DIR.'/Smarty.class.php');
     self::$smarty = $sm = new \Smarty();
     $sm->template_dir = $moddir.'/../../';
@@ -135,7 +135,7 @@ class Main {
   public static function _hook_template($hookname, $userdata, $params, $template, $result) {
     $name=str_replace('mod_smarty_hook_', '', $hookname);
     error_log("_hook_template: $userdata ($hookname)");
-    $result->display='<span class="'.$name.'">'.self::$smarty->fetch($userdata).'</span>';
+    $result->display.='<span class="'.$name.'">'.self::$smarty->fetch($userdata).'</span>';
   }
 
   /* Smarty Plugins */
