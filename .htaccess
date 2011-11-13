@@ -1,5 +1,5 @@
 RewriteEngine on
-RewriteCond %{REQUEST_FILENAME} !^/doc/$
+RewriteCond %{REQUEST_URI} !^/doc/$
 RewriteCond %{REQUEST_FILENAME} !\.js$
 RewriteCond %{REQUEST_FILENAME} !\.css$
 RewriteRule ^.*$ index.php [L]
