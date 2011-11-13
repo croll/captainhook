@@ -1,6 +1,5 @@
-<div style="width: 100%; height: 300px; text-align: center; border: solid 1px black; background: #aaa">
-	{hook mod='webpage' name='body'}
-
+{extends tplextends('webpage', 'webpage_main')}
+{block name='webpage_body'}
 {FieldForm hook_on_post='mod_exemple_person'}
 
 	<div> Firstname:
@@ -24,6 +23,5 @@
 	</div>
 
 {/FieldForm}
+{/block}
 
-
-</div>

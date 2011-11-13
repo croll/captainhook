@@ -4,10 +4,30 @@ namespace mod\site_test;
 
 class Main {
 
-	public static function hook_mod_site_test($hookname, $userdata) {
+	private static $urlmatches;
+
+	public static function hook_mod_site_test($hookname, $userdata, $urlmatches) {
+		self::$urlmatches=$urlmatches;
 		$page = new \mod\webpage\Main();
-    $page->setLayout('mod/site_test/hooks_templates/layout.tpl');
+    $page->setLayout('mod/site_test/templates/welcome.tpl');
 		$page->display();
+	}
+
+	public static function hook_mod_site_test_tests($hookname, $userdata, $urlmatches) {
+		self::$urlmatches=$urlmatches;
+		$page = new \mod\webpage\Main();
+		switch($urlmatches[1]) {
+		case 'field': $page->setLayout('mod/site_test/templates/field.tpl'); break;
+		}
+		$page->display();
+	}
+
+	public static function hook_mod_smarty_blockstart_mod_site_test_content($hookname, $userdata) {
+		//echo "[start]";
+	}
+
+	public static function hook_mod_smarty_blockend_mod_site_test_content($hookname, $userdata) {
+		//echo "[end]";
 	}
 
 }
