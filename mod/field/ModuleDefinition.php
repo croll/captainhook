@@ -16,7 +16,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
 		parent::install();
 
     // do things here by default (after parent::install)
-		\mod\regroute\Main::registerRoute($this->id, '#/fieldpost/(.*)$#', 'mod_field_post');
+		\mod\regroute\Main::registerRoute($this->id, '#/fieldpost/(.*)$#', 'field_post');
 	}
 
 	function uninstall() {

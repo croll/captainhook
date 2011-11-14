@@ -2,12 +2,13 @@
 
 namespace mod\smarty {
 
+	define("SMARTY_DIR", dirname(__FILE__).'/smarty/libs/');
+
 	class Main {
 		
 		public static function newSmarty() {
-			$moddir=dirname(__FILE__);
-			define("SMARTY_DIR", $moddir.'/smarty/libs/');
 			require_once(SMARTY_DIR.'/Smarty.class.php');
+			$moddir=dirname(__FILE__);
 			$sm = new \Smarty();
 			$sm->template_dir = $moddir.'/../../';
 			$sm->compile_dir = $moddir.'/templates_c/';
