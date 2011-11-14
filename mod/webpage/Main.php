@@ -33,12 +33,14 @@ class Main {
 		if (!isset($this->csss[$tplName]) && !isset($this->scripts[$tplName])) 
 			return $output;
 		$css = $js = '';
-		foreach($this->csss[$tplName] as $file) {
-			$css .= '<link rel="stylesheet" href="'.$file.'" />'."\n";
-		}
-		foreach($this->scripts[$tplName] as $file) {
-			$js .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
-		}
+		if (is_array($this->csss) && sizeof($this->csss) > 0)
+			foreach($this->csss[$tplName] as $file) {
+				$css .= '<link rel="stylesheet" href="'.$file.'" />'."\n";
+			}
+		if (is_array($this->scripts) && sizeof($this->scripts) > 0)
+			foreach($this->scripts[$tplName] as $file) {
+				$js .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
+			}
 		return str_replace(array('CSSREPLACEME', 'JSREPLACEME'), array($css, $js), $output);
 	}
 }
