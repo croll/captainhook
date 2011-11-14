@@ -1,0 +1,8 @@
+.field_error { 
+ color: red;
+ font-size: 9pt;
+ padding-left: 16px;
+ padding-right: 16px;
+ background: url('/mod/site_test/images/redbullet.png') no-repeat;
+ background-position: 0 -1px;
+}
