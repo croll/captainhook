@@ -1,6 +1,6 @@
 {extends tplextends('webpage', 'webpage_main')}
 {block name='webpage_body'}
- {if $site_test_myform}
+ {if isset($site_test_myform)}
   {$site_test_myform}
  {else}
   <p>firstname: {$site_test_firstname|escape}</p>
