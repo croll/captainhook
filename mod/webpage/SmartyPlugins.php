@@ -28,4 +28,9 @@ class SmartyPlugins {
 		return (sizeof($scripts[$tplName]) < 2) ? 'JSREPLACEME' : '';
 	}
 
+	public static function block_embedjs($params, $content, $template) {
+		$js = &$template->smarty->tpl_vars['webpage']->value->embedded_js;
+		$js[] = $content;
+	}
+
 }

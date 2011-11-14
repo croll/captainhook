@@ -9,6 +9,7 @@ class Main {
   public $csss = array();
   public $scripts = array();
 	public $smarty;
+	public $embedded_js = array();
 
 	function __construct() {
     $this->smarty =\mod\smarty\Main::newSmarty();
@@ -26,6 +27,14 @@ class Main {
 	public function display($template=NULL) {
 		$file = (!is_null($template) && is_file($template)) ? $template : $this->layout;
     $this->smarty->display($file);
+	}
+
+	public function toJSON($template=NULL) {
+		$file = (!is_null($template) && is_file($template)) ? $template : $this->layout;
+		$res = (object)NULL;
+		$res->html = $this->smarty->fetch($file);
+		$res->js = trim(implode('', $this->embedded_js));
+		return json_encode($res);
 	}
 
 	public function processJsAndCss($output, $template) {

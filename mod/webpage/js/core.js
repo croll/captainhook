@@ -1,10 +1,9 @@
 (function(){
-var Core = new new Class({
+var CaptainHook = new new Class({
 
 	Implements: [Events, Options],
 	
 	initialize: function() {
-		console.log("yoyo");
 	}
 });
 }).call(this);
