@@ -15,6 +15,11 @@ class FieldForm {
 		$this->smarty=\mod\smarty\Main::newSmarty();
 		$this->smarty->assign('fieldform', $this);
 		$this->html=$this->smarty->fetch($tpl);
+		/*
+		if ($this->isPosted()) {
+			foreach($this->fields as $field) $field->value=$field->getValue();
+		}
+		*/
 	}
 
 	public function get_html() {
@@ -31,6 +36,12 @@ class FieldForm {
 			if (count($res)) return false;
 		}
 		return true;
+	}
+
+	public function getValue($fieldname) {
+		foreach($this->fields as $field)
+			if ($field->name == $fieldname) return $field->getValue();
+		throw new \Exception("Field '".$fieldname."'not found");
 	}
 
 	public function addField($field) {
@@ -73,10 +84,12 @@ class Verification {
 	public $regexp;
 	public $message;
 	public $inverted;
-	public function __construct($regexp, $message, $inverted) {
+	public $stop;
+	public function __construct($regexp, $message, $inverted, $stop) {
 		$this->regexp=$regexp;
 		$this->message=$message;
 		$this->inverted=$inverted;
+		$this->stop=$stop;
 	}
 }
 
@@ -98,7 +111,10 @@ class Element {
 		$result=array();
 		foreach($this->tests as $test) {
 			$res=preg_match($test->regexp, $value);
-			if (($res && !$test->inverted) || (!$res && $test->inverted)) $result[]=$test->message;
+			if (($res && !$test->inverted) || (!$res && $test->inverted)) {
+				$result[]=$test->message;
+				if ($test->stop) break;
+			}
 		}
 		return $result;
 	}
@@ -112,14 +128,15 @@ class Element {
 	}
 
 	public function getValue() {
-		return $_REQUEST[$this->name];
+		if (isset($_POST[$this->name])) return $_POST[$this->name];
+		return $this->value;
 	}
 }
 
 class Text extends Element {
 	public function render() {
 		return sprintf("<input type='text' name='%s' value='%s'/>%s",
-									 $this->name, $this->value, $this->testtohtml($this->value)
+									 $this->name, $this->getValue(), $this->testtohtml($this->getValue())
 									 );
 	}
 }
@@ -127,7 +144,7 @@ class Text extends Element {
 class Hidden extends Element {
 	public function render() {
 		return sprintf("<input type='hidden' name='%s' value='%s'/>%s",
-									 $this->name, $this->value, $this->testtohtml($this->value)
+									 $this->name, $this->getValue(), $this->testtohtml($this->getValue())
 									 );
 	}
 }
@@ -146,7 +163,7 @@ class RadioGroup extends Element {
 class Radio extends Element {
 	public function render() {
 		return sprintf("<input type='radio' name='%s' value='%s'/>",
-									 $this->name, $this->value
+									 $this->name, $this->getValue()
 									 );
 	}
 }
@@ -166,7 +183,7 @@ class Select extends Element {
 class Submit extends Element {
 	public function render() {
 		return sprintf("<input type='submit' name='%s' value='%s'/>",
-									 $this->name, $this->value
+									 $this->name, $this->getValue()
 									 );
 	}
 }

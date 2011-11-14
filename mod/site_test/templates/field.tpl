@@ -5,5 +5,6 @@
  {else}
   <p>firstname: {$site_test_firstname|escape}</p>
   <p>lastname: {$site_test_lastname|escape}</p>
+  <p><a href="">recommencer</a></p>
  {/if}
 {/block}

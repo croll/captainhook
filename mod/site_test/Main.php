@@ -34,8 +34,8 @@ class Main {
 
 		$page->setLayout('mod/site_test/templates/field.tpl');
 		if ($form->isPosted() && $form->isValid()) {
-			$page->smarty->assign('site_test_firstname', $form->get_value('firstname'));
-			$page->smarty->assign('site_test_lastname', $form->get_value('lastname'));
+			$page->smarty->assign('site_test_firstname', $form->getValue('firstname'));
+			$page->smarty->assign('site_test_lastname', $form->getValue('lastname'));
 		} else {
 			$page->setLayout('mod/site_test/templates/field.tpl');
 			$page->smarty->assign('site_test_myform', $form->get_html());

@@ -31,7 +31,7 @@ class Main {
 			$regexp=$params['iregexp'];
 			$inverted=true;
 		} else throw new \Exception("FieldVerification must have at least regexp nor iregexp argument");
-		$field->addVerification(new Verification($regexp, $params['message'], $inverted));
+		$field->addVerification(new Verification($regexp, $params['message'], $inverted, isset($params['stop']) ? $params['stop'] : 0));
   }
 
 	public static function hook_field_post($hookname, $userdata, $urlparams) {
