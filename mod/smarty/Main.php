@@ -46,6 +46,15 @@ namespace mod\smarty {
 					else if (!strncmp("smartyModifier_", $method, 15))
 						self::registerPlugin($module_definition->id, substr($method, 15), 'modifier',
 																 '\\mod\\'.$module_definition->name.'\\Main::'.$method);
+					else if (!strncmp("smartyPreFilter_", $method, 16))
+						self::registerPlugin($module_definition->id, substr($method, 16), 'preFilter',
+																 '\\mod\\'.$module_definition->name.'\\Main::'.$method);
+					else if (!strncmp("smartyPostFilter_", $method, 17))
+						self::registerPlugin($module_definition->id, substr($method, 17), 'postFilter',
+																 '\\mod\\'.$module_definition->name.'\\Main::'.$method);
+					else if (!strncmp("smartyOutputFilter_", $method, 19))
+						self::registerPlugin($module_definition->id, substr($method, 19), 'outputFilter',
+																 '\\mod\\'.$module_definition->name.'\\Main::'.$method);
 				}
 			}
 			
@@ -66,6 +75,15 @@ namespace mod\smarty {
 																 '\\mod\\'.$module_definition->name.'\\SmartyPlugins::'.$method);
 					else if (!strncmp("Modifier_", $method, 9))
 						self::registerPlugin($module_definition->id, substr($method, 9), 'modifier',
+																 '\\mod\\'.$module_definition->name.'\\SmartyPlugins::'.$method);
+					else if (!strncmp("preFilter_", $method, 10))
+						self::registerPlugin($module_definition->id, substr($method, 10), 'preFilter',
+																 '\\mod\\'.$module_definition->name.'\\SmartyPlugins::'.$method);
+					else if (!strncmp("postFilter_", $method, 11))
+						self::registerPlugin($module_definition->id, substr($method, 11), 'postFilter',
+																 '\\mod\\'.$module_definition->name.'\\SmartyPlugins::'.$method);
+					else if (!strncmp("outputFilter_", $method, 13))
+						self::registerPlugin($module_definition->id, substr($method, 13), 'outputFilter',
 																 '\\mod\\'.$module_definition->name.'\\SmartyPlugins::'.$method);
 			}
 			
@@ -129,10 +147,18 @@ namespace mod\smarty {
 		private static function loadPlugins($smarty) {
 			$plugins=\core\Core::$db->getAll('SELECT `type`, `name`, `method` FROM `ch_smarty_plugins`');
 			foreach($plugins as $plugin) {
-				$smarty->registerPlugin($plugin['type'], $plugin['name'], $plugin['method']);
+				if (!strstr($plugin['type'], 'Filter'))
+					$smarty->registerPlugin($plugin['type'], $plugin['name'], $plugin['method']);
+				else {
+					if (!preg_match("/^([a-z]+)Filter.*/", $plugin['type'], $t))
+						throw new \Exception("Malformed filter.");
+					else {
+						$method = preg_split("/:{2}/", $plugin['method']);
+						$smarty->registerFilter($t[1], array($method[0], $method[1]));
+					}
+				}
 			}
 		}
-		
 		
 		public static function _hook_template($hookname, $userdata, $params, $template, $result) {
 			$name=str_replace('mod_smarty_hook_', '', $hookname);

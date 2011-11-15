@@ -16,7 +16,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
     \core\Core::$db->execute("CREATE TABLE `ch_smarty_plugins` ("
                              ." `id_module` INT(11) NULL,"
                              ." `name` VARCHAR(255) NOT NULL,"
-                             ." `type` ENUM('function','block','compiler','modifier') NOT NULL,"
+                             ." `type` ENUM('function','block','compiler','modifier','preFilter','postFilter','outputFilter') NOT NULL,"
                              ." `method` VARCHAR(255) NOT NULL,"
                              ." KEY `kidmodule` (`id_module`),"
                              ." KEY `kname` (`name`)"

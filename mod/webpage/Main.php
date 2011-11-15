@@ -17,7 +17,6 @@ class Main {
     $this->smarty->assign('title', $this->title);
     $this->smarty->assign('favicon', $this->favicon);
 		$this->smarty->assign('webpage', $this);
-		$this->smarty->registerFilter('output', array($this, 'processJsAndCss'));
 	}
 
 	public function setLayout($name) {
@@ -35,21 +34,5 @@ class Main {
 		$res->html = $this->smarty->fetch($file);
 		$res->js = trim(implode('', $this->embedded_js));
 		return json_encode($res);
-	}
-
-	public function processJsAndCss($output, $template) {
-		$tplName = str_replace('.tpl', '', basename($template->template_resource));
-		if (!isset($this->csss[$tplName]) && !isset($this->scripts[$tplName])) 
-			return $output;
-		$css = $js = '';
-		if (is_array($this->csss) && sizeof($this->csss) > 0)
-			foreach($this->csss[$tplName] as $file) {
-				$css .= '<link rel="stylesheet" href="'.$file.'" />'."\n";
-			}
-		if (is_array($this->scripts) && sizeof($this->scripts) > 0)
-			foreach($this->scripts[$tplName] as $file) {
-				$js .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
-			}
-		return str_replace(array('CSSREPLACEME', 'JSREPLACEME'), array($css, $js), $output);
 	}
 }

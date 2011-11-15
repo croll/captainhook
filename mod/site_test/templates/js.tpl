@@ -1,4 +1,11 @@
 {extends tplextends('webpage', 'webpage_main')}
+
+{block name='webpage_head'}
+	{js file="/mod/cssjs/js/mootools.js"}
+	{js file="/mod/cssjs/js/mootools.more.js"}
+	{js file="/mod/cssjs/js/core.js"}
+{/block}
+
 {block name='webpage_body'}
 <div id="test"></div>
 <script language="javascript">

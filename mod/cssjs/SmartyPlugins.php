@@ -1,5 +1,5 @@
 <?php  //  -*- mode:php; tab-width:2; c-basic-offset:2; -*-
-namespace mod\webpage;
+namespace mod\cssjs;
 
 class SmartyPlugins {
 
@@ -26,6 +26,24 @@ class SmartyPlugins {
 		if (!in_array($params['file'], $scripts[$tplName]))
 			$scripts[$tplName][] = $params['file'];
 		return (sizeof($scripts[$tplName]) < 2) ? 'JSREPLACEME' : '';
+	}
+
+	public static function outputFilter_processJsAndCss($output, $template) {
+		$scripts = &$template->smarty->tpl_vars['webpage']->value->scripts;
+		$csss = &$template->smarty->tpl_vars['webpage']->value->csss;
+		$tplName = str_replace('.tpl', '', basename($template->template_resource));
+		if (!isset($csss[$tplName]) && !isset($scripts[$tplName])) 
+			return $output;
+		$css = $js = '';
+		if (is_array($csss) && sizeof($csss) > 0)
+			foreach($csss[$tplName] as $file) {
+				$css .= '<link rel="stylesheet" href="'.$file.'" />'."\n";
+			}
+		if (is_array($scripts) && sizeof($scripts) > 0)
+			foreach($scripts[$tplName] as $file) {
+				$js .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
+			}
+		return str_replace(array('CSSREPLACEME', 'JSREPLACEME'), array($css, $js), $output);
 	}
 
 	public static function block_embedjs($params, $content, $template) {
