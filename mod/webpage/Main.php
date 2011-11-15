@@ -16,7 +16,7 @@ class Main {
 		$this->smarty->assign('extends_webpage_main', 'mod/webpage/templates/webpage_html4.tpl');
     $this->smarty->assign('title', $this->title);
     $this->smarty->assign('favicon', $this->favicon);
-		$this->smarty->assign('webpage', $this);
+		$this->smarty->assignByRef('webpage', $this);
 	}
 
 	public function setLayout($name) {
