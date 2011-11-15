@@ -10,37 +10,32 @@ class SmartyPlugins {
 
 	public static function function_css($params, $template) {
 		$csss = &$template->smarty->tpl_vars['webpage']->value->csss;
-		$tplName = str_replace('.tpl', '', basename($template->template_resource));
 		if (!isset($params['file'])) throw new \Exception("{css} function must have a 'file' parameter");
-		if (!isset($csss[$tplName])) $csss[$tplName] = array();
-		if (!in_array($params['file'], $csss[$tplName]))
-			$csss[$tplName][] = $params['file'];
-		return (sizeof($csss[$tplName]) < 2) ? 'CSSREPLACEME' : '';
+		if (!in_array($params['file'], $csss))
+			$csss[] = $params['file'];
+		return (sizeof($csss) < 2) ? 'CSSREPLACEME' : '';
 	}
 
 	public static function function_js($params, $template) {
 		$scripts = &$template->smarty->tpl_vars['webpage']->value->scripts;
-		$tplName = str_replace('.tpl', '', basename($template->template_resource));
 		if (!isset($params['file'])) throw new \Exception("{js} function must have a 'file' parameter");
-		if (!isset($scripts[$tplName])) $scripts[$tplName] = array();
-		if (!in_array($params['file'], $scripts[$tplName]))
-			$scripts[$tplName][] = $params['file'];
-		return (sizeof($scripts[$tplName]) < 2) ? 'JSREPLACEME' : '';
+		if (!in_array($params['file'], $scripts))
+			$scripts[] = $params['file'];
+		return (sizeof($scripts) < 2) ? 'JSREPLACEME' : '';
 	}
 
 	public static function outputFilter_processJsAndCss($output, $template) {
 		$scripts = &$template->smarty->tpl_vars['webpage']->value->scripts;
 		$csss = &$template->smarty->tpl_vars['webpage']->value->csss;
-		$tplName = str_replace('.tpl', '', basename($template->template_resource));
-		if (!isset($csss[$tplName]) && !isset($scripts[$tplName])) 
+		if (!isset($csss) && !isset($scripts)) 
 			return $output;
 		$css = $js = '';
 		if (is_array($csss) && sizeof($csss) > 0)
-			foreach($csss[$tplName] as $file) {
+			foreach($csss as $file) {
 				$css .= '<link rel="stylesheet" href="'.$file.'" />'."\n";
 			}
 		if (is_array($scripts) && sizeof($scripts) > 0)
-			foreach($scripts[$tplName] as $file) {
+			foreach($scripts as $file) {
 				$js .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 			}
 		return str_replace(array('CSSREPLACEME', 'JSREPLACEME'), array($css, $js), $output);
