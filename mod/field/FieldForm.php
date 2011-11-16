@@ -6,10 +6,9 @@ class FieldForm {
 	private $smarty;
 	private $uniquename;
 	private $fields=array();
+	private static $validators=array();
 	private $html;
 	
-	public $curfield=array(); // used by smarty functions
-
 	public function __construct($uniquename, $tpl) {
 		$this->uniquename=$uniquename;
 		$this->smarty=\mod\smarty\Main::newSmarty();
@@ -22,8 +21,26 @@ class FieldForm {
 		*/
 	}
 
-	public function get_html() {
-		return "<form method='POST'><input type='hidden' name='field_fieldform_uniquename' value='".$this->uniquename."'/>".$this->html."</form>";
+	// used internaly by smarty
+	public static function _addValidator($validator) {
+		self::$validators[$validator->name]=$validator;
+	}
+
+	// used internaly by smarty
+	public static function getValidator($name) {
+		if (isset(self::$validators[$name])) return self::$validators[$name];
+		else throw new \Exception("Validator '".$name."' not found");
+	}
+
+	public function get_html($webpage) {
+		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.js');
+		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.more.js');
+		$js="<script>";
+		$js.="alert(document.id('niclotest'));";
+		foreach(self::$validators as $validator) {
+		}
+		$js.="</script>";
+		return "<form id='niclotest' method='POST'><input type='hidden' name='field_fieldform_uniquename' value='".$this->uniquename."'/>".$this->html."</form> $js";
 	}
 
 	public function isPosted() {
@@ -32,7 +49,7 @@ class FieldForm {
 
 	public function isValid() {
 		foreach($this->fields as $field) {
-			$res=$field->test($field->getValue());
+			$res=$field->validate($field->getValue());
 			if (count($res)) return false;
 		}
 		return true;
@@ -48,23 +65,31 @@ class FieldForm {
 		$this->fields[]=$field;
 	}
 
-	public function sqlinsert($table) {
-		$vals=array();
-		$a='';
-		$b='';
+	public function sqlinsert() {
+		$querys=array();
 		foreach($this->fields as $field) {
-			$a.=($a == '' ? '' : ',').'`'.$field->name.'`';
-			$b.=($b == '' ? '' : ',').'?';
-			$vals[]=$field->getValue();
+			if (!isset($field->params['sqltable'])) continue;
+			$sqltable=$field->params['sqltable'];
+			if (!isset($querys[$sqltable]))
+				$querys[$sqltable]=array('vals' => array(), 'a' => '', 'b' => '');
+			$query=&$querys[$sqltable];
+
+			$query['a'].=($query['a'] == '' ? '' : ',').'`'.$field->name.'`';
+			$query['b'].=($query['b'] == '' ? '' : ',').'?';
+			$query['vals'][]=$field->getValue();
 		}
 
-		$q="INSERT INTO `$table` ($a) ($b)";
-		\core\Core::$db->query($q, $vals);
+		if (!count($querys)) throw new \Exception("No columns found to insert, maybe you have omited to add sqltable args to you're fields");
+
+		foreach($querys as $sqltable => $query) {
+			$q="INSERT INTO `".$sqltable."` (".$query['a'].") VALUES (".$query['b'].")";
+			\core\Core::$db->query($q, $query['vals']);
+		}
 
 		return \core\Core::$db->Insert_ID();
 	}
 
-	public function sqlupdate($table, $id) {
+	public function sqlupdate($id) {
 		$vals=array();
 		$a='';
 		foreach($this->fields as $field) {
@@ -80,50 +105,63 @@ class FieldForm {
 	}
 }
 
-class Verification {
+class Validator {
+	public $name;
 	public $regexp;
 	public $message;
 	public $inverted;
-	public $stop;
-	public function __construct($regexp, $message, $inverted, $stop) {
+	public function __construct($name, $regexp, $message, $inverted) {
+		$this->name=$name;
 		$this->regexp=$regexp;
 		$this->message=$message;
 		$this->inverted=$inverted;
-		$this->stop=$stop;
+	}
+
+	public function get_mootools_string() {
+		return $this->name;
 	}
 }
 
 class Element {
 	public $name;
 	public $value;
-	private $tests=array();
+	public $params;
+	private $validators=array();
 
-	public function __construct($name, $default='') {
+	public function __construct($name, $default='', $params) {
 		$this->name=$name;
 		$this->value=$default;
+		$this->params=$params;
+		foreach($this->params as $paramname => $param) {
+			switch($paramname) {
+			case 'validators':
+				foreach(explode(',',$param) as $vname)
+					$this->addValidator(FieldForm::getValidator(trim($vname)));
+				break;
+			}
+		}
 	}
 
-	public function addVerification($verification) {
-		$this->tests[]=$verification;
+	public function addValidator($validator) {
+		$this->validators[$validator->name]=$validator;
 	}
 
-	public function test($value) {
+	public function validate($value) {
 		$result=array();
-		foreach($this->tests as $test) {
-			$res=preg_match($test->regexp, $value);
-			if (($res && !$test->inverted) || (!$res && $test->inverted)) {
-				$result[]=$test->message;
-				if ($test->stop) break;
+		foreach($this->validators as $validator) {
+			$res=preg_match($validator->regexp, $value);
+			if (($res && !$validator->inverted) || (!$res && $validator->inverted)) {
+				$result[]=$validator->message;
 			}
 		}
 		return $result;
 	}
 
-	public function testtohtml($value) {
-		$tests=$this->test($value);
+	public function validatetohtml($value) {
+		$validators=$this->validate($value);
 		$res='';
-		foreach($tests as $test)
-			$res.="<span class='field_error'>$test</span>";
+		foreach($validators as $validator)
+			$res.="<span class='field_error'>$validator</span>";
 		return $res;
 	}
 
@@ -131,12 +169,22 @@ class Element {
 		if (isset($_POST[$this->name])) return $_POST[$this->name];
 		return $this->value;
 	}
+
+	public function get_mootools_validators_string() {
+		$str='';
+		foreach($this->validators as $validator) {
+			$tmp=$validator->get_mootools_string();
+			if ($tmp) $str.=($str ? ',' : '').$tmp;
+		}
+		if ($str) $str='data-validators="'.$str.'"';
+		return $str;
+	}
 }
 
 class Text extends Element {
 	public function render() {
-		return sprintf("<input type='text' name='%s' value='%s'/>%s",
-									 $this->name, $this->getValue(), $this->testtohtml($this->getValue())
+		return sprintf("<input type='text' name='%s' value='%s' ".$this->get_mootools_validators_string()."/>%s",
+									 $this->name, $this->getValue(), $this->validatetohtml($this->getValue())
 									 );
 	}
 }
@@ -144,7 +192,7 @@ class Text extends Element {
 class Hidden extends Element {
 	public function render() {
 		return sprintf("<input type='hidden' name='%s' value='%s'/>%s",
-									 $this->name, $this->getValue(), $this->testtohtml($this->getValue())
+									 $this->name, $this->getValue(), $this->validatetohtml($this->getValue())
 									 );
 	}
 }
