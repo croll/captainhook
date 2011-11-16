@@ -5,7 +5,7 @@ namespace mod\field;
 class Main {
 
   public static function smartyFunction_Field($params, $template) {
-		$fieldform = $template->smarty->tpl_vars['fieldform']->value;
+		$fieldform = $template->smarty->tpl_vars->fieldform->value;
 		if (!isset($params['phpclass']))
 			throw new \Exception("Field must have a phpclass");
 		$classname=$params['phpclass'];

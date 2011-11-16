@@ -22,7 +22,7 @@ abstract class Smarty_Internal_TemplateCompilerBase {
      *
      * @var mixed
      */
-    private $nocache_hash = null;
+    public $nocache_hash = null;
     /**
      * suppress generation of nocache code
      *
@@ -122,6 +122,58 @@ abstract class Smarty_Internal_TemplateCompilerBase {
     }
 
     /**
+     * Compiles the template source
+     *
+     * If the template is not evaluated the compiled template is saved on disk
+     * @param  Smarty_Internal_Template $template template object to compile
+    */
+    public function compileTemplateSource(Smarty_Internal_Template $template)
+    {
+        if (!$template->source->recompiled) {
+            $template->properties['file_dependency'] = array();
+            if ($template->source->components) {
+                // uses real resource for file dependency
+                $source = end($template->source->components);
+                $template->properties['file_dependency'][$template->source->uid] = array($template->source->filepath, $template->source->timestamp, $source->type);
+            } else {
+                $template->properties['file_dependency'][$template->source->uid] = array($template->source->filepath, $template->source->timestamp, $template->source->type);
+            }
+        }
+        if ($template->smarty->debugging) {
+            Smarty_Internal_Debug::start_compile($template);
+        }
+        // compile locking
+        if ($template->smarty->compile_locking && !$template->source->recompiled) {
+            if ($saved_timestamp = $template->compiled->timestamp) {
+                touch($template->compiled->filepath);
+            }
+        }
+        // call compiler
+        try {
+            $code = $this->compileTemplate($template);
+        } catch (Exception $e) {
+            // restore old timestamp in case of error
+            if ($template->smarty->compile_locking && !$template->source->recompiled && $saved_timestamp) {
+                touch($template->compiled->filepath, $saved_timestamp);
+            }
+            throw $e;
+        }
+        // compiling succeded
+        if (!$template->source->recompiled && $template->compiler->write_compiled_code) {
+            // write compiled template
+            $_filepath = $template->compiled->filepath;
+            if ($_filepath === false)
+                throw new SmartyException('Invalid filepath for compiled template');
+            Smarty_Internal_Write_File::writeFile($_filepath, $code, $template->smarty);
+            $template->compiled->exists = true;
+            $template->compiled->isCompiled = true;
+        }
+        if ($template->smarty->debugging) {
+            Smarty_Internal_Debug::end_compile($template);
+        }
+    }
+
+ /**
      * Method to compile a Smarty template
      *
      * @param  Smarty_Internal_Template $template template object to compile
@@ -140,7 +192,7 @@ abstract class Smarty_Internal_TemplateCompilerBase {
         // save template object in compiler class
         $this->template = $template;
         // reset has noche code flag
-        $this->template->has_nocache_code = false; 
+        $this->template->has_nocache_code = false;
         $this->smarty->_current_file = $saved_filepath = $this->template->source->filepath;
         // template header code
         $template_header = '';
@@ -318,7 +370,7 @@ abstract class Smarty_Internal_TemplateCompilerBase {
                                 return $plugin_object->compile($args, $this);
                             }
                         }
-                        throw new SmartyException("Plugin \"{$tag}\" not callable");
+                        $this->trigger_template_error ("Plugin '{{$tag}...}' not callable", $this->lex->taglineno);
                     } else {
                         if ($function = $this->getPlugin($tag, $plugin_type)) {
                             if(!isset($this->smarty->security_policy) || $this->smarty->security_policy->isTrustedTag($tag, $this)) {
@@ -396,10 +448,10 @@ abstract class Smarty_Internal_TemplateCompilerBase {
                             return $plugin_object->compile($args, $this);
                         }
                     }
-                    throw new SmartyException("Plugin \"{$tag}\" not callable");
+                    $this->trigger_template_error ("Plugin '{{$tag}...}' not callable", $this->lex->taglineno);
                 }
             }
-            $this->trigger_template_error ("unknown tag \"" . $tag . "\"", $this->lex->taglineno);
+            $this->trigger_template_error ("unknown tag '{{$tag}...}'", $this->lex->taglineno);
         }
     }
 
@@ -521,14 +573,14 @@ abstract class Smarty_Internal_TemplateCompilerBase {
                     }
                     include_once $script;
                 }  else {
-                    throw new SmartyCompilerException("Plugin or modifer script file $script not found");
+                    $this->trigger_template_error ("Default plugin handler: Plugin or modifer script file '{$script}' not found for '{$tag}", $this->lex->taglineno);
                 }
             }
             if (is_callable($callback)) {
                 $this->default_handler_plugins[$plugin_type][$tag] = array($callback, true, array());
                 return true;
             } else {
-                throw new SmartyCompilerException("Function for plugin or modifier $tag not callable");
+                $this->trigger_template_error ("Default plugin handler: Function for plugin or modifier '{$tag}' not callable", $this->lex->taglineno);
             }
         }
         return false;
@@ -580,43 +632,58 @@ abstract class Smarty_Internal_TemplateCompilerBase {
      * If parameter $args is empty it is a parser detected syntax error.
      * In this case the parser is called to obtain information about expected tokens.
      *
-     * If parameter $args contains a string this is used as error message
+     * If parameter $msg contains a string this is used as error message
      *
-     * @param string $args individual error message or null
+     * @param string $msg individual error message or null
      * @param string $line line-number
      * @throws SmartyCompilerException when an unexpected token is found
      */
-    public function trigger_template_error($args = null, $line = null)
+    public function trigger_template_error($msg = null, $line = null)
     {
         // get template source line which has error
         if (!isset($line)) {
             $line = $this->lex->line;
+        } else {
+            $line = $line - $this->line_offset;
         }
-        $match = preg_split("/\n/", $this->lex->data);
-        $error_text = 'Syntax Error in template "' . $this->template->source->filepath . '"  on line ' . $line . ' "' . htmlspecialchars(trim(preg_replace('![\t\r\n]+!',' ',$match[$line-1]))) . '" ';
-        if (isset($args)) {
+        preg_match_all("/\n/", $this->lex->data, $match, PREG_OFFSET_CAPTURE);
+        $start_line = max(1,$line - 2);
+        $end_line = min ($line + 2, count($match[0])+1);
+        $source = "<br>";
+        for ($i = $start_line; $i <= $end_line; $i++) {
+            $from = 0;
+            $to = 99999999;
+            if (isset($match[0][$i-2])) {
+                $from = $match[0][$i-2][1];
+            }
+            if (isset($match[0][$i-1])) {
+                $to = $match[0][$i-1][1] - $from;
+            }
+            $substr =  substr($this->lex->data, $from, $to);
+            $source .= sprintf('%4d : ',$i + $this->line_offset) . htmlspecialchars(trim(preg_replace('![\t\r\n]+!',' ',$substr))) . "<br>";
+        }
+        $error_text = "<b>Syntax Error</b> in template <b>'{$this->template->source->filepath}'</b>  on line ". ($line + $this->line_offset) . "<br>{$source}";
+        if (isset($msg)) {
             // individual error message
-            $error_text .= $args;
+            $error_text .= "<br><b>{$msg}</b><br>";
         } else {
             // expected token from parser
-            $error_text .= ' - Unexpected "' . $this->lex->value.'"';
+            $error_text .= "<br> Unexpected '<b>{$this->lex->value}</b>'";
             if (count($this->parser->yy_get_expected_tokens($this->parser->yymajor)) <= 4 ) {
                 foreach ($this->parser->yy_get_expected_tokens($this->parser->yymajor) as $token) {
                     $exp_token = $this->parser->yyTokenName[$token];
                     if (isset($this->lex->smarty_token_names[$exp_token])) {
                         // token type from lexer
-                        $expect[] = '"' . $this->lex->smarty_token_names[$exp_token] . '"';
+                        $expect[] = "'<b>{$this->lex->smarty_token_names[$exp_token]}</b>'";
                     } else {
                         // otherwise internal token name
                         $expect[] = $this->parser->yyTokenName[$token];
                     }
                 }
-                $error_text .= ', expected one of: ' . implode(' , ', $expect);
+                $error_text .= ', expected one of: ' . implode(' , ', $expect) . '<br>';
             }
         }
         throw new SmartyCompilerException($error_text);
     }
-
 }
-
 ?>

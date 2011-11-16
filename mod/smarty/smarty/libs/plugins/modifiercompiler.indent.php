@@ -14,19 +14,15 @@
  *
  * @link http://www.smarty.net/manual/en/language.modifier.indent.php indent (Smarty online manual)
  * @author Uwe Tews
- * @param array $params parameters
+ *
+ * @param string $input input string
+ * @param int $count number of posizions to indent
+ * @param char $char character to use for indention
  * @return string with compiled code
  */
-
-function smarty_modifiercompiler_indent($params, $compiler)
+// NOTE: The parser does pass all parameter as strings which could be directly inserted into the compiled code string
+function smarty_modifiercompiler_indent($input, $count = 4, $char = "' '")
 {
-    if (!isset($params[1])) {
-        $params[1] = 4;
-    }
-    if (!isset($params[2])) {
-        $params[2] = "' '";
-    }
-    return 'preg_replace(\'!^!m\',str_repeat(' . $params[2] . ',' . $params[1] . '),' . $params[0] . ')';
+    return "preg_replace('!^!m',str_repeat({$char}, {$count}), {$input})";
 }
-
 ?>

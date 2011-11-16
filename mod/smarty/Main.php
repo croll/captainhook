@@ -147,13 +147,13 @@ namespace mod\smarty {
 		private static function loadPlugins($smarty) {
 			$plugins=\core\Core::$db->getAll('SELECT `type`, `name`, `method` FROM `ch_smarty_plugins`');
 			foreach($plugins as $plugin) {
+				$method = preg_split("/:{2}/", $plugin['method']);
 				if (!strstr($plugin['type'], 'Filter'))
-					$smarty->registerPlugin($plugin['type'], $plugin['name'], $plugin['method']);
+					$smarty->registerPlugin($plugin['type'], $plugin['name'], array($method[0], $method[1]));
 				else {
 					if (!preg_match("/^([a-z]+)Filter.*/", $plugin['type'], $t))
 						throw new \Exception("Malformed filter.");
 					else {
-						$method = preg_split("/:{2}/", $plugin['method']);
 						$smarty->registerFilter($t[1], array($method[0], $method[1]));
 					}
 				}

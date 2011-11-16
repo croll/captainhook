@@ -1,34 +1,34 @@
 <?php
 /**
- * Smarty Internal Plugin Debug
- *
- * Class to collect data for the Smarty Debugging Consol
- *
- * @package Smarty
- * @subpackage Debug
- * @author Uwe Tews
- */
+* Smarty Internal Plugin Debug
+*
+* Class to collect data for the Smarty Debugging Consol
+*
+* @package Smarty
+* @subpackage Debug
+* @author Uwe Tews
+*/
 
 /**
- * Smarty Internal Plugin Debug Class
- *
- * @package Smarty
- * @subpackage Debug
- */
+* Smarty Internal Plugin Debug Class
+*
+* @package Smarty
+* @subpackage Debug
+*/
 class Smarty_Internal_Debug extends Smarty_Internal_Data {
 
     /**
-     * template data
-     *
-     * @var array
-     */
+    * template data
+    *
+    * @var array
+    */
     public static $template_data = array();
 
     /**
-     * Start logging of compile time
-     *
-     * @param object $template
-     */
+    * Start logging of compile time
+    *
+    * @param object $template
+    */
     public static function start_compile($template)
     {
         $key = self::get_key($template);
@@ -36,10 +36,10 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
     }
 
     /**
-     * End logging of compile time
-     *
-     * @param object $template
-     */
+    * End logging of compile time
+    *
+    * @param object $template
+    */
     public static function end_compile($template)
     {
         $key = self::get_key($template);
@@ -47,10 +47,10 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
     }
 
     /**
-     * Start logging of render time
-     *
-     * @param object $template
-     */
+    * Start logging of render time
+    *
+    * @param object $template
+    */
     public static function start_render($template)
     {
         $key = self::get_key($template);
@@ -58,10 +58,10 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
     }
 
     /**
-     * End logging of compile time
-     *
-     * @param object $template
-     */
+    * End logging of compile time
+    *
+    * @param object $template
+    */
     public static function end_render($template)
     {
         $key = self::get_key($template);
@@ -69,10 +69,10 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
     }
 
     /**
-     * Start logging of cache time
-     *
-     * @param object $template cached template
-     */
+    * Start logging of cache time
+    *
+    * @param object $template cached template
+    */
     public static function start_cache($template)
     {
         $key = self::get_key($template);
@@ -80,10 +80,10 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
     }
 
     /**
-     * End logging of cache time
-     *
-     * @param object $template cached template
-     */
+    * End logging of cache time
+    *
+    * @param object $template cached template
+    */
     public static function end_cache($template)
     {
         $key = self::get_key($template);
@@ -91,10 +91,10 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
     }
 
     /**
-     * Opens a window for the Smarty Debugging Consol and display the data
-     *
-     * @param Smarty_Internal_Template|Smarty $obj object to debug
-     */
+    * Opens a window for the Smarty Debugging Consol and display the data
+    *
+    * @param Smarty_Internal_Template|Smarty $obj object to debug
+    */
     public static function display_debug($obj)
     {
         // prepare information of assigned variables
@@ -123,6 +123,8 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
         $_template->compile_id = null;
         if ($obj instanceof Smarty_Internal_Template) {
             $_template->assign('template_name', $obj->source->type . ':' . $obj->source->name);
+        } else {
+            $_template->assign('template_name', null);
         }
         if ($obj instanceof Smarty) {
             $_template->assign('template_data', self::$template_data);
@@ -136,23 +138,25 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
     }
 
     /**
-     * Recursively gets variables from all template/data scopes
-     *
-     * @param Smarty_Internal_Template|Smarty_Data $obj object to debug
-     * @return StdClass
-     */
+    * Recursively gets variables from all template/data scopes
+    *
+    * @param Smarty_Internal_Template|Smarty_Data $obj object to debug
+    * @return StdClass
+    */
     public static function get_debug_vars($obj)
     {
-        $config_vars = $obj->config_vars;
+        $config_vars = array();
         $tpl_vars = array();
         foreach ($obj->tpl_vars as $key => $var) {
-            $tpl_vars[$key] = clone $var;
-            if ($obj instanceof Smarty_Internal_Template) {
-                $tpl_vars[$key]->scope = $obj->source->type . ':' . $obj->source->name;
-            } elseif ($obj instanceof Smarty_Data) {
-                $tpl_vars[$key]->scope = 'Data object';
-            } else {
-                $tpl_vars[$key]->scope = 'Smarty root';
+            if ($key != '__smarty__data' && is_object($var)) {
+                $tpl_vars[$key] = clone $var;
+                if ($obj instanceof Smarty_Internal_Template) {
+                    $tpl_vars[$key]->source = $obj->source->type . ':' . $obj->source->name;
+                } elseif ($obj instanceof Smarty_Data) {
+                    $tpl_vars[$key]->source = 'Data object';
+                } else {
+                    $tpl_vars[$key]->source = 'Smarty object';
+                }
             }
         }
 
@@ -162,10 +166,12 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
             $config_vars = array_merge($parent->config_vars, $config_vars);
         } else {
             foreach (Smarty::$global_tpl_vars as $name => $var) {
-                if (!array_key_exists($name, $tpl_vars)) {
-                    $clone = clone $var;
-                    $clone->scope = 'Global';
-                    $tpl_vars[$name] = $clone;
+                if ($key != '__smarty__data' && is_object($var)) {
+                    if (!array_key_exists($name, $tpl_vars)) {
+                        $clone = clone $var;
+                        $clone->source = 'Global';
+                        $tpl_vars[$name] = $clone;
+                    }
                 }
             }
         }
@@ -173,11 +179,11 @@ class Smarty_Internal_Debug extends Smarty_Internal_Data {
     }
 
     /**
-     * Return key into $template_data for template
-     *
-     * @param object $template  template object
-     * @return string   key into $template_data
-     */
+    * Return key into $template_data for template
+    *
+    * @param object $template  template object
+    * @return string   key into $template_data
+    */
     private static function get_key($template)
     {
         static $_is_stringy = array('string' => true, 'eval' => true);

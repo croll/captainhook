@@ -32,6 +32,8 @@
  * @param Smarty_Internal_Template $template template object
  * @return string 
  * @uses smarty_function_escape_special_chars()
+ * @smarty_nocache 
+ * @smarty_cache_attr aaa, bb, cccc 
  */
 function smarty_function_html_options($params, $template)
 {

@@ -16,13 +16,14 @@
  * @link http://www.smarty.net/manual/en/language.modifier.count.paragraphs.php
  *          count_sentences (Smarty online manual)
  * @author Uwe Tews
- * @param array $params parameters
+ *
+ * @param string $input input string
  * @return string with compiled code
  */
-function smarty_modifiercompiler_count_sentences($params, $compiler)
+// NOTE: The parser does pass all parameter as strings which could be directly inserted into the compiled code string
+function smarty_modifiercompiler_count_sentences($input)
 {
     // find periods, question marks, exclamation marks with a word before but not after.
-    return 'preg_match_all("#\w[\.\?\!](\W|$)#uS", ' . $params[0] . ', $tmp)';
+    return 'preg_match_all("#\w[\.\?\!](\W|$)#uS", ' . $input . ', $tmp)';
 }
-
 ?>

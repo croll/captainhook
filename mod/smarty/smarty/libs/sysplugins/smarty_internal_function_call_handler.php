@@ -21,7 +21,7 @@ class Smarty_Internal_Function_Call_Handler {
      *
      * @param string                   $_name       template function name
      * @param Smarty_Internal_Template $_template   template object
-     * @param array                    $_params     Smarty variables passed as call paramter
+     * @param array                    $_params     Smarty variables passed as call parameter
      * @param string                   $_hash       nocache hash value
      * @param bool                     $_nocache    nocache flag
      */
@@ -34,9 +34,9 @@ class Smarty_Internal_Function_Call_Handler {
         }
         if (!is_callable($_function)) {
             $_code = "function {$_function}(\$_smarty_tpl,\$params) {
-    \$saved_tpl_vars = \$_smarty_tpl->tpl_vars;
-    foreach (\$_smarty_tpl->smarty->template_functions['{$_name}']['parameter'] as \$key => \$value) {\$_smarty_tpl->tpl_vars[\$key] = new Smarty_variable(\$value);};
-    foreach (\$params as \$key => \$value) {\$_smarty_tpl->tpl_vars[\$key] = new Smarty_variable(\$value);}?>";
+    \$saved_tpl_vars = clone \$_smarty_tpl->tpl_vars;
+    foreach (\$_smarty_tpl->smarty->template_functions['{$_name}']['parameter'] as \$key => \$value) {\$_smarty_tpl->tpl_vars->\$key = new Smarty_variable(\$value);};
+    foreach (\$params as \$key => \$value) {\$_smarty_tpl->tpl_vars->\$key = new Smarty_variable(\$value);}?>";
             if ($_nocache) {
                 $_code .= preg_replace(array("!<\?php echo \\'/\*%%SmartyNocache:{$_template->smarty->template_functions[$_name]['nocache_hash']}%%\*/|/\*/%%SmartyNocache:{$_template->smarty->template_functions[$_name]['nocache_hash']}%%\*/\\';\?>!",
                         "!\\\'!"), array('', "'"), $_template->smarty->template_functions[$_name]['compiled']);

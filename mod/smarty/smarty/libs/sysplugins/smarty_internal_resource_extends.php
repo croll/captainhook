@@ -93,15 +93,14 @@ class Smarty_Internal_Resource_Extends extends Smarty_Resource {
 
             // read content
             $source->filepath = $_component->filepath;
-            $_content = $_component->content;
 
             // extend sources
             if ($_component != $_last) {
-                if (preg_match_all("!({$_ldl}block\s(.+?){$_rdl})!", $_content, $_open) !=
-                preg_match_all("!({$_ldl}/block{$_rdl})!", $_content, $_close)) {
+                if (preg_match_all("!({$_ldl}block\s(.+?){$_rdl})!", $_component->content, $_open) !=
+                preg_match_all("!({$_ldl}/block{$_rdl})!", $_component->content, $_close)) {
                     throw new SmartyException("unmatched {block} {/block} pairs in template {$_component->type} '{$_component->name}'");
                 }
-                preg_match_all("!{$_ldl}block\s(.+?){$_rdl}|{$_ldl}/block{$_rdl}|{$_ldl}\*([\S\s]*?)\*{$_rdl}!", $_content, $_result, PREG_OFFSET_CAPTURE);
+                preg_match_all("!{$_ldl}block\s(.+?){$_rdl}|{$_ldl}/block{$_rdl}|{$_ldl}\*([\S\s]*?)\*{$_rdl}!", $_component->content, $_result, PREG_OFFSET_CAPTURE);
                 $_result_count = count($_result[0]);
                 $_start = 0;
                 while ($_start+1 < $_result_count) {
@@ -122,12 +121,14 @@ class Smarty_Internal_Resource_Extends extends Smarty_Resource {
                             $_level--;
                         }
                     }
-                    $_block_content = str_replace($source->smarty->left_delimiter . '$smarty.block.parent' . $source->smarty->right_delimiter, '%%%%SMARTY_PARENT%%%%', substr($_content, $_result[0][$_start][1] + strlen($_result[0][$_start][0]), $_result[0][$_start + $_end][1] - $_result[0][$_start][1] - + strlen($_result[0][$_start][0])));
-                    Smarty_Internal_Compile_Block::saveBlockData($_block_content, $_result[0][$_start][0], $source->template, $_component->filepath);
+                    $_block_content = str_replace($source->smarty->left_delimiter . '$smarty.block.parent' . $source->smarty->right_delimiter, '%%%%SMARTY_PARENT%%%%',
+                        substr($_component->content, $_result[0][$_start][1] + strlen($_result[0][$_start][0]), $_result[0][$_start + $_end][1] - $_result[0][$_start][1] - + strlen($_result[0][$_start][0])));
+                    $line_offset = substr_count($_component->content, "\n", 0, $_result[0][$_start][1] + strlen($_result[0][$_start][0]));
+                    Smarty_Internal_Compile_Block::saveBlockData($_block_content, $_result[0][$_start][0], $source->template, $_component->filepath, $_component->resource, $line_offset);
                     $_start = $_start + $_end + 1;
                 }
             } else {
-                return $_content;
+                return $_component->content;
             }
         }
     }

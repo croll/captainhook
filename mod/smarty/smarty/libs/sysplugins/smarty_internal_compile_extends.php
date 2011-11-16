@@ -70,12 +70,12 @@ class Smarty_Internal_Compile_Extends extends Smarty_Internal_CompileBase {
             $compiler->trigger_template_error("illegal recursive call of \"{$include_file}\"", $compiler->lex->line - 1);
         }
         $compiler->template->properties['file_dependency'][$template_sha1] = array($_template->source->filepath, $_template->source->timestamp, $_template->source->type);
-        $_content = substr($compiler->template->source->content, $compiler->lex->counter - 1);
-        if (preg_match_all("!({$this->_ldl}block\s(.+?){$this->_rdl})!", $_content, $s) !=
-        preg_match_all("!({$this->_ldl}/block{$this->_rdl})!", $_content, $c)) {
+        //$compiler->template->source->content = substr($compiler->template->source->content, $compiler->lex->counter - 1);
+        if (preg_match_all("!({$this->_ldl}block\s(.+?){$this->_rdl})!", $compiler->template->source->content, $s) !=
+        preg_match_all("!({$this->_ldl}/block{$this->_rdl})!", $compiler->template->source->content, $c)) {
             $compiler->trigger_template_error('unmatched {block} {/block} pairs');
         }
-        preg_match_all("!{$this->_ldl}block\s(.+?){$this->_rdl}|{$this->_ldl}/block{$this->_rdl}|{$this->_ldl}\*([\S\s]*?)\*{$this->_rdl}!", $_content, $_result, PREG_OFFSET_CAPTURE);
+        preg_match_all("!{$this->_ldl}block\s(.+?){$this->_rdl}|{$this->_ldl}/block{$this->_rdl}|{$this->_ldl}\*([\S\s]*?)\*{$this->_rdl}!", $compiler->template->source->content, $_result, PREG_OFFSET_CAPTURE);
         $_result_count = count($_result[0]);
         $_start = 0;
         while ($_start+1 < $_result_count) {
@@ -97,8 +97,9 @@ class Smarty_Internal_Compile_Extends extends Smarty_Internal_CompileBase {
                 }
             }
             $_block_content = str_replace($compiler->smarty->left_delimiter . '$smarty.block.parent' . $compiler->smarty->right_delimiter, '%%%%SMARTY_PARENT%%%%',
-            substr($_content, $_result[0][$_start][1] + strlen($_result[0][$_start][0]), $_result[0][$_start + $_end][1] - $_result[0][$_start][1] - + strlen($_result[0][$_start][0])));
-            Smarty_Internal_Compile_Block::saveBlockData($_block_content, $_result[0][$_start][0], $compiler->template, $filepath);
+            substr($compiler->template->source->content, $_result[0][$_start][1] + strlen($_result[0][$_start][0]), $_result[0][$_start + $_end][1] - $_result[0][$_start][1] - + strlen($_result[0][$_start][0])));
+            $line_offset = substr_count($compiler->template->source->content, "\n", 0, $_result[0][$_start][1] + strlen($_result[0][$_start][0]));
+            Smarty_Internal_Compile_Block::saveBlockData($_block_content, $_result[0][$_start][0], $compiler->template, $filepath, $compiler->template->template_resource, $line_offset);
             $_start = $_start + $_end + 1;
         }
         if ($_template->source->type == 'extends') {
@@ -112,6 +113,7 @@ class Smarty_Internal_Compile_Extends extends Smarty_Internal_CompileBase {
             }
         }
         $compiler->template->source->filepath = $_template->source->filepath;
+        $compiler->template->template_resource = $_template->template_resource;
         $compiler->abort_and_recompile = true;
         return '';
     }

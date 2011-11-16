@@ -15,17 +15,18 @@
  * @link http://www.smarty.net/manual/en/language.modifier.lower.php lower (Smarty online manual)
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Uwe Tews
- * @param array $params parameters
+ *
+ * @param string $input input string
  * @return string with compiled code
  */
-
-function smarty_modifiercompiler_lower($params, $compiler)
+// NOTE: The parser does pass all parameter as strings which could be directly inserted into the compiled code string
+function smarty_modifiercompiler_lower($input)
 {
     if (SMARTY_MBSTRING /* ^phpunit */&&empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
-        return 'mb_strtolower(' . $params[0] . ',SMARTY_RESOURCE_CHAR_SET)' ;
+        return "mb_strtolower({$input}, SMARTY_RESOURCE_CHAR_SET)";
     }
     // no MBString fallback
-    return 'strtolower(' . $params[0] . ')';
+    return 'strtolower(' . $input . ')';
 }
 
 ?>

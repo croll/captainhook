@@ -11,7 +11,7 @@
 
 /**
  * Smarty Internal Plugin Compile Section Class
- * 
+ *
  * @package Smarty
  * @subpackage Compiler
  */
@@ -59,8 +59,8 @@ class Smarty_Internal_Compile_Section extends Smarty_Internal_CompileBase {
 
         $section_name = $_attr['name'];
 
-        $output .= "if (isset(\$_smarty_tpl->tpl_vars['smarty']->value['section'][$section_name])) unset(\$_smarty_tpl->tpl_vars['smarty']->value['section'][$section_name]);\n";
-        $section_props = "\$_smarty_tpl->tpl_vars['smarty']->value['section'][$section_name]";
+        $output .= "if (isset(\$_smarty_tpl->tpl_vars->smarty->value['section'][$section_name])) unset(\$_smarty_tpl->tpl_vars->smarty->value['section'][$section_name]);\n";
+        $section_props = "\$_smarty_tpl->tpl_vars->smarty->value['section'][$section_name]";
 
         foreach ($_attr as $attr_name => $attr_value) {
             switch ($attr_name) {
@@ -138,7 +138,7 @@ class Smarty_Internal_Compile_Section extends Smarty_Internal_CompileBase {
 
 /**
  * Smarty Internal Plugin Compile Sectionelse Class
- * 
+ *
  * @package Smarty
  * @subpackage Compiler
  */
@@ -166,7 +166,7 @@ class Smarty_Internal_Compile_Sectionelse extends Smarty_Internal_CompileBase {
 
 /**
  * Smarty Internal Plugin Compile Sectionclose Class
- * 
+ *
  * @package Smarty
  * @subpackage Compiler
  */

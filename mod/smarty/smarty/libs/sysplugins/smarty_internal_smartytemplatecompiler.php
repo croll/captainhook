@@ -65,6 +65,13 @@ class Smarty_Internal_SmartyTemplateCompiler extends Smarty_Internal_TemplateCom
     public $local_var = array();
 
     /**
+     * line offset to start of template source
+     *
+     * @var int
+     */
+    public $line_offset = 0;
+
+    /**
      * Initialize compiler
      *
      * @param string $lexer_class  class name

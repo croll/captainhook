@@ -15,12 +15,15 @@
  *
  * @link http://www.smarty.net/manual/en/language.modifier.string.format.php string_format (Smarty online manual)
  * @author Uwe Tews
- * @param array $params parameters
+ *
+ * @param mixed $input  input string to be formated
+ * @param string $format format string
  * @return string with compiled code
  */
-function smarty_modifiercompiler_string_format($params, $compiler)
+// NOTE: The parser does pass all parameter as strings which could be directly inserted into the compiled code string
+function smarty_modifiercompiler_string_format($input, $format)
 {
-    return 'sprintf(' . $params[1] . ',' . $params[0] . ')';
+    return "sprintf({$format}, {$input})";
 }
 
 ?>

@@ -18,16 +18,14 @@
  *
  * @link http://www.smarty.net/manual/en/language.modifier.strip.php strip (Smarty online manual)
  * @author Uwe Tews
- * @param array $params parameters
+ *
+ * @params string $input input string
+ * @params string $replacement replacement string
  * @return string with compiled code
  */
-
-function smarty_modifiercompiler_strip($params, $compiler)
+// NOTE: The parser does pass all parameter as strings which could be directly inserted into the compiled code string
+function smarty_modifiercompiler_strip($input, $replacement = "' '")
 {
-    if (!isset($params[1])) {
-        $params[1] = "' '";
-    }
-    return "preg_replace('!\s+!u', {$params[1]},{$params[0]})";
+    return "preg_replace('!\s+!u', {$replacement},{$input})";
 }
-
 ?>

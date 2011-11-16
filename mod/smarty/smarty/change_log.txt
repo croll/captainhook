@@ -1,9 +1,112 @@
-﻿===== trunk  =====
-===== Smarty-3.1.4 =====
+﻿===== Smarty 3.2-DEV  =====
+15.11.2011
+- removed $use_reflection property as  reflection is now mandatory
+
+12.11.2011
+- use Reflection to check parameter when compiling modifier code
+
+01.11.2011
+- bugfix adjust displayed line numbers for SmartyCompilerException in {block} tags to be 
+  absolute to start of source file
+
+24.10.2011
+- tweak performance replace strncmp with strpos (15% faster)
+- tweak make internal variable static to (often called) smartyAutoload
+- fix template source traceback when using inheritance
+
+23.10.2011
+- make template source traceback on SmartyRunTimeException working also in nocache
+  sections in cache files
+
+22.10.2011
+- add {exception} tag
+- improved Exception messages (work still in progress)
+- bugfix call of plugin with Smarty | Smarty_Internal_Template object as only 
+  parameter was incorrectly compiled
+- add buildRefection() internal method for code optimization
+
+21.10.2011
+- bugfix nocache_hash processing
+
+19.10.2011
+- improvement SmartyRunTimeException now shows template source lines of error
+- fix SmartyRunTimeException on eval and string resources
+- bugfix getConfigVars() should also run into the default_config_variable_handler
+- merged 3.1.4
+
+18.10.2011
+- bugfix {${$foo}} did not work (Smarty 3.2 parser)
+- improvement remove BOM of template and config files in lexer
+- bugfix cache_attr of registered plugins did not work after adding PHP reflection
+- add $disable_core_plugins to disable looking for plugins in Smarty's plugins/
+
+16.10.2011
+- pass context object to default variable handlers
+- add support of function and block plugins which use real parameter instead $params array
+- moved compiled object into its own file smarty_compiled.php
+- moved parts of fetch() code into classes it belongs to
+- bugfix cached template objects must save/restore local variables in fetch()
+- add modifier checks for required parameter
+- merging 3.1 patches
+
+14.10.2011
+- add {$x = $k cachevalue} to make the value of $k available as nocache variable $x (Forum Topic 20123)
+- removed traceback information from Smarty exceptions
+- add SmartyRuntimeExecption
+
+29.09.2011
+- added namespace support for static classes in templates
+- added PHP reflection to:
+  * pass optional Smarty or template objects to modifier by type-hint
+  * use type-hint to pass Smarty or template objects to plugins
+  * use PHPdoc annotation to use smarty_nocache and smarty_cache_attr on plugins
+
+28.09.2011
+- remove scope property from Smarty_variable class
+- code optimizations
+
+26.09.2011
+- add default variable handler
+- add default config variable handler
+- optimization of variable container handling
+
+===== trunk  =====
+===== Smarty-3.1.5  =====
+14.11.2011
+- bugfix allow space between function name and open bracket (forum topic 20375)
+
+09.11.2011
+- bugfix different behaviour of uniqid() on cygwin. See https://bugs.php.net/bug.php?id=34908
+  (forum topic 20343)
+
+01.11.2011
+- bugfix {if} and {while} tags without condition did not throw a SmartyCompilerException (Issue #57)
+- bugfix multiline strings in config files could fail on longer strings (reopened Issue #55)
+
+22.10.2011
+- bugfix smarty_mb_from_unicode() would not decode unicode-points properly
+- bugfix use catch Exception instead UnexpectedValueException in 
+  clearCompiledTemplate to be PHP 5.2 compatible
+
+21.10.2011
+- bugfix apostrophe in plugins_dir path name failed (forum topic 20199)
+- improvement sha1() for array keys longer than 150 characters
+- add Smarty::$allow_ambiguous_resources to activate unique resource handling (Forum Topic 20128)
+
+20.10.2011
+- @silenced unlink() in Smarty_Internal_Write_File since debuggers go haywire without it.
+- bugfix Smarty::clearCompiledTemplate() threw an Exception if $cache_id was not present in $compile_dir when $use_sub_dirs = true.
+- bugfix {html_select_date} and {html_select_time} did not properly handle empty time arguments (Forum Topic 20190)
+- improvement removed unnecessary sha1()
+
 19.10.2011
 - revert PHP4 constructor message
+- fixed PHP4 constructor message
+
+===== Smarty-3.1.4 =====
 19.10.2011
 - added exception when using PHP4 style constructor
+
 16.10.2011
 - bugfix testInstall() did not propery check cache_dir and compile_dir
 
@@ -1681,7 +1784,7 @@ NOTICE: existing compiled template and cache files must be deleted
 - autoappend a directory separator if the xxxxx_dir definition have no trailing one
 
 03/19/2009
-- allow array definition as modifer paramter
+- allow array definition as modifer parameter
 - changed modifier to use multi byte string funktions. 
 
 03/17/2009

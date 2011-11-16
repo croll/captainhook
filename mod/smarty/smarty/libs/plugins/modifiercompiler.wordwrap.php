@@ -8,27 +8,24 @@
 
 /**
  * Smarty wordwrap modifier plugin
- * 
+ *
  * Type:     modifier<br>
  * Name:     wordwrap<br>
  * Purpose:  wrap a string of text at a given length
- * 
+ *
  * @link http://smarty.php.net/manual/en/language.modifier.wordwrap.php wordwrap (Smarty online manual)
- * @author Uwe Tews 
- * @param array $params parameters
+ * @author Uwe Tews
+ *
+ * @param Smarty_Internal_TemplateCompilerBase $compiler compiler object
+ * @param string $input input string
+ * @param int $columns number of columns before wrap
+ * @param string $wrap string to use to wrap
+ * @param bool $cut if true wrap exact at column count
  * @return string with compiled code
  */
-function smarty_modifiercompiler_wordwrap($params, $compiler)
+// NOTE: The parser does pass all parameter as strings which could be directly inserted into the compiled code string
+function smarty_modifiercompiler_wordwrap(Smarty_Internal_TemplateCompilerBase $compiler, $input, $columns = 80, $wrap = '"\n"', $cut = 'false')
 {
-    if (!isset($params[1])) {
-        $params[1] = 80;
-    } 
-    if (!isset($params[2])) {
-        $params[2] = '"\n"';
-    } 
-    if (!isset($params[3])) {
-        $params[3] = 'false';
-    } 
     $function = 'wordwrap';
     if (SMARTY_MBSTRING /* ^phpunit */&&empty($_SERVER['SMARTY_PHPUNIT_DISABLE_MBSTRING'])/* phpunit$ */) {
         if ($compiler->tag_nocache | $compiler->nocache) {
@@ -40,7 +37,7 @@ function smarty_modifiercompiler_wordwrap($params, $compiler)
         }
         $function = 'smarty_mb_wordwrap';
     }
-    return $function . '(' . $params[0] . ',' . $params[1] . ',' . $params[2] . ',' . $params[3] . ')';
-} 
+    return $function . "({$input}, {$columns}, {$wrap}, {$cut})";
+}
 
 ?>

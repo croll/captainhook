@@ -19,12 +19,13 @@
  * @link http://smarty.php.net/manual/en/language.modifier.cat.php cat
  *          (Smarty online manual)
  * @author   Uwe Tews
- * @param array $params parameters
+ *
+ * @param n x mixed $params any number of parameter                    }
  * @return string with compiled code
  */
-function smarty_modifiercompiler_cat($params, $compiler)
+// NOTE: The parser does pass all parameter as strings which could be directly inserted into the compiled code string
+function smarty_modifiercompiler_cat()
 {
-    return '('.implode(').(', $params).')';
+    return '('.implode(').(', func_get_args()).')';
 }
-
 ?>

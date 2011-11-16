@@ -72,8 +72,10 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase {
      * @param string $block_tag         opening block tag
      * @param object $template          template object
      * @param string $filepath          filepath of template source
+     * @param string $resource          template resource
+     * @param int    $line_offset       offset of this block from source start
      */
-    public static function saveBlockData($block_content, $block_tag, $template, $filepath)
+    public static function saveBlockData($block_content, $block_tag, $template, $filepath, $resource, $line_offset)
     {
         $_rdl = preg_quote($template->smarty->right_delimiter);
         $_ldl = preg_quote($template->smarty->left_delimiter);
@@ -106,6 +108,8 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase {
                 } else {
                     $template->block_data[$_name]['source'] = $block_content;
                     $template->block_data[$_name]['file'] = $filepath;
+                    $template->block_data[$_name]['resource'] = $resource;
+                    $template->block_data[$_name]['offset'] = $line_offset;
                 }
                 if ($_match[6] == 'append') {
                     $template->block_data[$_name]['mode'] = 'append';
@@ -147,11 +151,13 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase {
         if (!isset($compiler->template->block_data[$_name]['source'])) {
             return '';
         }
-        $_tpl = new Smarty_Internal_template ('string:' . $compiler->template->block_data[$_name]['source'], $compiler->smarty, $compiler->template, $compiler->template->cache_id,
+        $_tpl = new Smarty_Internal_template ($compiler->template->block_data[$_name]['resource'], $compiler->smarty, $compiler->template, $compiler->template->cache_id,
         $compiler->template->compile_id = null, $compiler->template->caching, $compiler->template->cache_lifetime);
+        $_tpl->source->filepath = $compiler->template->block_data[$_name]['file'];
+        $_tpl->source->content = $compiler->template->block_data[$_name]['source'];
+        $_tpl->compiler->line_offset = $compiler->template->block_data[$_name]['offset'];
         $_tpl->variable_filters = $compiler->template->variable_filters;
         $_tpl->properties['nocache_hash'] = $compiler->template->properties['nocache_hash'];
-        $_tpl->source->filepath = $compiler->template->block_data[$_name]['file'];
         $_tpl->allow_relative_path = true;
         if ($compiler->nocache) {
             $_tpl->compiler->forceNocache = 2;
@@ -184,6 +190,8 @@ class Smarty_Internal_Compile_Block extends Smarty_Internal_CompileBase {
                 }
             }
         }
+        unset($_tpl->tpl_vars);
+        unset($_tpl->config_vars);
         unset($_tpl);
         return $_output;
     }
@@ -228,6 +236,8 @@ class Smarty_Internal_Compile_Blockclose extends Smarty_Internal_CompileBase {
         $compiler->smarty->merge_compiled_includes = $saved_data[3];
         // reset flag for {block} tag
         $compiler->inheritance = false;
+        // update nocache line number trace back
+        $compiler->parser->updateNocacheLineTrace(true);
         // $_output content has already nocache code processed
         $compiler->suppressNocacheProcessing = true;
         return $_output;
