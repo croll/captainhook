@@ -9,7 +9,7 @@ class SmartyPlugins {
 	}
 
 	public static function function_css($params, $template) {
-		$csss = &$template->smarty->tpl_vars['webpage']->value->csss;
+		$csss = &$template->smarty->tpl_vars->webpage->value->csss;
 		if (!isset($params['file'])) throw new \Exception("{css} function must have a 'file' parameter");
 		if (!in_array($params['file'], $csss))
 			$csss[] = $params['file'];
@@ -17,7 +17,7 @@ class SmartyPlugins {
 	}
 
 	public static function function_js($params, $template) {
-		$scripts = &$template->smarty->tpl_vars['webpage']->value->scripts;
+		$scripts = &$template->smarty->tpl_vars->webpage->value->scripts;
 		if (!isset($params['file'])) throw new \Exception("{js} function must have a 'file' parameter");
 		if (!in_array($params['file'], $scripts))
 			$scripts[] = $params['file'];
@@ -25,8 +25,8 @@ class SmartyPlugins {
 	}
 
 	public static function outputFilter_processJsAndCss($output, $template) {
-		$scripts = &$template->smarty->tpl_vars['webpage']->value->scripts;
-		$csss = &$template->smarty->tpl_vars['webpage']->value->csss;
+		$scripts = &$template->smarty->tpl_vars->webpage->value->scripts;
+		$csss = &$template->smarty->tpl_vars->webpage->value->csss;
 		if (!isset($csss) && !isset($scripts)) 
 			return $output;
 		$css = $js = '';
@@ -42,7 +42,7 @@ class SmartyPlugins {
 	}
 
 	public static function block_embedjs($params, $content, $template) {
-		$js = &$template->smarty->tpl_vars['webpage']->value->embedded_js;
+		$js = &$template->smarty->tpl_vars->webpage->value->embedded_js;
 		$js[] = $content;
 	}
 
