@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/demo/templates
+END
+index.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/demo/templates/index.tpl
+END
+header.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/demo/templates/header.tpl
+END
+footer.tpl
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/demo/templates/footer.tpl
+END

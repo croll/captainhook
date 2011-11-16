@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/4455/branches/Smarty_3_2_DEV/distribution/demo/plugins
+END
+resource.extendsall.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/demo/plugins/resource.extendsall.php
+END
+resource.mysql.php
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/4455/branches/Smarty_3_2_DEV/distribution/demo/plugins/resource.mysql.php
+END
+cacheresource.memcache.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/demo/plugins/cacheresource.memcache.php
+END
+cacheresource.apc.php
+K 25
+svn:wc:ra_dav:version-url
+V 90
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/demo/plugins/cacheresource.apc.php
+END
+resource.mysqls.php
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/4455/branches/Smarty_3_2_DEV/distribution/demo/plugins/resource.mysqls.php
+END
+cacheresource.mysql.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/4455/branches/Smarty_3_2_DEV/distribution/demo/plugins/cacheresource.mysql.php
+END
