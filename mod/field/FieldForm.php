@@ -35,10 +35,14 @@ class FieldForm {
 	public function get_html($webpage) {
 		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.js');
 		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.more.js');
+		//\mod\cssjs\Main::addJs($webpage, '/mod/field/js/field.js');
 		$js="<script>";
-		$js.="alert(document.id('niclotest'));";
+		$js.="myForm=document.id('niclotest');";
+		$js.="new Form.Validator.Inline(myForm, { evaluateFieldsOnChange: true, useTitles: true });";
 		foreach(self::$validators as $validator) {
+			$js.=$validator->get_mootools_js();
 		}
+		//$js.="myForm.validate();";
 		$js.="</script>";
 		return "<form id='niclotest' method='POST'><input type='hidden' name='field_fieldform_uniquename' value='".$this->uniquename."'/>".$this->html."</form> $js";
 	}
@@ -120,6 +124,17 @@ class Validator {
 	public function get_mootools_string() {
 		return $this->name;
 	}
+
+	public function get_mootools_js() {
+		return '
+Form.Validator.add("'.addslashes($this->name).'", {
+    errorMsg: "'.addslashes($this->message).'",
+    test: function(field) {
+	return '.($this->inverted ? '' : '!').'field.get("value").test('.$this->regexp.');
+    }
+});
+';
+	}
 }
 
 class Element {
@@ -174,7 +189,7 @@ class Element {
 		$str='';
 		foreach($this->validators as $validator) {
 			$tmp=$validator->get_mootools_string();
-			if ($tmp) $str.=($str ? ',' : '').$tmp;
+			if ($tmp) $str.=($str ? ' ' : '').$tmp;
 		}
 		if ($str) $str='data-validators="'.$str.'"';
 		return $str;
@@ -183,16 +198,16 @@ class Element {
 
 class Text extends Element {
 	public function render() {
-		return sprintf("<input type='text' name='%s' value='%s' ".$this->get_mootools_validators_string()."/>%s",
-									 $this->name, $this->getValue(), $this->validatetohtml($this->getValue())
+		return sprintf("<input type='text' name='%s' value='%s' ".$this->get_mootools_validators_string()."/>",
+									 $this->name, $this->getValue()
 									 );
 	}
 }
 
 class Hidden extends Element {
 	public function render() {
-		return sprintf("<input type='hidden' name='%s' value='%s'/>%s",
-									 $this->name, $this->getValue(), $this->validatetohtml($this->getValue())
+		return sprintf("<input type='hidden' name='%s' value='%s'/>",
+									 $this->name, $this->getValue()
 									 );
 	}
 }
