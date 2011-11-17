@@ -13,7 +13,7 @@ class SmartyPlugins {
 		if (!isset($params['file'])) throw new \Exception("{css} function must have a 'file' parameter");
 		if (!in_array($params['file'], $csss))
 			$csss[] = $params['file'];
-		return (sizeof($csss) < 2) ? 'CSSREPLACEME' : '';
+		return;
 	}
 
 	public static function function_js($params, $template) {
@@ -21,7 +21,7 @@ class SmartyPlugins {
 		if (!isset($params['file'])) throw new \Exception("{js} function must have a 'file' parameter");
 		if (!in_array($params['file'], $scripts))
 			$scripts[] = $params['file'];
-		return (sizeof($scripts) < 2) ? 'JSREPLACEME' : '';
+		return;
 	}
 
 	public static function outputFilter_processJsAndCss($output, $template) {
@@ -38,7 +38,7 @@ class SmartyPlugins {
 			foreach($scripts as $file) {
 				$js .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
 			}
-		return str_replace(array('CSSREPLACEME', 'JSREPLACEME'), array($css, $js), $output);
+		return str_replace('</head>', $css.$js.'</head>', $output);
 	}
 
 	public static function block_embedjs($params, $content, $template) {
