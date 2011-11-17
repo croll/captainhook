@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/svn/!svn/ver/4470/branches/Smarty_3_2_DEV/distribution
+END
+change_log.txt
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/4470/branches/Smarty_3_2_DEV/distribution/change_log.txt
+END
+SMARTY_3.1_NOTES.txt
+K 25
+svn:wc:ra_dav:version-url
+V 76
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/SMARTY_3.1_NOTES.txt
+END
+SMARTY_3.0_BC_NOTES.txt
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/!svn/ver/4425/branches/Smarty_3_2_DEV/distribution/SMARTY_3.0_BC_NOTES.txt
+END
+SMARTY_2_BC_NOTES.txt
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/svn/!svn/ver/4425/branches/Smarty_3_2_DEV/distribution/SMARTY_2_BC_NOTES.txt
+END
+README
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/README
+END
+COPYING.lib
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/COPYING.lib
+END
