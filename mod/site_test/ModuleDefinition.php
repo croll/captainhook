@@ -23,6 +23,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
                              ." `id` INT(11) NOT NULL auto_increment,"
                              ." `firstname` VARCHAR(255) NOT NULL,"
                              ." `lastname` VARCHAR(255) NOT NULL,"
+                             ." `gender` enum('male','female','other') NOT NULL,"
                              ." KEY `kperson` (`id`)"
                              .") ENGINE=InnoDB DEFAULT CHARSET=utf8");
 

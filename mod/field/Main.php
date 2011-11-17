@@ -9,7 +9,9 @@ class Main {
 		if (!isset($params['phpclass']))
 			throw new \Exception("Field must have a phpclass");
 		$classname=$params['phpclass'];
-		$field = new $classname($params['name'], isset($params['value']) ? $params['value'] : '', $params);
+		if (isset($fieldform->_curfieldgroup) && !isset($params['name']))
+			$params['name']=$fieldform->_curfieldgroup->params['name'];
+		$field = new $classname($params);
 		$fieldform->addField($field);
 		return $field->render();
   }
@@ -29,6 +31,21 @@ class Main {
 		} else throw new \Exception("FieldVerification must have at least regexp nor iregexp argument");
 
 		FieldForm::_addValidator(new Validator($params['name'], $regexp, $params['message'], $inverted));
+	}
+
+	public static function smartyBlock_FieldGroup($params, $content, $smarty, &$repeat) {
+		$fieldform = $smarty->tpl_vars->fieldform->value;
+		if ($content === NULL) { // open tag
+			if (!isset($params['phpclass']))
+				throw new \Exception("FieldGroup must have a phpclass");
+			$classname=$params['phpclass'];
+			$fieldform->_curfieldgroup=new $classname($params);
+		} else {
+			$field=$fieldform->_curfieldgroup;
+			$fieldform->addField($field);
+			unset($fieldform->_curfieldgroup);
+			return $content.$field->render();
+		}
 	}
 
 }
