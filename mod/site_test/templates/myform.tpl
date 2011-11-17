@@ -23,4 +23,3 @@
 <div>
   {Field phpclass='\mod\field\Submit' name='submit' value='Envoi la sauce !'}
 </div>
-

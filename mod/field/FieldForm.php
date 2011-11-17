@@ -184,7 +184,7 @@ class Element {
 
 	public function getValue() {
 		if (isset($_POST[$this->name])) return $_POST[$this->name];
-		return $this->params['value'];
+		return isset($this->params['value']) ? $this->params['value'] : '';
 	}
 
 	public function get_mootools_validators_string() {
@@ -204,22 +204,30 @@ class Element {
 				$str.=($str ? ' ' : '').$k."='$v'";
 		return $str;
 	}
+
+	public function render_show() {
+		return htmlspecialchars($value);
+	}
+
+	public function render_edit() {
+		return "render_edit not implemented";
+	}
 }
 
 class Text extends Element {
-	public function render() {
+	public function render_edit() {
 		return sprintf("<input %s type='text' name='%s' value='%s' ".$this->get_mootools_validators_string()."/>",
 									 $this->getParamsStr(array('name','value','type')),
-									 $this->name, $this->getValue()
+									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
 									 );
 	}
 }
 
 class Hidden extends Element {
-	public function render() {
+	public function render_edit() {
 		return sprintf("<input %s type='hidden' name='%s' value='%s'/>",
 									 $this->getParamsStr(array('name','value','type')),
-									 $this->name, $this->getValue()
+									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
 									 );
 	}
 }
@@ -231,12 +239,13 @@ class RadioGroup extends Element {
 		$this->radios[]=$radio;
 	}
 
-	public function render() {
+	public function render_edit() {
+		return '';
 	}
 }
 
 class Radio extends Element {
-	public function render() {
+	public function render_edit() {
 		return sprintf("<input %s type='radio' name='%s' value='%s'%s/>",
 									 $this->getParamsStr(array('name','value','type')),
 									 $this->name, $this->params['value'], $this->is_checked() ? ' checked' : ''
@@ -251,28 +260,46 @@ class Radio extends Element {
 }
 
 class Checkbox extends Element {
+	public function render_edit() {
+		return sprintf("<input %s type='checkbox' name='%s' value='%s'%s/>",
+									 $this->getParamsStr(array('name','value','type')),
+									 $this->name, $this->params['value'], $this->is_checked() ? ' checked' : ''
+									 );
+	}
+	public function is_checked() {
+		if (isset($_POST[$this->name]) && ($_POST[$this->name] == $this->params['value']))
+			return true;
+		if (isset($this->params['checked'])) return true;
+		return false;
+	}
 }
 
 class Password extends Element {
-	public function render() {
+	public function render_edit() {
 		return sprintf("<input %s type='password' name='%s' value='%s' ".$this->get_mootools_validators_string()."/>",
 									 $this->getParamsStr(array('name','value','type')),
-									 $this->name, $this->getValue()
+									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
 									 );
 	}
 }
 
 class Textarea extends Element {
+	public function render_edit() {
+		return sprintf("<textarea %s name='%s'".$this->get_mootools_validators_string()."/>%s</textarea>",
+									 $this->getParamsStr(array('name','value')),
+									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
+									 );
+	}
 }
 
 class Select extends Element {
 }
 
 class Submit extends Element {
-	public function render() {
+	public function render_edit() {
 		return sprintf("<input %s type='submit' name='%s' value='%s'/>",
 									 $this->getParamsStr(array('name','value','type')),
-									 $this->name, $this->getValue()
+									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
 									 );
 	}
 }

@@ -13,7 +13,7 @@ class Main {
 			$params['name']=$fieldform->_curfieldgroup->params['name'];
 		$field = new $classname($params);
 		$fieldform->addField($field);
-		return $field->render();
+		return $field->render_edit();
   }
 	
   public static function smartyFunction_FieldValidator($params, $template) {
@@ -44,7 +44,7 @@ class Main {
 			$field=$fieldform->_curfieldgroup;
 			$fieldform->addField($field);
 			unset($fieldform->_curfieldgroup);
-			return $content.$field->render();
+			return $content.$field->render_edit();
 		}
 	}
 
