@@ -1,7 +1,7 @@
 {extends tplextends('webpage', 'webpage_html4')}
 
 {block name='webpage_head'}
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <title>{$title|escape}</title>
   <link rel="shortcut icon" href="{$favicon}" type="image/x-icon" />
 {/block}
