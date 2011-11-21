@@ -10,4 +10,9 @@ class Tools {
 		return @round($size/pow(1024,($i=floor(log($size,1024)))),2).' '.$unit[$i];
 	}
 
+	public static function cleanString($str) {
+		$str = mb_convert_encoding($str, 'UTF-8', 'UTF-8');
+		return htmlentities($str, ENT_QUOTES, 'UTF-8');
+	}
+
 }
