@@ -34,12 +34,12 @@ class Main {
 
 		$page->setLayout('mod/site_test/templates/field.tpl');
 		if ($form->isPosted() && $form->isValid()) {
-			$form->sqlinsert('ch_sitetest_person');
+			$form->sqlInsert('ch_sitetest_person');
 			$page->smarty->assign('site_test_firstname', $form->getValue('firstname'));
 			$page->smarty->assign('site_test_lastname', $form->getValue('lastname'));
 		} else {
 			$page->setLayout('mod/site_test/templates/field.tpl');
-			$page->smarty->assign('site_test_myform', $form->get_html($page));
+			$page->smarty->assign('site_test_myform', $form->getHtml($page));
 		}
 	}
 

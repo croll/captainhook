@@ -32,15 +32,15 @@ class FieldForm {
 		else throw new \Exception("Validator '".$name."' not found");
 	}
 
-	public function get_html($webpage) {
+	public function getHtml($webpage) {
 		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.js');
 		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.more.js');
 		//\mod\cssjs\Main::addJs($webpage, '/mod/field/js/field.js');
 		$js="<script>";
 		$js.="myForm=document.id('niclotest');";
-		$js.="new Form.Validator.Inline(myForm, { evaluateFieldsOnChange: true, useTitles: true, warningPrefix: '', errorPrefix: '' });";
+		$js.="new Form.Validator.Inline(myForm, { evaluateFieldsOnChange: true, warningPrefix: '', errorPrefix: '' });";
 		foreach(self::$validators as $validator) {
-			$js.=$validator->get_mootools_js();
+			$js.=$validator->getMootoolsJs();
 		}
 		//$js.="myForm.validate();";
 		$js.="</script>";
@@ -69,7 +69,7 @@ class FieldForm {
 		$this->fields[]=$field;
 	}
 
-	public function sqlinsert() {
+	public function sqlInsert() {
 		$querys=array();
 		foreach($this->fields as $field) {
 			if (!isset($field->params['sqltable'])) continue;
@@ -93,7 +93,7 @@ class FieldForm {
 		return \core\Core::$db->Insert_ID();
 	}
 
-	public function sqlupdate($id) {
+	public function sqlUpdate($id) {
 		$vals=array();
 		$a='';
 		foreach($this->fields as $field) {
@@ -121,11 +121,11 @@ class Validator {
 		$this->inverted=$inverted;
 	}
 
-	public function get_mootools_string() {
+	public function getMootoolsString() {
 		return $this->name;
 	}
 
-	public function get_mootools_js() {
+	public function getMootoolsJs() {
 		return '
 Form.Validator.add("'.addslashes($this->name).'", {
     errorMsg: "'.addslashes($this->message).'",
@@ -187,10 +187,10 @@ class Element {
 		return isset($this->params['value']) ? $this->params['value'] : '';
 	}
 
-	public function get_mootools_validators_string() {
+	public function getMootoolsValidatorsString() {
 		$str='';
 		foreach($this->validators as $validator) {
-			$tmp=$validator->get_mootools_string();
+			$tmp=$validator->getMootoolsString();
 			if ($tmp) $str.=($str ? ' ' : '').$tmp;
 		}
 		if ($str) $str='data-validators="'.$str.'"';
@@ -216,7 +216,7 @@ class Element {
 
 class Text extends Element {
 	public function render_edit() {
-		return sprintf("<input %s type='text' name='%s' value='%s' ".$this->get_mootools_validators_string()."/>",
+		return sprintf("<input %s type='text' name='%s' value='%s' ".$this->getMootoolsValidatorsString()."/>",
 									 $this->getParamsStr(array('name','value','type')),
 									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
 									 );
@@ -276,7 +276,7 @@ class Checkbox extends Element {
 
 class Password extends Element {
 	public function render_edit() {
-		return sprintf("<input %s type='password' name='%s' value='%s' ".$this->get_mootools_validators_string()."/>",
+		return sprintf("<input %s type='password' name='%s' value='%s' ".$this->getMootoolsValidatorsString()."/>",
 									 $this->getParamsStr(array('name','value','type')),
 									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
 									 );
@@ -285,7 +285,7 @@ class Password extends Element {
 
 class Textarea extends Element {
 	public function render_edit() {
-		return sprintf("<textarea %s name='%s'".$this->get_mootools_validators_string()."/>%s</textarea>",
+		return sprintf("<textarea %s name='%s'".$this->getMootoolsValidatorsString()."/>%s</textarea>",
 									 $this->getParamsStr(array('name','value')),
 									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
 									 );

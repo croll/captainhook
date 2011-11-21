@@ -17,23 +17,25 @@ class Main {
 																			array($login, $password))) {
 					if ($row) {
 						$_SESSION['full_name'] = $row['full_name'];
+						$_SESSION['login'] = $row['full_name'];
 						$_SESSION['hash'] = self::genTempHash($login,$password);
-            \core\Hook::call('login_ok');
+            \core\Hook::call('mod_user_login-ok');
+						return true;
 					} else {
-            \core\Hook::call('login_failed');
+            \core\Hook::call('mod_user_login-failed');
           }
 				}
 			}
 		}
 		unset($_SESSION);
 		session_destroy();
+		return false;
 	}
 
 	public static function logout() {
     \core\Hook::call('mod/user/logout');
 		unset($_SESSION);
 		session_destroy();
-		header('Location: index.php');
 	}
 
 	protected static function genTempHash($login,$password) {
@@ -201,7 +203,6 @@ class Main {
 		else 
 			$rid = self::getRightId($right);
 
-		echo "$right - $rid<br>";
 		if (is_null($group)) {
 			Core::$db->Execute('DELETE FROM `ch_group_right` WHERE `rid`=?',
 																		array($rid));
@@ -250,6 +251,43 @@ class Main {
 			return (is_array(self::$_cache['g'][$gid]) && in_array($right, self::$_cache['g'][$gid])) ? true : false;
 	}	
 
+	public static function hook_mod_user_login($hookname, $userdata, $urlmatches) {
+		$displayForm = true;
+		$form = new \mod\field\FieldForm('user_loginform', 'mod/user/templates/login_form_fields.tpl');
+		$page = new \mod\webpage\Main();
+		$page->setLayout('mod/user/templates/login.tpl');
+		if (!self::isAuthentified()) { 
+			if ($form->isPosted() && $form->isValid()) {
+				$l = \core\Tools::cleanString($form->getValue('login'));
+				$p = \core\Tools::cleanString($form->getValue('password'));
+				if(self::checkAuth($l, $p)) {
+					$displayForm = false;
+					$page->smarty->assign('login_ok', true);
+					if ($_REQUEST['from'])
+						$page->smarty->assign('url_redirect', urldecode($_REQUEST['from']));
+				} else {
+					$page->smarty->assign('login_failed', true);
+				}
+			}
+		} else {
+			$page->smarty->assign('url_redirect', 'http://'.$_SERVER['HTTP_HOST']);
+			$displayForm = false;
+		}
+		if ($displayForm)
+			$page->smarty->assign('loginform', $form->getHtml($page));
+		$page->display();
+	}
+
+	public static function hook_mod_user_logout() {
+		self::logout();
+		$page = new \mod\webpage\Main();
+		$page->setLayout('mod/user/templates/login.tpl');
+		$page->smarty->assign('logout', true);
+		$page->smarty->assign('url_redirect', 'http://'.$_SERVER['HTTP_HOST']);
+		$page->display();
+	}
+
+	/*
 	public static function hook_core_init_http() {
 		try {
 			#echo self::addRight("test", "un droit de test")."<br>"; 
@@ -261,5 +299,6 @@ class Main {
 			echo $e->getMessage();
 		}
 	}
+  */
 
 }

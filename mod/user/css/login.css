@@ -1,0 +1,76 @@
+legend {
+	padding-top:10px;
+	font-family: arial, helvetica, sans-serif ;
+	font-size:14px;
+	font-weight:bold;
+}
+
+fieldset {
+	width: 280px;
+	margin: 100px auto;
+  padding: 10px 20px 20px 20px;;
+  border: 1px solid #000;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+}
+
+form [type=text],
+form [type=password],
+form [type=submit] {
+  margin-top: 3px;
+  padding: 1px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+	font-family: arial, helvetica, sans-serif ;
+	font-size:12px;
+}
+
+form [type=check],
+form [type=radio],
+form [type=submit] {
+  cursor: pointer;
+}
+
+form label {
+  display: block;
+}
+
+form input:hover,
+form input:focus,
+form textarea:focus {
+  background-color: #fff38a;
+}
+
+form .validation-failed {
+  border-color: #ff0000;
+  background-color: #ffdddd;
+}
+
+form .validation-advice {
+	color:red;
+  padding: 3px 0 3px 0;
+	font-family: arial, helvetica, sans-serif ;
+	font-size:12px;
+}
+
+form #message {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fff;
+  font-weight:bold;
+  color: red;
+}
+
+form #message:empty {
+  border-width: 0;
+  padding: 0;
+}
+
+form .overTxtLabel {
+  color: #888888;
+	font-family: arial, helvetica, sans-serif ;
+	font-size:12px;
+}
