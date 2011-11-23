@@ -11,8 +11,7 @@ class Main {
 		$classname=$params['phpclass'];
 		if (isset($fieldform->_curfieldgroup) && !isset($params['name']))
 			$params['name']=$fieldform->_curfieldgroup->params['name'];
-		$field = new $classname($params);
-		$fieldform->addField($field);
+		$field = new $classname($params, $fieldform);
 		return $field->render_edit();
   }
 	
@@ -39,10 +38,9 @@ class Main {
 			if (!isset($params['phpclass']))
 				throw new \Exception("FieldGroup must have a phpclass");
 			$classname=$params['phpclass'];
-			$fieldform->_curfieldgroup=new $classname($params);
+			$fieldform->_curfieldgroup=new $classname($params, $fieldform);
 		} else {
 			$field=$fieldform->_curfieldgroup;
-			$fieldform->addField($field);
 			unset($fieldform->_curfieldgroup);
 			return $content.$field->render_edit();
 		}

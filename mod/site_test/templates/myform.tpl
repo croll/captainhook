@@ -5,11 +5,11 @@
 
 
 <div> Firstname:
-  {Field phpclass='\mod\field\Text' name='firstname' sqltable='ch_sitetest_person' value='' validators='site_test_empty,site_test_allowedchars,site_test_length'}
+  {Field phpclass='\mod\field\Text' name='firstname' sqltable='ch_sitetest_person' validators='site_test_empty,site_test_allowedchars,site_test_length'}
 </div>
 
 <div> Lastname:
-  {Field phpclass='\mod\field\Text' name='lastname' sqltable='ch_sitetest_person' value='' validators='site_test_empty,site_test_allowedchars,site_test_length'}
+  {Field phpclass='\mod\field\Text' name='lastname' sqltable='ch_sitetest_person' validators='site_test_empty,site_test_allowedchars,site_test_length'}
 </div>
 
 <div> Gender:
@@ -18,6 +18,10 @@
    <p>{Field phpclass='\mod\field\Radio' value='female'} Female</p>
    <p>{Field phpclass='\mod\field\Radio' value='other'} Other</p>
   {/FieldGroup}
+</div>
+
+<div> Photo:
+  {Field phpclass='\mod\field\File' name='photo'}
 </div>
 
 <div>

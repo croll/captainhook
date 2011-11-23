@@ -5,9 +5,10 @@ namespace mod\field;
 class FieldForm {
 	private $smarty;
 	private $uniquename;
+	private $params=array();
 	private $fields=array();
-	private static $validators=array();
 	private $html;
+	private static $validators=array();
 	
 	public function __construct($uniquename, $tpl) {
 		$this->uniquename=$uniquename;
@@ -21,15 +22,19 @@ class FieldForm {
 		*/
 	}
 
-	// used internaly by smarty
+	// used internaly by smarty functions
 	public static function _addValidator($validator) {
 		self::$validators[$validator->name]=$validator;
 	}
 
-	// used internaly by smarty
+	// used internaly by smarty functions
 	public static function getValidator($name) {
 		if (isset(self::$validators[$name])) return self::$validators[$name];
 		else throw new \Exception("Validator '".$name."' not found");
+	}
+
+	public function setParam($param, $value) {
+		$this->params[$param]=$value;
 	}
 
 	public function getHtml($webpage) {
@@ -44,7 +49,15 @@ class FieldForm {
 		}
 		//$js.="myForm.validate();";
 		$js.="</script>";
-		return "<form id='niclotest' method='POST'><input type='hidden' name='field_fieldform_uniquename' value='".$this->uniquename."'/>".$this->html."</form> $js";
+		return "<form ".$this->getParamsStr()." id='niclotest' method='POST'><input type='hidden' name='field_fieldform_uniquename' value='".$this->uniquename."'/>".$this->html."</form> $js";
+	}
+
+	private function getParamsStr($exclude=array()) {
+		$str='';
+		foreach($this->params as $k => $v)
+			if (!in_array($k, $exclude))
+				$str.=($str ? ' ' : '').$k."=$v";
+		return $str;
 	}
 
 	public function isPosted() {
@@ -143,12 +156,13 @@ class Element {
 	public $params;
 	private $validators=array();
 
-	public function __construct($params) {
+	public function __construct($params, $form) {
 		if (!isset($params['name']))
 			throw new \Exception("Element must have a name parameter");
 		$this->name=$params['name'];
 		$this->value=isset($this->value) ? $this->value : '';
 		$this->params=$params;
+		$this->form=$form;
 		foreach($this->params as $paramname => $param) {
 			switch($paramname) {
 			case 'validators':
@@ -157,6 +171,7 @@ class Element {
 				break;
 			}
 		}
+		$this->form->addField($this);
 	}
 
 	public function addValidator($validator) {
@@ -197,7 +212,7 @@ class Element {
 		return $str;
 	}
 
-	public function getParamsStr($exclude=array()) {
+	protected function getParamsStr($exclude=array()) {
 		$str='';
 		foreach($this->params as $k => $v)
 			if (!in_array($k, $exclude) && !in_array($k, array('phpclass', 'sqltable', 'validators')))
@@ -304,3 +319,21 @@ class Submit extends Element {
 	}
 }
 
+class File extends Element {
+	public function __construct($params, $form) {
+		parent::__construct($params, $form);
+		$form->setParam('enctype', '"multipart/form-data"');
+	}
+
+	public function render_edit() {
+		$val=$this->getValue();
+		return sprintf("<input %s type='file' name='%s' value='%s'/> ",
+									 $this->getParamsStr(array('name','value','type')),
+									 $this->name, is_array($val) ? htmlspecialchars($val['name'], ENT_QUOTES) : ''
+									 );
+	}
+
+	public function getValue() {
+		return isset($_FILES[$this->name]) ? $_FILES[$this->name] : NULL;
+	}
+}
