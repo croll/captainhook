@@ -99,6 +99,11 @@ namespace mod\smarty {
 					if (preg_match('/^hook\.([^.].*)\.tpl$/', $tpl, $matches)) {
 						\core\Hook::registerHookListener('smarty_hook_'.$module_definition->name.'_'.$matches[1], '\\mod\\smarty\\Main::_hook_template', 'mod/'.$module_definition->name.'/templates/'.$tpl, $self_id_module);
 					}
+					if (preg_match('/^override\.([^.].*)\.tpl$/', $tpl, $matches)) {
+						$name=str_replace('.', '/', $matches[1]);
+						\core\Core::$db->execute('INSERT INTO `ch_smarty_override` (`id_module`, `orig`, `replace`) VALUES (?,?,?)',
+																		 array($module_definition->id, $name, $module_definition->name.'/override.'.$matches[1]));
+					}
 				}
 			}
 		}
@@ -119,6 +124,9 @@ namespace mod\smarty {
 					}
 				}
 			}
+
+			\core\Core::$db->execute('DELETE FROM `ch_smarty_override` WHERE id_module=?',
+															 array($module_definition->id));
 			
 			self::unregisterPlugin($module_definition->id);
 		}
@@ -188,6 +196,25 @@ namespace mod\smarty {
 	 * this class implement our smarty template loader
 	 */
 	class Smarty_Resource_Mod extends \Smarty_Resource_Custom {
+
+		private $overrides = null;
+		
+		/*
+		 * Convert the short template name to the real file path.
+		 * This function also check if there is an override, and return the file path of the overrided one
+		 */
+		private function nametofile($name) {
+			if (!is_array($this->overrides)) {
+				$overrides = \core\Core::$db->getAll('SELECT `orig`, `replace` FROM `ch_smarty_override`');
+				$this->overrides=array();
+				foreach($overrides as $override)
+					$this->overrides[$override['orig']]=$override['replace'];
+			}
+			while (isset($this->overrides[$name])) $name=$this->overrides[$name];
+			list($modname, $tplname) = explode('/', $name, 2);
+			return CH_MODDIR.'/'.$modname.'/templates/'.$tplname.'.tpl';
+		}
+
 		/**
 		 * Fetch a template and its modification time from database
 		 *
@@ -197,11 +224,12 @@ namespace mod\smarty {
 		 * @return void
 		 */
 		protected function fetch($name, &$source, &$mtime) {
-			list($modname, $tplname) = explode('/', $name, 2);
-			$filepath=CH_MODDIR.'/'.$modname.'/templates/'.$tplname.'.tpl';
+			$filepath=$this->nametofile($name);
 			if (is_file($filepath)) {
 				$mtime=filemtime($filepath);
 				$source=file_get_contents($filepath);
+			} else {
+				throw new \Exception("template '$filepath' ($name) not found !");
 			}
 		}
  
@@ -213,8 +241,7 @@ namespace mod\smarty {
 		 * @return integer timestamp (epoch) the template was modified
 		 */
 		protected function fetchTimestamp($name) {
-			list($modname, $tplname) = explode('/', $name, 2);
-			$filepath=CH_MODDIR.'/'.$modname.'/templates/'.$tplname.'.tpl';
+			$filepath=$this->nametofile($name);
 			if (is_file($filepath))
 				return filemtime($filepath);
 		}
