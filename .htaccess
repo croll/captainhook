@@ -1,6 +1,4 @@
 RewriteEngine on
 RewriteCond %{REQUEST_URI} !^/doc/$
-RewriteCond %{REQUEST_FILENAME} !\.js$
-RewriteCond %{REQUEST_FILENAME} !\.css$
-RewriteCond %{REQUEST_FILENAME} !\.(jpg|JPG|png|PNG|avi|AVI|mov|MOV)$
+RewriteCond %{REQUEST_FILENAME} !\.(js|JS|css|CSS|jpg|JPG|png|PNG|avi|AVI|mov|MOV)$
 RewriteRule ^.*$ index.php [L]

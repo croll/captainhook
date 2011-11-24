@@ -13,11 +13,13 @@ class Main {
 	public static function checkAuth($login='',$password='') {
 		if ((!empty($login)) && (!empty($password))) {
 			if ( (preg_match("/^[a-zA-Z0-9-_]+$/",$login)) && (preg_match("/^[a-zA-Z0-9-_]+$/",$password)) ) {
-				if ($row = Core::$db->GetOne('SELECT `full_name` FROM `ch_user` WHERE UPPER(`login`)=UPPER(?) AND `pass`=md5(?) AND `status`=1', 
-																			array($login, $password))) {
+				$res = Core::$db->Execute('SELECT `full_name`, `login` FROM `ch_user` WHERE UPPER(`login`)=UPPER(?) AND `pass`=md5(?) AND `status`=1', 
+																		array($login, $password));
+				if ($res) {
+					$row = $res->FetchRow();
 					if ($row) {
 						$_SESSION['full_name'] = $row['full_name'];
-						$_SESSION['login'] = $row['full_name'];
+						$_SESSION['login'] = $row['login'];
 						$_SESSION['hash'] = self::genTempHash($login,$password);
             \core\Hook::call('mod_user_login-ok');
 						return true;
@@ -38,6 +40,11 @@ class Main {
 		session_destroy();
 	}
 
+	public static function redirectIfNotLoggedIn() {
+		if (!self::userIsLoggedIn())
+			header('Location: http://'.$_SERVER['HTTP_HOST'].'/login');
+	}
+
 	protected static function genTempHash($login,$password) {
 		return md5($login.date('Ymdhis')+rand(0,100000).$password);
 	}
@@ -51,7 +58,7 @@ class Main {
 	public static function getUserInfos($id) {
 		$result = Core::$db->Execute('SELECT * FROM `ch_user` WHERE `uid`=?',
 																	array((int)$id));
-		return $result->FetchObject();
+		return $result->FetchRow();
 	}
 
 	public static function getUserId($name) {
@@ -70,7 +77,7 @@ class Main {
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
 	}
 
-	public static function isAuthentified($hash=NULL) {
+	public static function userIsLoggedIn($hash=NULL) {
 		if (empty($_SESSION['hash']) || empty($_SESSION['login'])) return false;
 		if ($hash !== NULL && !$_SESSION['hash'] != $hash) return false;
 		return true;
@@ -85,7 +92,7 @@ class Main {
 	public static function getGroup($id) {
 		$result = Core::$db->Execute('SELECT * FROM `ch_group` WHERE `gid`=?',
 																	array((int)$id));
-		return $result->FetchObject();
+		return $result->FetchRow();
 	}
 
 	public static function getGroupId($name) {
@@ -106,15 +113,15 @@ class Main {
 
 	public static function getUserGroups($user) {
 		if (is_int($user))
-			$result = Core::$db->Execute('SELECT `gid`, `name`, `status` FROM `ch_group` gr LEFT JOIN `ch_user_group` ug ON gr.`gid` = ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid`  WHERE us.`name`=?',
+			$result = Core::$db->Execute('SELECT gr.`gid`, gr.`name` FROM `ch_group` gr LEFT JOIN `ch_user_group` ug ON gr.`gid` = ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid`  WHERE us.`name`=?',
 																	array($name));
 		else {
-			$uid = self::getUserId($name);
-			$result = Core::$db->Execute('SELECT `gid`, `name`, `status` FROM `ch_group` gr LEFT JOIN `ch_user_group` ug ON gr.`gid` = ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid` WHERE us.`uid`=?',
+			$uid = self::getUserId($user);
+			$result = Core::$db->Execute('SELECT gr.`gid`, gr.`name` FROM `ch_group` gr LEFT JOIN `ch_user_group` ug ON gr.`gid` = ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid` WHERE us.`uid`=?',
 																	array((int)$uid));
 		}
-		while($row = $result->FetchNextObject()) {
-			$g[] = $row;
+		while($row = $result->FetchRow()) {
+			$g[] = array('id' => $row['gid'], 'name' => $row['name']);
 		}
 		return $g;
 	}
@@ -123,10 +130,21 @@ class Main {
 		$result = Core::$db->Execute('SELECT * FROM `ch_group` WHERE status=?',
 															array($status));
 		$g = array();
-		while($row = $result->FetchNextObject()) {
+		while($row = $result->FetchRow()) {
 			$g[] = $row;
 		}
 		return $g;
+	}
+
+	public static function userBelongsToGroup($group, $user=NULL) {
+		if (is_null($user)) {
+			if ($_SESSION['login']) $user = $_SESSION['login'];
+			else return false;
+		}
+		$uid = (is_string($user)) ? self::getUserId($user) : $user;
+		return (Core::$db->GetOne('SELECT gr.`gid` FROM `ch_group` gr LEFT JOIN `ch_user_group` ug ON gr.`gid` = ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid` WHERE us.`uid`=? AND gr.`name`=?',
+																	array((int)$uid, $group))) ? true : false;
+
 	}
 
 	public static function addRight($name, $description=NULL) {
@@ -218,8 +236,8 @@ class Main {
 		$result = Core::$db->Execute('SELECT ri.`name` FROM `ch_right` ri LEFT JOIN `ch_group_right` gr ON ri.`rid`=gr.`rid` LEFT JOIN `ch_group` g ON gr.`gid`=g.`gid` LEFT JOIN `ch_user_group` ug ON g.`gid`=ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid` WHERE us.`uid`=?',
 															array($uid));
 		$r = array();
-		while($row = $result->FetchNextObject()) {
-			$r[] = $row->NAME;
+		while($row = $result->FetchRow()) {
+			$r[] = $row['name'];
 		}
 		return (sizeof($r) > 0) ? $r : NULL;
 	}
@@ -229,13 +247,17 @@ class Main {
 		$result = Core::$db->Execute('SELECT ri.`name` FROM `ch_right` ri LEFT JOIN `ch_group_right` gr ON ri.`rid`=gr.`rid` LEFT JOIN `ch_group` g ON gr.`gid`=g.`gid` WHERE g.`gid`=?',
 															array($gid));
 		$r = array();
-		while($row = $result->FetchNextObject()) {
-			$r[] = $row->NAME;
+		while($row = $result->FetchRow()) {
+			$r[] = $row['name'];
 		}
 		return (sizeof($r) > 0) ? $r : NULL;
 	}
 
-	public static function userHasRight($user, $right) {
+	public static function userHasRight($right, $user=NULL) {
+			if (is_null($user)) {
+				if ($_SESSION['login']) $user = $_SESSION['login'];
+				else return false;
+			}
 			$uid = (is_string($user)) ? self::getUserId($user) : $user;
 			if (!isset(self::$_cache) || is_null(self::$_cache['u']) || !isset(self::$_cache['u'][$uid]) || is_null(self::$_cache['u'][$uid])) {
 				self::$_cache['u'][$uid] = self::getUserRights($uid);
@@ -256,15 +278,14 @@ class Main {
 		$form = new \mod\field\FieldForm('user_loginform', 'mod/user/templates/login_form_fields.tpl');
 		$page = new \mod\webpage\Main();
 		$page->setLayout('mod/user/templates/login.tpl');
-		if (!self::isAuthentified()) { 
+		if (!self::userIsLoggedIn()) { 
 			if ($form->isPosted() && $form->isValid()) {
 				$l = \core\Tools::cleanString($form->getValue('login'));
 				$p = \core\Tools::cleanString($form->getValue('password'));
 				if(self::checkAuth($l, $p)) {
 					$displayForm = false;
 					$page->smarty->assign('login_ok', true);
-					if ($_REQUEST['from'])
-						$page->smarty->assign('url_redirect', urldecode($_REQUEST['from']));
+					$page->smarty->assign('url_redirect', ((isset($_REQUEST['from'])) ? urldecode($_REQUEST['from']) : 'http://'.$_SERVER['HTTP_HOST']));
 				} else {
 					$page->smarty->assign('login_failed', true);
 				}

@@ -6,7 +6,7 @@
 		{Field phpclass='\mod\field\Text' title='login' name='login' validators='user_empty,user_length'}
 	</div>
 	<div>
-		{Field phpclass='\mod\field\Text' title='password' name='password' validators='user_empty,user_length'}
+		{Field phpclass='\mod\field\Password' title='password' name='password' validators='user_empty,user_length'}
 	</div>
 </div>
 <div>
