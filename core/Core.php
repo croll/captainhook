@@ -27,7 +27,10 @@
 
 namespace core;
 
+/* the full path of CaptainHook on the filesystem */
 define('CH_ROOTDIR', dirname(dirname(__FILE__)));
+
+/* the full path of CaptainHook mod directory on the filesystem */
 define('CH_MODDIR', CH_ROOTDIR.'/mod');
 
 /**
@@ -75,8 +78,6 @@ class Core {
 
 	/** @var object the db object, used in whole application and modules to perform database queries */
 	public static $db;
-	/** @var string the full path of CaptainHook on the filesystem */
-	private static $_rootDir;
 
 	/**
 	 * Convenience method that does the complete initialization for CaptainHook.
@@ -89,10 +90,9 @@ class Core {
 	 */
 	public static function init($initDb = true, $triggerHook = true) {
 		if (!empty($_GET["page"]) && !preg_match("/^[a-zA-Z]+$/", $_GET["page"])) die("No way");
-			self::$_rootDir = realpath(dirname(__FILE__).'/../');
-		if (!is_file(self::$_rootDir.'/conf/general.conf'))
-			die('Config file '.self::$_rootDir.'/conf/general.conf'.' does not exist. Take a look at '.self::$_rootDir.'/conf/general.conf.dist');
-		$ini = parse_ini_file(self::$_rootDir.'/conf/general.conf', true);
+		if (!is_file(CH_ROOTDIR.'/conf/general.conf'))
+			die('Config file '.CH_ROOTDIR.'/conf/general.conf'.' does not exist. Take a look at '.CH_ROOTDIR.'/conf/general.conf.dist');
+		$ini = parse_ini_file(CH_ROOTDIR.'/conf/general.conf', true);
 		/** Database */
 		if (isset($ini['database']) && $initDb) {
 			require_once(dirname(__FILE__).'/../ext/adodb5/adodb-exceptions.inc.php');
@@ -136,17 +136,6 @@ class Core {
 	public static function log($msg) {
     if (is_string($msg)) error_log($msg);
     else error_log(var_export($msg, true));
-	}
-
-	/**
-	 * Simply returns the full path of the application on filesystem.
-	 *
-	 * @api
-	 *
-	 * @return string
-	 */
-	public static function getRootDir() {
-		return self::$_rootDir;
 	}
 
 }
