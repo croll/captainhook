@@ -1,4 +1,4 @@
-{extends tplextends('webpage', 'webpage_html4')}
+{extends tplextends('webpage/webpage_html4')}
 
 {block name='webpage_head'}
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />

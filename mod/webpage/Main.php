@@ -5,7 +5,7 @@ namespace mod\webpage;
 class Main {
   public $title = "Captain Hook";
   public $favicon = "mod/webpage/images/favicon.ico";
-	public $layout = 'mod/webpage/templates/webpage_main.tpl';
+	public $layout = 'webpage/webpage_main';
   public $csss = array();
   public $scripts = array();
 	public $smarty;
@@ -13,7 +13,7 @@ class Main {
 
 	function __construct() {
     $this->smarty =\mod\smarty\Main::newSmarty();
-		$this->smarty->assign('extends_webpage_main', 'mod/webpage/templates/webpage_html4.tpl');
+		$this->smarty->assign('extends_webpage_main', 'webpage/webpage_html4');
     $this->smarty->assign('title', $this->title);
     $this->smarty->assign('favicon', $this->favicon);
 		$this->smarty->assignByRef('webpage', $this);

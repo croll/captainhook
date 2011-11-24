@@ -1,4 +1,4 @@
-{extends tplextends('webpage', 'webpage_main')}
+{extends tplextends('webpage/webpage_main')}
 {block name='webpage_body'}
  {if isset($site_test_myform)}
   {css file='/mod/site_test/css/field.css'}

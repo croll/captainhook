@@ -1,19 +1,22 @@
 <?php  //  -*- mode:php; tab-width:2; c-basic-offset:2; -*-
 
 namespace mod\smarty {
-
 	define("SMARTY_DIR", dirname(__FILE__).'/smarty/libs/');
+	require_once(SMARTY_DIR.'/Smarty.class.php');
+
 
 	class Main {
 		
 		public static function newSmarty() {
-			require_once(SMARTY_DIR.'/Smarty.class.php');
 			$moddir=dirname(__FILE__);
 			$sm = new \Smarty();
 			$sm->template_dir = $moddir.'/../../';
 			$sm->compile_dir = $moddir.'/templates_c/';
 			$sm->config_dir = $moddir.'/conf/';
 			$sm->cache_dir = $moddir.'/cache/';
+
+			$sm->registerResource('mod', new Smarty_Resource_Mod());
+			$sm->default_resource_type='mod';
 			
 			self::loadPlugins($sm);    
 
@@ -89,12 +92,12 @@ namespace mod\smarty {
 			
 			// Install smarty templates hooks
 			$self_id_module = \core\Core::$db->GetOne("SELECT `mid` FROM `ch_module` WHERE `name` = ?", array('smarty'));
-			if (is_dir($moddir.'/hooks_templates/')) {
-				$tpls=scandir($moddir.'/hooks_templates/');
+			if (is_dir($moddir.'/templates/')) {
+				$tpls=scandir($moddir.'/templates/');
 				foreach($tpls as $tpl) {
 					$matches=array();
-					if (preg_match('/^([^.].*)\.tpl$/', $tpl, $matches)) {
-						\core\Hook::registerHookListener('mod_smarty_hook_mod_'.$module_definition->name.'_'.$matches[1], '\\mod\\smarty\\Main::_hook_template', 'mod/'.$module_definition->name.'/hooks_templates/'.$tpl, $self_id_module);
+					if (preg_match('/^hook\.([^.].*)\.tpl$/', $tpl, $matches)) {
+						\core\Hook::registerHookListener('smarty_hook_'.$module_definition->name.'_'.$matches[1], '\\mod\\smarty\\Main::_hook_template', 'mod/'.$module_definition->name.'/templates/'.$tpl, $self_id_module);
 					}
 				}
 			}
@@ -107,11 +110,11 @@ namespace mod\smarty {
 		public static function hook_core_ModuleDefinition_uninstall($hookname, $userdata, $module_definition) {
 			$moddir = dirname(__FILE__).'/../'.$module_definition->name;
 			// uninstall smarty templates hooks
-			if (is_dir($moddir.'/hooks_templates/')) {
-				$tpls=scandir($moddir.'/hooks_templates/');
+			if (is_dir($moddir.'/templates/')) {
+				$tpls=scandir($moddir.'/templates/');
 				foreach($tpls as $tpl) {
 					$matches=array();
-					if (preg_match('/^([^.].*)\.tpl$/', $tpl, $matches)) {
+					if (preg_match('/^hook\.([^.].*)\.tpl$/', $tpl, $matches)) {
 						\core\Hook::unregisterHookListener($matches[1], '\\mod\\smarty\\Main::_hook_template');
 					}
 				}
@@ -177,11 +180,52 @@ namespace mod\smarty {
 		}
 		
 	}
+
+
+
+
+	/**
+	 * this class implement our smarty template loader
+	 */
+	class Smarty_Resource_Mod extends \Smarty_Resource_Custom {
+		/**
+		 * Fetch a template and its modification time from database
+		 *
+		 * @param string $name template name
+		 * @param string $source template source
+		 * @param integer $mtime template modification timestamp (epoch)
+		 * @return void
+		 */
+		protected function fetch($name, &$source, &$mtime) {
+			list($modname, $tplname) = explode('/', $name, 2);
+			$filepath=CH_MODDIR.'/'.$modname.'/templates/'.$tplname.'.tpl';
+			if (is_file($filepath)) {
+				$mtime=filemtime($filepath);
+				$source=file_get_contents($filepath);
+			}
+		}
+ 
+		/**
+		 * Fetch a template's modification time from database
+		 *
+		 * @note implementing this method is optional. Only implement it if modification times can be accessed faster than loading the comple template source.
+		 * @param string $name template name
+		 * @return integer timestamp (epoch) the template was modified
+		 */
+		protected function fetchTimestamp($name) {
+			list($modname, $tplname) = explode('/', $name, 2);
+			$filepath=CH_MODDIR.'/'.$modname.'/templates/'.$tplname.'.tpl';
+			if (is_file($filepath))
+				return filemtime($filepath);
+		}
+	}	
+
+
 }
 
 // This function is outside of any namespace, because smarty seem to not like it
 namespace {
-	function tplextends($extended_module, $extended_tpl) {
-		return 'mod/'.$extended_module.'/templates/'.$extended_tpl.'.tpl';
+	function tplextends($extended_tpl) {
+		return $extended_tpl;
 	}
 }

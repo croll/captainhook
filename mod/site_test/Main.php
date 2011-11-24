@@ -6,7 +6,7 @@ class Main {
 
 	public static function hook_mod_site_test($hookname, $userdata, $urlmatches) {
 		$page = new \mod\webpage\Main();
-    $page->setLayout('mod/site_test/templates/welcome.tpl');
+    $page->setLayout('site_test/welcome');
 		$page->display();
 	}
 
@@ -15,13 +15,13 @@ class Main {
 		$json = false;
 		switch($urlmatches[1]) {
 		case 'field': self::test_field($page); break;
-		case 'js': $page->setLayout('mod/site_test/templates/js.tpl'); break;
+		case 'js': $page->setLayout('site_test/js'); break;
 		case 'ajax': 
-			$page->setLayout('mod/site_test/templates/ajax.tpl'); 
+			$page->setLayout('site_test/ajax');
 			$json = true;
 			break;
 		case 'ajax2': 
-			$page->setLayout('mod/site_test/templates/ajax2.tpl'); 
+			$page->setLayout('site_test/ajax2'); 
 			$json = true;
 			break;
 		}
@@ -30,15 +30,15 @@ class Main {
 	}
 
 	private static function test_field($page) {
-		$form = new \mod\field\FieldForm('site_test_myform', 'mod/site_test/templates/myform.tpl');
+		$form = new \mod\field\FieldForm('site_test_myform', 'site_test/myform');
 
-		$page->setLayout('mod/site_test/templates/field.tpl');
+		$page->setLayout('site_test/field');
 		if ($form->isPosted() && $form->isValid()) {
 			$form->sqlInsert('ch_sitetest_person');
 			$page->smarty->assign('site_test_firstname', $form->getValue('firstname'));
 			$page->smarty->assign('site_test_lastname', $form->getValue('lastname'));
 		} else {
-			$page->setLayout('mod/site_test/templates/field.tpl');
+			$page->setLayout('site_test/field');
 			$page->smarty->assign('site_test_myform', $form->getHtml($page));
 		}
 	}

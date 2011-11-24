@@ -27,6 +27,9 @@
 
 namespace core;
 
+define('CH_ROOTDIR', dirname(dirname(__FILE__)));
+define('CH_MODDIR', CH_ROOTDIR.'/mod');
+
 /**
  * Use adodb lowecase syntax
  */

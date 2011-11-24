@@ -1,4 +1,4 @@
-{extends tplextends('webpage', 'webpage_main')}
+{extends tplextends('webpage/webpage_main')}
 
 {block name='webpage_head' append}
 	{css file='/mod/user/css/login.css'}

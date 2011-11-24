@@ -1,4 +1,4 @@
-{extends tplextends('webpage', 'webpage_main')}
+{extends tplextends('webpage/webpage_main')}
 
 {block name='webpage_head'}
 	{js file="/mod/cssjs/js/mootools.js"}

@@ -275,9 +275,9 @@ class Main {
 
 	public static function hook_mod_user_login($hookname, $userdata, $urlmatches) {
 		$displayForm = true;
-		$form = new \mod\field\FieldForm('user_loginform', 'mod/user/templates/login_form_fields.tpl');
+		$form = new \mod\field\FieldForm('user_loginform', 'user/login_form_fields');
 		$page = new \mod\webpage\Main();
-		$page->setLayout('mod/user/templates/login.tpl');
+		$page->setLayout('user/login');
 		if (!self::userIsLoggedIn()) { 
 			if ($form->isPosted() && $form->isValid()) {
 				$l = \core\Tools::cleanString($form->getValue('login'));
@@ -302,7 +302,7 @@ class Main {
 	public static function hook_mod_user_logout() {
 		self::logout();
 		$page = new \mod\webpage\Main();
-		$page->setLayout('mod/user/templates/login.tpl');
+		$page->setLayout('user/login');
 		$page->smarty->assign('logout', true);
 		$page->smarty->assign('url_redirect', 'http://'.$_SERVER['HTTP_HOST']);
 		$page->display();
