@@ -130,7 +130,7 @@ abstract class Smarty_Internal_TemplateBase extends Smarty_Internal_Data {
             if ($this->caching && $this->cache_modified_check) {
                 $_isCached = $_template->isCached() && !$_template->has_nocache_code;
                 $_last_modified_date = @substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 0, strpos($_SERVER['HTTP_IF_MODIFIED_SINCE'], 'GMT') + 3);
-                if ($_isCached && $_template->cached->timestamp <= strtotime($_last_modified_date)) {
+                if ($_isCached && $_last_modified_date !== false && $_template->cached->timestamp <= strtotime($_last_modified_date)) {
                     switch (PHP_SAPI) {
                         case 'cgi':         // php-cgi < 5.3
                         case 'cgi-fcgi':    // php-cgi >= 5.3

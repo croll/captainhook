@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
 V 68
-/svn/!svn/ver/4464/branches/Smarty_3_2_DEV/distribution/libs/plugins
+/svn/!svn/ver/4477/branches/Smarty_3_2_DEV/distribution/libs/plugins
 END
 function.html_image.php
 K 25
@@ -87,17 +87,17 @@ svn:wc:ra_dav:version-url
 V 93
 /svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/libs/plugins/modifier.date_format.php
 END
-modifiercompiler.upper.php
-K 25
-svn:wc:ra_dav:version-url
-V 95
-/svn/!svn/ver/4464/branches/Smarty_3_2_DEV/distribution/libs/plugins/modifiercompiler.upper.php
-END
 function.cycle.php
 K 25
 svn:wc:ra_dav:version-url
 V 87
 /svn/!svn/ver/4387/branches/Smarty_3_2_DEV/distribution/libs/plugins/function.cycle.php
+END
+modifiercompiler.upper.php
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/4464/branches/Smarty_3_2_DEV/distribution/libs/plugins/modifiercompiler.upper.php
 END
 modifier.count_characters.php
 K 25
@@ -117,23 +117,17 @@ svn:wc:ra_dav:version-url
 V 105
 /svn/!svn/ver/4464/branches/Smarty_3_2_DEV/distribution/libs/plugins/modifiercompiler.count_sentences.php
 END
+function.html_radios.php
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/!svn/ver/4477/branches/Smarty_3_2_DEV/distribution/libs/plugins/function.html_radios.php
+END
 modifiercompiler.strip.php
 K 25
 svn:wc:ra_dav:version-url
 V 95
 /svn/!svn/ver/4464/branches/Smarty_3_2_DEV/distribution/libs/plugins/modifiercompiler.strip.php
-END
-function.html_radios.php
-K 25
-svn:wc:ra_dav:version-url
-V 93
-/svn/!svn/ver/4387/branches/Smarty_3_2_DEV/distribution/libs/plugins/function.html_radios.php
-END
-outputfilter.trimwhitespace.php
-K 25
-svn:wc:ra_dav:version-url
-V 100
-/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/libs/plugins/outputfilter.trimwhitespace.php
 END
 modifiercompiler.wordwrap.php
 K 25
@@ -141,17 +135,17 @@ svn:wc:ra_dav:version-url
 V 98
 /svn/!svn/ver/4464/branches/Smarty_3_2_DEV/distribution/libs/plugins/modifiercompiler.wordwrap.php
 END
+outputfilter.trimwhitespace.php
+K 25
+svn:wc:ra_dav:version-url
+V 100
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/libs/plugins/outputfilter.trimwhitespace.php
+END
 modifiercompiler.count_words.php
 K 25
 svn:wc:ra_dav:version-url
 V 101
 /svn/!svn/ver/4464/branches/Smarty_3_2_DEV/distribution/libs/plugins/modifiercompiler.count_words.php
-END
-function.html_table.php
-K 25
-svn:wc:ra_dav:version-url
-V 92
-/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/libs/plugins/function.html_table.php
 END
 modifiercompiler.cat.php
 K 25
@@ -159,23 +153,29 @@ svn:wc:ra_dav:version-url
 V 93
 /svn/!svn/ver/4464/branches/Smarty_3_2_DEV/distribution/libs/plugins/modifiercompiler.cat.php
 END
+function.html_table.php
+K 25
+svn:wc:ra_dav:version-url
+V 92
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/libs/plugins/function.html_table.php
+END
 modifier.regex_replace.php
 K 25
 svn:wc:ra_dav:version-url
 V 95
 /svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/libs/plugins/modifier.regex_replace.php
 END
-function.counter.php
-K 25
-svn:wc:ra_dav:version-url
-V 89
-/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/libs/plugins/function.counter.php
-END
 function.html_options.php
 K 25
 svn:wc:ra_dav:version-url
 V 94
 /svn/!svn/ver/4429/branches/Smarty_3_2_DEV/distribution/libs/plugins/function.html_options.php
+END
+function.counter.php
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/4324/branches/Smarty_3_2_DEV/distribution/libs/plugins/function.counter.php
 END
 modifiercompiler.from_charset.php
 K 25
@@ -283,7 +283,7 @@ function.html_checkboxes.php
 K 25
 svn:wc:ra_dav:version-url
 V 97
-/svn/!svn/ver/4387/branches/Smarty_3_2_DEV/distribution/libs/plugins/function.html_checkboxes.php
+/svn/!svn/ver/4477/branches/Smarty_3_2_DEV/distribution/libs/plugins/function.html_checkboxes.php
 END
 shared.mb_wordwrap.php
 K 25

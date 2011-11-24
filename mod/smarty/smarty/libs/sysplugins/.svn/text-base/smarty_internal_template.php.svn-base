@@ -337,8 +337,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase {
                 $plugins_string = '<?php ';
                 foreach ($this->required_plugins['compiled'] as $tmp) {
                     foreach ($tmp as $data) {
-                        $file = addslashes($data['file']);
-                        $plugins_string .= "if (!is_callable('{$data['function']}')) include '{$file}';\n";
+                        $plugins_string .= "if (!is_callable('{$data['function']}')) include '{$data['file']}';\n";
                     }
                 }
                 $plugins_string .= '?>';
@@ -348,8 +347,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase {
                 $plugins_string .= "<?php echo '/*%%SmartyNocache:{$this->properties['nocache_hash']}%%*/<?php \$_smarty = \$_smarty_tpl->smarty; ";
                 foreach ($this->required_plugins['nocache'] as $tmp) {
                     foreach ($tmp as $data) {
-                        $file = addslashes($data['file']);
-                        $plugins_string .= addslashes("if (!is_callable('{$data['function']}')) include '{$file}';\n");
+                        $plugins_string .= addslashes("if (!is_callable('{$data['function']}')) include '{$data['file']}';\n");
                     }
                 }
                 $plugins_string .= "?>/*/%%SmartyNocache:{$this->properties['nocache_hash']}%%*/';?>\n";
@@ -392,14 +390,31 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase {
             $output .= "\$_valid = \$_smarty_tpl->decodeProperties(" . var_export($this->properties, true) . ',' . ($cache ? 'true' : 'false') . "); /*/%%SmartyHeaderCode%%*/?>\n";
         }
         if (!$this->source->recompiled) {
-            $output .= '<?php if ($_valid && !is_callable(\'' . $this->properties['unifunc'] . '\')) {function ' . $this->properties['unifunc'] . '($_smarty_tpl) {?>';
+            $output .= '<?php if ($_valid && !is_callable(\'' . $this->properties['unifunc'] . '\')) {function ' . $this->properties['unifunc'] . "(\$_smarty_tpl) {\n?>";
         }
         $output .= $plugins_string;
         $output .= $content;
         if (!$this->source->recompiled) {
             $output .= '<?php }} ?>';
         }
+        $output = preg_replace_callback('/(\?>)([\n]{0,1})(<\?php )|(\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\';|"[^"\\\\]*(?:\\\\.[^"\\\\]*)*";)/',array($this,'removePhpTags'), $output);
         return $output;
+    }
+
+    /**
+     * preg_replace callback to remove unneeded  ?><?php tags
+     *
+     * @param string $match match string
+     * @return string  replacemant
+     */
+    function removePhpTags($match) {
+        if (isset($match[4])) {
+            return $match[4];
+        }
+        if (isset($match[2])) {
+            return $match[2];
+        }
+        return '';
     }
 
     /**

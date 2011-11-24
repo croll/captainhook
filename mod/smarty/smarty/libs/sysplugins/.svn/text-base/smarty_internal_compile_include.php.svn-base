@@ -152,7 +152,7 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase {
                         $tpl->properties['file_dependency'][$tpl->source->uid] = array($tpl->source->filepath, $tpl->source->timestamp,$tpl->source->type);
                         $compiler->template->properties['file_dependency'] = array_merge($compiler->template->properties['file_dependency'], $tpl->properties['file_dependency']);
                         // remove header code
-                        $compiled_code = preg_replace("/(<\?php \/\*%%SmartyHeaderCode:{$tpl->properties['nocache_hash']}%%\*\/(.+?)\/\*\/%%SmartyHeaderCode%%\*\/\?>\n)/s", '', $compiled_code);
+                        $compiled_code = preg_replace("/(\/\*%%SmartyHeaderCode:{$tpl->properties['nocache_hash']}%%\*\/(.+?)\/\*\/%%SmartyHeaderCode%%\*\/)/s", '', $compiled_code);
                         if ($tpl->has_nocache_code) {
                             // replace nocache_hash
                             $compiled_code = preg_replace("/{$tpl->properties['nocache_hash']}/", $compiler->template->properties['nocache_hash'], $compiled_code);
@@ -189,9 +189,8 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase {
         // output compiled code
         if ($has_compiled_template) {
             $_hash = $compiler->smarty->merged_templates_func[$tpl_name]['nocache_hash'];
-            $_output = "<?php /*  Call merged included template \"" . $tpl_name . "\" */\n";
-            $_output .= "\$_tpl_stack[] = \$_smarty_tpl;\n";
-            $_output .= " \$_smarty_tpl = \$_smarty_tpl->setupInlineSubTemplate($include_file, $_cache_id, $_compile_id, $_caching, $_cache_lifetime, $_vars, $_parent_scope, '$_hash');\n";
+            $_output = "<?php \n/*  Call merged included template \"" . $tpl_name . "\" */\n";
+            $_output .= "\$_tpl_stack[] = \$_smarty_tpl; \$_smarty_tpl = \$_smarty_tpl->setupInlineSubTemplate($include_file, $_cache_id, $_compile_id, $_caching, $_cache_lifetime, $_vars, $_parent_scope, '$_hash');\n";
             if (isset($_assign)) {
                 $_output .= 'ob_start(); ';
             }
@@ -200,7 +199,7 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase {
             if (isset($_assign)) {
                 $_output .= " \$_smarty_tpl->tpl_vars->{$_assign} = new Smarty_variable(ob_get_clean());";
             }
-            $_output .= "/*  End of included template \"" . $tpl_name . "\" */?>";
+            $_output .= "\n/*  End of included template \"" . $tpl_name . "\" */\n?>";
             return $_output;
         }
 

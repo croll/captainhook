@@ -2,7 +2,7 @@
 /**
 * Project:     Smarty: the PHP compiling template engine
 * File:        Smarty.class.php
-* SVN:         $Id: Smarty.class.php 4470 2011-11-14 23:20:25Z uwe.tews@googlemail.com $
+* SVN:         $Id: Smarty.class.php 4477 2011-11-21 00:45:09Z uwe.tews@googlemail.com $
 *
 * This library is free software; you can redistribute it and/or
 * modify it under the terms of the GNU Lesser General Public
@@ -207,7 +207,7 @@ class Smarty extends Smarty_Internal_TemplateBase {
     * @var array
     * @link http://www.smarty.net/docs/en/variable.template.dir.tpl
     */
-    protected $template_dir = array();
+    private $template_dir = array();
     /**
     * joined template directory string used in cache keys
     * @var string
@@ -255,25 +255,25 @@ class Smarty extends Smarty_Internal_TemplateBase {
     * @var string
     * @link http://www.smarty.net/docs/en/variable.compile.dir.tpl
     */
-    protected $compile_dir = null;
+    private $compile_dir = null;
     /**
     * plugins directory
     * @var array
     * @link http://www.smarty.net/docs/en/variable.plugins.dir.tpl
     */
-    protected $plugins_dir = array();
+    private $plugins_dir = array();
     /**
     * cache directory
     * @var string
     * @link http://www.smarty.net/docs/en/variable.cache.dir.tpl
     */
-    protected $cache_dir = null;
+    private $cache_dir = null;
     /**
     * config directory
     * @var array
     * @link http://www.smarty.net/docs/en/variable.fooobar.tpl
     */
-    protected $config_dir = array();
+    private $config_dir = array();
     /**
     * disable core plugins in {@link loadPlugin()}
     * @var boolean

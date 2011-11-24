@@ -1,7 +1,7 @@
 K 25
 svn:wc:ra_dav:version-url
 V 60
-/svn/!svn/ver/4470/branches/Smarty_3_2_DEV/distribution/libs
+/svn/!svn/ver/4477/branches/Smarty_3_2_DEV/distribution/libs
 END
 debug.tpl
 K 25
@@ -19,7 +19,7 @@ Smarty.class.php
 K 25
 svn:wc:ra_dav:version-url
 V 77
-/svn/!svn/ver/4470/branches/Smarty_3_2_DEV/distribution/libs/Smarty.class.php
+/svn/!svn/ver/4477/branches/Smarty_3_2_DEV/distribution/libs/Smarty.class.php
 END
 SmartyBC.class.php
 K 25

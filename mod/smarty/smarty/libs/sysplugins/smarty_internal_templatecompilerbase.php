@@ -195,10 +195,10 @@ abstract class Smarty_Internal_TemplateCompilerBase {
         $this->template->has_nocache_code = false;
         $this->smarty->_current_file = $saved_filepath = $this->template->source->filepath;
         // template header code
-        $template_header = '';
         if (!$this->suppressHeader) {
-            $template_header .= "<?php /* Smarty version " . Smarty::SMARTY_VERSION . ", created on " . strftime("%Y-%m-%d %H:%M:%S") . "\n";
-            $template_header .= "         compiled from \"" . $this->template->source->filepath . "\" */ ?>\n";
+            $template_header = "<?php \n/* Smarty version " . Smarty::SMARTY_VERSION . ", created on " . strftime("%Y-%m-%d %H:%M:%S") . " compiled from \"" . $this->template->source->filepath . "\" */ ?>\n";
+        } else {
+            $template_header = '';
         }
 
         do {
@@ -605,9 +605,8 @@ abstract class Smarty_Internal_TemplateCompilerBase {
             if ((!($this->template->source->recompiled) || $this->forceNocache) && $this->template->caching && !$this->suppressNocacheProcessing &&
             ($this->nocache || $this->tag_nocache || $this->forceNocache == 2)) {
                 $this->template->has_nocache_code = true;
-                $_output = str_replace("'", "\'", $content);
-                $_output = str_replace('\\\\', '\\\\\\\\', $_output);
-                $_output = str_replace("^#^", "'", $_output);
+                $_output = str_replace(array("'",'\\\\',"^#^"), array("\'",'\\\\\\\\',"'"), $content);
+                $_output = preg_replace('/(\?><\?php)|(\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'|"[^"\\\\]*(?:\\\\.[^"\\\\]*)*")/','$2', $_output);
                 $_output = "<?php echo '/*%%SmartyNocache:{$this->nocache_hash}%%*/" . $_output . "/*/%%SmartyNocache:{$this->nocache_hash}%%*/';?>\n";
                 // make sure we include modifer plugins for nocache code
                 foreach ($this->modifier_plugins as $plugin_name => $dummy) {
@@ -621,6 +620,7 @@ abstract class Smarty_Internal_TemplateCompilerBase {
         } else {
             $_output = $content;
         }
+        $this->modifier_plugins = array();
         $this->suppressNocacheProcessing = false;
         $this->tag_nocache = false;
         return $_output;
