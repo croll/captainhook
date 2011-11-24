@@ -4,6 +4,12 @@ namespace mod\field;
 
 class Main {
 
+  public static function smartyFunction_FieldForm($params, $template) {
+		$fieldform=new FieldForm($params['id'], $params['tpl'],
+														 isset($params['hookonpost']) ? $params['hookonpost'] : null);
+		return $fieldform->getHtml($template->smarty->tpl_vars->webpage);
+  }
+
   public static function smartyFunction_Field($params, $template) {
 		$fieldform = $template->smarty->tpl_vars->fieldform->value;
 		if (!isset($params['phpclass']))
@@ -12,7 +18,7 @@ class Main {
 		if (isset($fieldform->_curfieldgroup) && !isset($params['name']))
 			$params['name']=$fieldform->_curfieldgroup->params['name'];
 		$field = new $classname($params, $fieldform);
-		return $field->render_edit();
+		return $field->render_edit_pre().$field->render_edit_post();
   }
 	
   public static function smartyFunction_FieldValidator($params, $template) {
@@ -39,10 +45,11 @@ class Main {
 				throw new \Exception("FieldGroup must have a phpclass");
 			$classname=$params['phpclass'];
 			$fieldform->_curfieldgroup=new $classname($params, $fieldform);
+			return $fieldform->_curfieldgroup->render_edit_pre();
 		} else {
 			$field=$fieldform->_curfieldgroup;
 			unset($fieldform->_curfieldgroup);
-			return $content.$field->render_edit();
+			return $content.$field->render_edit_post();
 		}
 	}
 

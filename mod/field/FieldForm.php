@@ -10,16 +10,15 @@ class FieldForm {
 	private $html;
 	private static $validators=array();
 	
-	public function __construct($uniquename, $tpl) {
+	public function __construct($uniquename, $tpl, $hookonpost=null) {
 		$this->uniquename=$uniquename;
 		$this->smarty=\mod\smarty\Main::newSmarty();
 		$this->smarty->assign('fieldform', $this);
 		$this->html=$this->smarty->fetch($tpl);
-		/*
-		if ($this->isPosted()) {
-			foreach($this->fields as $field) $field->value=$field->getValue();
+
+		if ($hookonpost !== null && $this->isPosted()) {
+			\core\Hook::call($hookonpost, $this);
 		}
-		*/
 	}
 
 	// used internaly by smarty functions
@@ -224,13 +223,16 @@ class Element {
 		return htmlspecialchars($value);
 	}
 
-	public function render_edit() {
-		return "render_edit not implemented";
+	public function render_edit_pre() {
+		return '';
+	}
+	public function render_edit_post() {
+		return '';
 	}
 }
 
 class Text extends Element {
-	public function render_edit() {
+	public function render_edit_pre() {
 		return sprintf("<input %s type='text' name='%s' value='%s' ".$this->getMootoolsValidatorsString()."/>",
 									 $this->getParamsStr(array('name','value','type')),
 									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
@@ -239,7 +241,7 @@ class Text extends Element {
 }
 
 class Hidden extends Element {
-	public function render_edit() {
+	public function render_edit_pre() {
 		return sprintf("<input %s type='hidden' name='%s' value='%s'/>",
 									 $this->getParamsStr(array('name','value','type')),
 									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
@@ -253,14 +255,10 @@ class RadioGroup extends Element {
 	public function addRadio($radio) {
 		$this->radios[]=$radio;
 	}
-
-	public function render_edit() {
-		return '';
-	}
 }
 
 class Radio extends Element {
-	public function render_edit() {
+	public function render_edit_pre() {
 		return sprintf("<input %s type='radio' name='%s' value='%s'%s/>",
 									 $this->getParamsStr(array('name','value','type')),
 									 $this->name, $this->params['value'], $this->is_checked() ? ' checked' : ''
@@ -275,22 +273,26 @@ class Radio extends Element {
 }
 
 class Checkbox extends Element {
-	public function render_edit() {
+	public function render_edit_pre() {
 		return sprintf("<input %s type='checkbox' name='%s' value='%s'%s/>",
-									 $this->getParamsStr(array('name','value','type')),
+									 $this->getParamsStr(array('name','value','type','checked')),
 									 $this->name, $this->params['value'], $this->is_checked() ? ' checked' : ''
 									 );
 	}
 	public function is_checked() {
-		if (isset($_POST[$this->name]) && ($_POST[$this->name] == $this->params['value']))
-			return true;
-		if (isset($this->params['checked'])) return true;
+		if (isset($_POST[$this->name])) {
+			if ($_POST[$this->name] == $this->params['value'])
+				return true;
+		} else {
+			if (isset($this->params['checked']))
+				return true;
+		}
 		return false;
 	}
 }
 
 class Password extends Element {
-	public function render_edit() {
+	public function render_edit_pre() {
 		return sprintf("<input %s type='password' name='%s' value='%s' ".$this->getMootoolsValidatorsString()."/>",
 									 $this->getParamsStr(array('name','value','type')),
 									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
@@ -299,7 +301,7 @@ class Password extends Element {
 }
 
 class Textarea extends Element {
-	public function render_edit() {
+	public function render_edit_pre() {
 		return sprintf("<textarea %s name='%s'".$this->getMootoolsValidatorsString()."/>%s</textarea>",
 									 $this->getParamsStr(array('name','value')),
 									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
@@ -308,10 +310,48 @@ class Textarea extends Element {
 }
 
 class Select extends Element {
+	private $options=array();
+	
+	public function addOption($option) {
+		$this->options[]=$option;
+	}
+
+	public function render_edit_pre() {
+		return sprintf("<select %s name='%s' ".$this->getMootoolsValidatorsString()."/>",
+									 $this->getParamsStr(array('name','value')),
+									 $this->name
+									 );
+	}
+
+	public function render_edit_post() {
+		return "</select>";
+	}
+}
+
+Class SelectOption extends Element {
+	public function render_edit_pre() {
+		return sprintf("<option %s value='%s'%s/>%s</option>",
+									 $this->getParamsStr(array('label','value','selected')),
+									 $this->params['value'],
+									 $this->is_selected() ? ' selected' : '',
+									 isset($this->params['label']) ? $this->params['label'] : $this->value
+									 );
+	}
+
+	public function is_selected() {
+		if (isset($_POST[$this->name])) {
+			if ($_POST[$this->name] == $this->params['value'])
+				return true;
+		} else {
+			if (isset($this->params['selected']))
+				return true;
+		}
+		return false;
+	}
 }
 
 class Submit extends Element {
-	public function render_edit() {
+	public function render_edit_pre() {
 		return sprintf("<input %s type='submit' name='%s' value='%s'/>",
 									 $this->getParamsStr(array('name','value','type')),
 									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
@@ -325,9 +365,9 @@ class File extends Element {
 		$form->setParam('enctype', '"multipart/form-data"');
 	}
 
-	public function render_edit() {
+	public function render_edit_pre() {
 		$val=$this->getValue();
-		return sprintf("<input %s type='file' name='%s' value='%s'/> ",
+		return sprintf("<input %s type='file' name='%s' value='%s'/>",
 									 $this->getParamsStr(array('name','value','type')),
 									 $this->name, is_array($val) ? htmlspecialchars($val['name'], ENT_QUOTES) : ''
 									 );

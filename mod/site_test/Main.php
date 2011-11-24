@@ -34,7 +34,7 @@ class Main {
 
 		$page->setLayout('site_test/field');
 		if ($form->isPosted() && $form->isValid()) {
-			$form->sqlInsert('ch_sitetest_person');
+			$form->sqlInsert();
 			$page->smarty->assign('site_test_firstname', $form->getValue('firstname'));
 			$page->smarty->assign('site_test_lastname', $form->getValue('lastname'));
 		} else {

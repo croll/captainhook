@@ -138,7 +138,7 @@ class Main {
 
 	public static function userBelongsToGroup($group, $user=NULL) {
 		if (is_null($user)) {
-			if ($_SESSION['login']) $user = $_SESSION['login'];
+			if (!empty($_SESSION['login'])) $user = $_SESSION['login'];
 			else return false;
 		}
 		$uid = (is_string($user)) ? self::getUserId($user) : $user;
@@ -255,7 +255,7 @@ class Main {
 
 	public static function userHasRight($right, $user=NULL) {
 			if (is_null($user)) {
-				if ($_SESSION['login']) $user = $_SESSION['login'];
+				if (!empty($_SESSION['login'])) $user = $_SESSION['login'];
 				else return false;
 			}
 			$uid = (is_string($user)) ? self::getUserId($user) : $user;
