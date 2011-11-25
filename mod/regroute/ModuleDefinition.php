@@ -17,6 +17,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
                              ." `id_module` INT(11) NULL,"
                              ." `regexp` VARCHAR(255) NOT NULL,"
                              ." `hook` VARCHAR(255) NOT NULL,"
+                             ." `flags` INT(11) NOT NULL,"
                              ." KEY `kidmodule` (`id_module`)"
                              .") ENGINE=InnoDB DEFAULT CHARSET=utf8");
     
