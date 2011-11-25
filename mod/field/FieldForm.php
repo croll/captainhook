@@ -44,7 +44,7 @@ class FieldForm {
 		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.more.js');
 		//\mod\cssjs\Main::addJs($webpage, '/mod/field/js/field.js');
 		$js="<script>";
-		$js.="myForm=document.id('niclotest');";
+		$js.="myForm=document.id('".$this->id."');";
 		$js.="new Form.Validator.Inline(myForm, { evaluateFieldsOnChange: true, warningPrefix: '', errorPrefix: '' });";
 		foreach(self::$validators as $validator) {
 			$js.=$validator->getMootoolsJs();
