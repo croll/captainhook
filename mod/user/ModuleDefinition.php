@@ -72,8 +72,10 @@ class ModuleDefinition extends \core\ModuleDefinition {
     \core\Core::$db->exec("INSERT INTO `ch_group_right` (`gid`, `rid`) VALUES (1, 1)");
     \core\Core::$db->exec("INSERT INTO `ch_group_right` (`gid`, `rid`) VALUES (1, 2)");
 
-		\mod\regroute\Main::registerRoute($this->id, '#/login/?f?r?o?m?=?(.*)$#', 'mod_user_login');
-		\mod\regroute\Main::registerRoute($this->id, '#/logout/?$#', 'mod_user_logout');
+		\mod\regroute\Main::registerRoute($this->id, '#^/login/?f?r?o?m?=?(.*)$#', 'mod_user_login');
+		\mod\regroute\Main::registerRoute($this->id, '#^/logout/?$#', 'mod_user_logout');
+		\mod\regroute\Main::registerRoute($this->id, '#^/user/([a-z]+)/?$#', 'mod_user_manage_users');
+		\mod\regroute\Main::registerRoute($this->id, '#^/group/([a-z]+)/?$#', 'mod_user_manage_groups');
 		parent::install();
 	}
 

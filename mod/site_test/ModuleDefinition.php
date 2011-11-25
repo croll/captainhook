@@ -14,8 +14,8 @@ class ModuleDefinition extends \core\ModuleDefinition {
 
 	function install() {
 		parent::install();
-		\mod\regroute\Main::registerRoute($this->id, '#/$#', 'mod_site_test');
-		\mod\regroute\Main::registerRoute($this->id, '#/tests/(.*)$#', 'mod_site_test_tests');
+		\mod\regroute\Main::registerRoute($this->id, '#^/$#', 'mod_site_test');
+		\mod\regroute\Main::registerRoute($this->id, '#^/tests/(.*)$#', 'mod_site_test_tests');
 		//\mod\regroute\Main::registerRoute($this->id, '#/p/(.*)#', 'mod_site_test');
 
 

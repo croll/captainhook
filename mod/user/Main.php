@@ -75,6 +75,15 @@ class Main {
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
 	}
 
+	public static function listUsersList() {
+		$result = Core::$db->Execute('SELECT * FROM `ch_user`');
+		$u = array();
+		while($row = $result->FetchRow()) {
+			$u[] = $row;
+		}
+		return $u;
+	}
+
 	public static function userIsLoggedIn($hash=NULL) {
 		if (empty($_SESSION['hash']) || empty($_SESSION['login'])) return false;
 		if ($hash !== NULL && !$_SESSION['hash'] != $hash) return false;
@@ -304,6 +313,25 @@ class Main {
 		$page->smarty->assign('logout', true);
 		$page->smarty->assign('url_redirect', 'http://'.$_SERVER['HTTP_HOST']);
 		$page->display();
+	}
+
+	public static function hook_mod_user_manage_users($hookname, $userdata, $urlmatches) {
+		if (!isset($urlmatches[1]) || !is_string($urlmatches[1])) {
+			throw new Exception("Page does not exists");
+			return;
+		}
+		$section = $urlmatches[1];
+		switch($section) {
+			case 'list':
+			break;
+		}
+		$page = new \mod\webpage\Main();
+		$page->setLayout('user/user/list');
+		$page->display();
+	}
+
+	public static function hook_mod_user_manage_groups($hookname, $userdata, $urlmatches) {
+		echo "ici";
 	}
 
 	/*
