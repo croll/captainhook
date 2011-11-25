@@ -350,6 +350,15 @@ Class SelectOption extends Element {
 	}
 }
 
+class Button extends Element {
+	public function render_edit_pre() {
+		return sprintf("<input %s type='button' name='%s' value='%s'/>",
+									 $this->getParamsStr(array('name','value','type')),
+									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
+									 );
+	}
+}
+
 class Submit extends Element {
 	public function render_edit_pre() {
 		return sprintf("<input %s type='submit' name='%s' value='%s'/>",

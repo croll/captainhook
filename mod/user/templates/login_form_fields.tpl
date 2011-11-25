@@ -1,5 +1,5 @@
 {FieldValidator name='user_empty' regexp='/^$/' message='Ce champ est obligatoire'}
-{FieldValidator name='user_length' iregexp='/^.{2,30}$/' message='Doit faire entre 2 et 30 caractères'}
+{FieldValidator name='user_length' iregexp='/^.{2,30}$/' message='Le texte doit faire de 2 et 30 caractères'}
 
 <div>
 	<div>
