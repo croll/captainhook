@@ -13,7 +13,6 @@
 	{Field phpclass='\mod\field\Submit' name='submit' value='Identification'}
 </div>
 
-{literal}
 <script>
 window.addEvent('domready', function(){
   document.id('niclotest').getElements('[type=text], [type=password]').each(function(el){
@@ -21,4 +20,3 @@ window.addEvent('domready', function(){
   });
 });
 </script>
-{/literal}
