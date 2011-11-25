@@ -91,7 +91,7 @@ namespace mod\smarty {
 			}
 			
 			// Install smarty templates hooks
-			$self_id_module = \core\Core::$db->GetOne("SELECT `mid` FROM `ch_module` WHERE `name` = ?", array('smarty'));
+			$self_id_module = \core\Core::$db->fetchOne("SELECT `mid` FROM `ch_module` WHERE `name` = ?", array('smarty'));
 			if (is_dir($moddir.'/templates/')) {
 				$tpls=scandir($moddir.'/templates/');
 				foreach($tpls as $tpl) {
@@ -101,7 +101,7 @@ namespace mod\smarty {
 					}
 					if (preg_match('/^override\.([^.].*)\.tpl$/', $tpl, $matches)) {
 						$name=str_replace('.', '/', $matches[1]);
-						\core\Core::$db->execute('INSERT INTO `ch_smarty_override` (`id_module`, `orig`, `replace`) VALUES (?,?,?)',
+						\core\Core::$db->exec('INSERT INTO `ch_smarty_override` (`id_module`, `orig`, `replace`) VALUES (?,?,?)',
 																		 array($module_definition->id, $name, $module_definition->name.'/override.'.$matches[1]));
 					}
 				}
@@ -125,14 +125,14 @@ namespace mod\smarty {
 				}
 			}
 
-			\core\Core::$db->execute('DELETE FROM `ch_smarty_override` WHERE id_module=?',
+			\core\Core::$db->exec('DELETE FROM `ch_smarty_override` WHERE id_module=?',
 															 array($module_definition->id));
 			
 			self::unregisterPlugin($module_definition->id);
 		}
 		
 		private static function registerPlugin($id_module, $name, $type, $method) {
-			\core\Core::$db->execute('INSERT INTO `ch_smarty_plugins` (`id_module`, `name`, `type`, `method`) VALUES (?,?,?,?)',
+			\core\Core::$db->exec('INSERT INTO `ch_smarty_plugins` (`id_module`, `name`, `type`, `method`) VALUES (?,?,?,?)',
 															 array($id_module, $name, $type, $method));
 		}
 		
@@ -152,11 +152,11 @@ namespace mod\smarty {
 				$vals[]=$method;
 			}
 			
-			\core\Core::$db->execute($query, $vals);
+			\core\Core::$db->exec($query, $vals);
 		}
 		
 		private static function loadPlugins($smarty) {
-			$plugins=\core\Core::$db->getAll('SELECT `type`, `name`, `method` FROM `ch_smarty_plugins`');
+			$plugins=\core\Core::$db->fetchAll('SELECT `type`, `name`, `method` FROM `ch_smarty_plugins`');
 			foreach($plugins as $plugin) {
 				$method = preg_split("/:{2}/", $plugin['method']);
 				if (!strstr($plugin['type'], 'Filter'))
@@ -205,7 +205,14 @@ namespace mod\smarty {
 		 */
 		private function nametofile($name) {
 			if (!is_array($this->overrides)) {
-				$overrides = \core\Core::$db->getAll('SELECT `orig`, `replace` FROM `ch_smarty_override`');
+				//debug_print_backtrace();
+				try {
+				$overrides = \core\Core::$db->fetchAll('SELECT `orig`, `replace` FROM `ch_smarty_override`');
+				} catch (\Exception $e) {
+					echo $e;
+					debug_print_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
+					die();
+				}
 				$this->overrides=array();
 				foreach($overrides as $override)
 					$this->overrides[$override['orig']]=$override['replace'];

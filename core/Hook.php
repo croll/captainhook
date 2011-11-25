@@ -44,14 +44,11 @@ class Hook {
    * @param string callback the static method to call, must be of the form: classname::methodname
    * @param int id_module if the listener is a module, the id of this module
    * @param int positon position of the listener in de "call stack"
-	 *
-	 * @return bool
    */
   public static function registerHookListener($name, $callback, $userdata = NULL, $id_module = NULL, $position = 0) {
-    Core::$db->Execute("INSERT INTO `ch_hook` (`name`, `callback`, `userdata`, `mid`, `position`) VALUES (?,?,?,?,?)",
-                       array($name, $callback, $userdata, $id_module, $position));
+    Core::$db->exec("INSERT INTO `ch_hook` (`name`, `callback`, `userdata`, `mid`, `position`) VALUES (?,?,?,?,?)",
+										array($name, $callback, $userdata, $id_module, $position));
     self::$callbacks = NULL;
-		return (!Core::$db->ErrorMsg()) ? true : false;
   }
 
   /*
@@ -60,14 +57,11 @@ class Hook {
    * @param string name the name of the hook that we were listening
    * @param string callback hint: must be like it was for registerHookListener
    * @param int id_module if the listener is a module, the id of this module
-	 *
-	 * @return bool
    */
   public static function unregisterHookListener($name, $callback, $id_module = NULL) {
-    Core::$db->Execute("DELETE FROM `ch_hook` WHERE `name`=? AND `callback`=? AND `mid`=?",
-                       array($name, $callback, $id_module));
+    Core::$db->exec("DELETE FROM `ch_hook` WHERE `name`=? AND `callback`=? AND `mid`=?",
+										array($name, $callback, $id_module));
     self::$callbacks = NULL;
-		return (!Core::$db->ErrorMsg()) ? true : false;
   }
   /*
    * Unregister all hook listener for speficied module.
@@ -75,10 +69,9 @@ class Hook {
    * @param int id_module if the listener is a module, the id of this module
    */
   public static function unregisterModuleListeners($id_module) {
-    Core::$db->Execute("DELETE FROM `ch_hook` WHERE `mid`=?",
-                       array($id_module));
+    Core::$db->exec("DELETE FROM `ch_hook` WHERE `mid`=?",
+										array($id_module));
     self::$callbacks = NULL;
-		return (!Core::$db->ErrorMsg()) ? true : false;
   }
 
   /*
@@ -88,12 +81,10 @@ class Hook {
    * @param int id_module if the listener is a module, the id of this module
    * @param string callback (must be like it was for registerHookListener)
    * @param int id_module if the listener is a module. the id of this module
-	 *
-   * @return bool
    */
 	public static function checkHookListener($name, $callback, $id_module = NULL) {
-		$exist = Core::$db->GetOne("SELECT hid FROM `ch_hook` WHERE `name`=? AND `callback`=? AND `mid`=?",
-												array($name, $callback, $id_module));	
+		$exist = Core::$db->fetchOne("SELECT hid FROM `ch_hook` WHERE `name`=? AND `callback`=? AND `mid`=?",
+																 array($name, $callback, $id_module));	
 		return ($exist) ? true : false;
 	}
 
@@ -103,12 +94,10 @@ class Hook {
    * @param string callback the static method to call, must be of the form: classname::methodname
    * @param int id_module if the listener is a module, the id of this module
    * @param int positon position of the listener in de "call stack"
-	 *
-   * @return bool
 	 */
 	public static function changeListenerPosition($name, $callback, $id_module = NULL, $position = 0) {
-    Core::$db->Execute("UPDATE `ch_hook` SET `position` = ? WHERE `name`=? AND `callback`=? AND `mid`=?",
-                       array($position, $name, $callback, $id_module));
+    Core::$db->exec("UPDATE `ch_hook` SET `position` = ? WHERE `name`=? AND `callback`=? AND `mid`=?",
+										array($position, $name, $callback, $id_module));
 		return (!Core::$db->ErrorMsg()) ? true : false;
 	}
 
@@ -145,7 +134,7 @@ class Hook {
    * @return void
    */
   private static function initCache() {
-		$callbacks = Core::$db->GetAll("SELECT `ch_hook`.*, `ch_module`.`name` AS `module_name` FROM `ch_hook` LEFT JOIN `ch_module` ON `ch_hook`.`mid` = `ch_module`.`mid` ORDER BY `position`,`hid`");
+		$callbacks = Core::$db->fetchAll("SELECT `ch_hook`.*, `ch_module`.`name` AS `module_name` FROM `ch_hook` LEFT JOIN `ch_module` ON `ch_hook`.`mid` = `ch_module`.`mid` ORDER BY `position`,`hid`");
     self::$callbacks=array();
     foreach($callbacks as $callback) {
       if (!isset(self::$callbacks[$callback['name']])) self::$callbacks[$callback['name']]=array();

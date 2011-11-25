@@ -88,24 +88,16 @@ class Core {
 	 *
 	 * @return void
 	 */
-	public static function init($initDb = true, $triggerHook = true) {
+	public static function init() {
 		if (!empty($_GET["page"]) && !preg_match("/^[a-zA-Z]+$/", $_GET["page"])) die("No way");
 		if (!is_file(CH_ROOTDIR.'/conf/general.conf'))
 			die('Config file '.CH_ROOTDIR.'/conf/general.conf'.' does not exist. Take a look at '.CH_ROOTDIR.'/conf/general.conf.dist');
 		$ini = parse_ini_file(CH_ROOTDIR.'/conf/general.conf', true);
+
 		/** Database */
-		if (isset($ini['database']) && $initDb) {
-			require_once(dirname(__FILE__).'/../ext/adodb5/adodb-exceptions.inc.php');
-			require_once(dirname(__FILE__).'/../ext/adodb5/adodb.inc.php');
-			$dbObj = ADONewConnection($ini['database']['type']);
-			try {
-				$dbObj->Connect($ini['database']['host'], $ini['database']['user'], $ini['database']['password'], $ini['database']['dbname']);
-			} catch (\Exception $e) {
-				Core::log($e->getMessage());
-				return false;
-			}
-			$dbObj->SetFetchMode(ADODB_FETCH_ASSOC);
-			self::$db = $dbObj;
+		if (isset($ini['database'])) {
+			require_once(CH_ROOTDIR.'/ext/pdoex/mysql.php');
+			self::$db = new \MySQL($ini['database']);
 		}
 
 		/** Timezone */
@@ -113,13 +105,11 @@ class Core {
 			date_default_timezone_set($ini['general']['timezone']);
 
 		/** Trigger hook */
-		if ($triggerHook)
-			Hook::call('core_init');
-    if (isset($_SERVER) && isset($_SERVER['REQUEST_URI'])) {
+		Hook::call('core_init');
+    if (isset($_SERVER) && isset($_SERVER['REQUEST_URI']))
       Hook::call('core_init_http');
-		} else
+		else
       Hook::call('core_init_shell');
-
 	}
 
 	/**

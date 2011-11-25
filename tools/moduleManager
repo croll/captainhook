@@ -4,7 +4,7 @@
 namespace tools;
 
 require(dirname(__FILE__).'/../core/Core.php');
-\core\Core::init(true, true);
+\core\Core::init();
 
 $scriptName = basename(__FILE__);
 $actions = array('list' => false, 'info' => true, 'install' => true, 'uninstall' => true, 'enable' => true, 'disable' => true, 'reinstall' => false); 
@@ -31,7 +31,7 @@ switch($action) {
     triggerOff($action);
     break;
   case 'reinstall':
-    $mods=\core\Core::$db->getAll("select `name` from `ch_module` order by `mid`");
+    $mods=\core\Core::$db->fetchAll("select `name` from `ch_module` order by `mid`");
     foreach (array_reverse($mods) as $mod) {
       $moduleName=$mod['name'];
       echo "uninstalling '$moduleName' ...\n";

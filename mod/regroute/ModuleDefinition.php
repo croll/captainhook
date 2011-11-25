@@ -13,7 +13,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
 	}
   
 	function install() {
-    \core\Core::$db->execute("CREATE TABLE `ch_regroute` ("
+    \core\Core::$db->exec("CREATE TABLE `ch_regroute` ("
                              ." `id_module` INT(11) NULL,"
                              ." `regexp` VARCHAR(255) NOT NULL,"
                              ." `hook` VARCHAR(255) NOT NULL,"
@@ -25,6 +25,6 @@ class ModuleDefinition extends \core\ModuleDefinition {
   
 	function uninstall() {
 		parent::uninstall();
-    \core\Core::$db->execute("DROP TABLE `ch_regroute`");
+    \core\Core::$db->exec("DROP TABLE `ch_regroute`");
 	}
 }

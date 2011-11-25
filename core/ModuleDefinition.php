@@ -15,8 +15,8 @@ abstract class ModuleDefinition {
 			if (!isset(self::$_cache) || !isset(self::$_cache[$this->name]) || empty(self::$_cache[$this->name]['id'])) {
 				if (!is_array(self::$_cache))
 					self::$_cache = array();
-				$modinfos = Core::$db->GetRow('SELECT `mid` AS id, `active` FROM ch_module WHERE name=?',
-																			array($this->name));
+				$modinfos = Core::$db->fetchRow('SELECT `mid` AS id, `active` FROM ch_module WHERE name=?',
+																				array($this->name));
 				if ($modinfos)
 					self::$_cache[$this->name] = $modinfos;
 			} 
@@ -33,8 +33,8 @@ abstract class ModuleDefinition {
 			if ($this->id) throw new \Exception("install a module which already have an id ?");
 
 			// Check if module is already loaded
-			$exist = Core::$db->GetOne('SELECT `mid` FROM ch_module WHERE name=?', 
-																	array($this->name));
+			$exist = Core::$db->fetchOne('SELECT `mid` FROM ch_module WHERE name=?', 
+																	 array($this->name));
 			if ($exist) throw new \Exception("module already installed");
 
       $moddir = dirname(__FILE__).'/../mod/'.$this->name;
@@ -42,10 +42,10 @@ abstract class ModuleDefinition {
       if (file_exists($moddir.'/smarty_plugins/')) $options[]='smarty_plugins';
 
 			// Create module instance
-			Core::$db->Execute('INSERT INTO ch_module (`name`, `active`, `options`) VALUES (?,1,?)', 
+			Core::$db->exec('INSERT INTO ch_module (`name`, `active`, `options`) VALUES (?,1,?)', 
                          array($this->name, implode(',', $options)));
 
-			$this->id = Core::$db->Insert_ID();
+			$this->id = Core::$db->lastInsertId();
 
       $this->install_hooks();
       \core\Hook::call('core_ModuleDefinition_install', $this);
@@ -84,10 +84,10 @@ abstract class ModuleDefinition {
 			// Delete hooks
 			Hook::unregisterModuleListeners($this->id);
 
-			Core::$db->Execute('DELETE FROM ch_module WHERE `mid` = ? ', 
+			$affected=Core::$db->exec('DELETE FROM ch_module WHERE `mid` = ? ', 
 																array($this->id));
 
-      if (!Core::$db->Affected_Rows()) throw new \Exception("Module was not installed in database");
+      if ($affected <= 0) throw new \Exception("Module was not installed in database");
       $this->id = null;
 		}
 
@@ -95,18 +95,18 @@ abstract class ModuleDefinition {
 			if (!$this->id) throw new \Exception("enabling a module which don't have an id ?");
 
 			// Enable module
-			Core::$db->Execute('UPDATE ch_module SET `active` = 1 WHERE mid=?', 
+			$affected=Core::$db->exec('UPDATE ch_module SET `active` = 1 WHERE mid=?', 
                          array($this->id));
-      if (!Core::$db->Affected_Rows()) throw new \Exception("Module was not found in database");
+      if ($affected <= 0) throw new \Exception("Module was not found in database");
 		}
 
 		function disable() {
 			if (!$this->id) throw new \Exception("disable a module which don't have an id ?");
 
 			// Disable module
-			Core::$db->Execute('UPDATE ch_module SET `active` = 0 WHERE mid=?', 
+			$affected=Core::$db->exec('UPDATE ch_module SET `active` = 0 WHERE mid=?', 
                          array($this->id));
-      if (!Core::$db->Affected_Rows()) throw new \Exception("Module was not found in database");
+      if ($affected <= 0) throw new \Exception("Module was not found in database");
 		}
 
 		function registerHookListener($name, $callback, $userdata, $position = 0) {

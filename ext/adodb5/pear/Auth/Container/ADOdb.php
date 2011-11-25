@@ -299,7 +299,7 @@ class Auth_Container_ADOdb extends Auth_Container
                          $sql_from,
                          $this->options['table']
                          );
-        $res = $this->db->getAll($query, null, DB_FETCHMODE_ASSOC);
+        $res = $this->db->fetchAll($query, null, DB_FETCHMODE_ASSOC);
 
         if (DB::isError($res)) {
             return PEAR::raiseError($res->getMessage(), $res->getCode());

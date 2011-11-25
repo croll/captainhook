@@ -13,7 +13,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
 	}
 
 	function install() {
-    \core\Core::$db->execute("CREATE TABLE `ch_smarty_plugins` ("
+    \core\Core::$db->exec("CREATE TABLE `ch_smarty_plugins` ("
                              ." `id_module` INT(11) NULL,"
                              ." `name` VARCHAR(255) NOT NULL,"
                              ." `type` ENUM('function','block','compiler','modifier','preFilter','postFilter','outputFilter') NOT NULL,"
@@ -22,7 +22,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
                              ." KEY `kname` (`name`)"
                              .") ENGINE=InnoDB DEFAULT CHARSET=utf8");
 
-    \core\Core::$db->execute("CREATE TABLE `ch_smarty_override` ("
+    \core\Core::$db->exec("CREATE TABLE `ch_smarty_override` ("
                              ." `id_module` INT(11) NULL,"
                              ." `orig` VARCHAR(255) NOT NULL,"
                              ." `replace` VARCHAR(255) NOT NULL,"
@@ -34,7 +34,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
 
 	function uninstall() {
 		parent::uninstall();
-    \core\Core::$db->execute("DROP TABLE IF EXISTS `ch_smarty_plugins`");
-    \core\Core::$db->execute("DROP TABLE IF EXISTS `ch_smarty_override`");
+    \core\Core::$db->exec("DROP TABLE IF EXISTS `ch_smarty_plugins`");
+    \core\Core::$db->exec("DROP TABLE IF EXISTS `ch_smarty_override`");
 	}
 }

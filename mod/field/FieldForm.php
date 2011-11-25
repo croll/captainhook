@@ -4,20 +4,23 @@ namespace mod\field;
 
 class FieldForm {
 	private $smarty;
-	private $uniquename;
+	private $id;
 	private $params=array();
 	private $fields=array();
 	private $html;
 	private static $validators=array();
 	
-	public function __construct($uniquename, $tpl, $hookonpost=null) {
-		$this->uniquename=$uniquename;
+	public function __construct($id, $tpl, $hookonpost=null, $hookoninvalidpost=null) {
+		$this->id=$id;
 		$this->smarty=\mod\smarty\Main::newSmarty();
 		$this->smarty->assign('fieldform', $this);
 		$this->html=$this->smarty->fetch($tpl);
 
-		if ($hookonpost !== null && $this->isPosted()) {
-			\core\Hook::call($hookonpost, $this);
+		if ($this->isPosted()) {
+			if ($this->isValid())
+				if ($hookonpost !== null) \core\Hook::call($hookonpost, $this);
+			else
+				if ($hookoninvalidpost !== null) \core\Hook::call($hookoninvalidpost, $this);
 		}
 	}
 
@@ -48,7 +51,11 @@ class FieldForm {
 		}
 		//$js.="myForm.validate();";
 		$js.="</script>";
-		return "<form ".$this->getParamsStr()." id='niclotest' method='POST'><input type='hidden' name='field_fieldform_uniquename' value='".$this->uniquename."'/>".$this->html."</form> $js";
+		return "<form ".$this->getParamsStr()." id='".$this->id."' method='POST'><input type='hidden' name='field_fieldform_id' value='".$this->id."'/>".$this->html."</form> $js";
+	}
+
+	public function getField_byIndex($index) {
+		return $this->fields[$index];
 	}
 
 	private function getParamsStr($exclude=array()) {
@@ -60,7 +67,7 @@ class FieldForm {
 	}
 
 	public function isPosted() {
-		return isset($_POST) && isset($_POST['field_fieldform_uniquename']) && $_POST['field_fieldform_uniquename'] == $this->uniquename;
+		return isset($_POST) && isset($_POST['field_fieldform_id']) && $_POST['field_fieldform_id'] == $this->id;
 	}
 
 	public function isValid() {
@@ -102,7 +109,7 @@ class FieldForm {
 			\core\Core::$db->query($q, $query['vals']);
 		}
 
-		return \core\Core::$db->Insert_ID();
+		return \core\Core::$db->lastInsertId();
 	}
 
 	public function sqlUpdate($id) {

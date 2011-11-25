@@ -7,7 +7,7 @@ class Main {
 
   private static function regroutes() {
     if (self::$regroutes === null) 
-      self::$regroutes=\core\Core::$db->getAll('SELECT * FROM `ch_regroute`');
+      self::$regroutes=\core\Core::$db->fetchAll('SELECT * FROM `ch_regroute`');
     return self::$regroutes;
   }
 
@@ -21,7 +21,7 @@ class Main {
   }
 
   public static function registerRoute($id_module, $regexp, $hook) {
-    \core\Core::$db->execute('INSERT INTO `ch_regroute` (`id_module`, `regexp`, `hook`) VALUES (?,?,?)',
+    \core\Core::$db->exec('INSERT INTO `ch_regroute` (`id_module`, `regexp`, `hook`) VALUES (?,?,?)',
                              array($id_module, $regexp, $hook));
     self::$regroutes=null;
   }
@@ -37,7 +37,7 @@ class Main {
       $query.= ' AND `hook`=?';
       $vals[]=$hook;
     }
-    \core\Core::$db->execute($query, $vals);
+    \core\Core::$db->exec($query, $vals);
     self::$regroutes=null;
   }
 
