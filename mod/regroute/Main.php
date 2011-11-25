@@ -18,13 +18,14 @@ class Main {
     session_start();
 
 		$xmlhttprequest = (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest');
+		$flags = $xmlhttprequest ? self::flag_xmlhttprequest : self::flag_html;
 
     foreach (self::regroutes() as $regroute) {
       $matches=array();
       if (preg_match($regroute['regexp'], $_SERVER['REQUEST_URI'], $matches)) {
 				if (($xmlhttprequest && ($regroute['flags'] & self::flag_xmlhttprequest))
 						|| (!$xmlhttprequest && ($regroute['flags'] & self::flag_html)))
-					\core\Hook::call($regroute['hook'], $matches, $xmlhttprequest);
+					\core\Hook::call($regroute['hook'], $matches, $flags);
 			}
     }
   }
