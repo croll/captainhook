@@ -8,19 +8,25 @@ class FieldForm {
 	private $params=array();
 	private $fields=array();
 	private $html;
+	private $ajaxreplaceid=null;
 	private static $validators=array();
 	
-	public function __construct($id, $tpl, $hookonpost=null, $hookoninvalidpost=null) {
+	public function __construct($id, $tpl,
+															$options=array('hookonpost' => null, 'hookoninvalidpost' => null,
+																						 'ajaxreplaceid' => null)) {
 		$this->id=$id;
 		$this->smarty=\mod\smarty\Main::newSmarty();
 		$this->smarty->assign('fieldform', $this);
 		$this->html=$this->smarty->fetch($tpl);
+		$this->ajaxreplaceid=isset($options['ajaxreplaceid']) ? $options['ajaxreplaceid'] : false;
 
 		if ($this->isPosted()) {
 			if ($this->isValid())
-				if ($hookonpost !== null) \core\Hook::call($hookonpost, $this);
+				if (isset($options['hookonpost']) && $options['hookonpost'] !== null)
+					\core\Hook::call($options['hookonpost'], $this);
 			else
-				if ($hookoninvalidpost !== null) \core\Hook::call($hookoninvalidpost, $this);
+				if (isset($options['hookoninvalidpost']) && $options['hookoninvalidpost'] !== null)
+					\core\Hook::call($options['hookoninvalidpost'], $this);
 		}
 	}
 
@@ -43,15 +49,16 @@ class FieldForm {
 		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.js');
 		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.more.js');
 		//\mod\cssjs\Main::addJs($webpage, '/mod/field/js/field.js');
-		$js="<script>";
-		$js.="myForm=document.id('".$this->id."');";
-		$js.="new Form.Validator.Inline(myForm, { evaluateFieldsOnChange: true, warningPrefix: '', errorPrefix: '' });";
+		$js="<script>\n";
+		$js.="myForm=document.id('".$this->id."');\n";
+		$js.="new Form.Validator.Inline(myForm, { evaluateFieldsOnChange: true, warningPrefix: '', errorPrefix: '' });\n";
 		foreach(self::$validators as $validator) {
 			$js.=$validator->getMootoolsJs();
 		}
 		//$js.="myForm.validate();";
+		if ($this->ajaxreplaceid) $js.="new Form.Request(myForm, $('".$this->ajaxreplaceid."'));\n";
 		$js.="</script>";
-		return "<form ".$this->getParamsStr()." id='".$this->id."' method='POST'><input type='hidden' name='field_fieldform_id' value='".$this->id."'/>".$this->html."</form> $js";
+		return "<form ".$this->getParamsStr()." id='".$this->id."' method='POST' action=''><input type='hidden' name='field_fieldform_id' value='".$this->id."'/>".$this->html."</form>$js";
 	}
 
 	public function getField_byIndex($index) {

@@ -6,7 +6,7 @@ namespace mod\smarty {
 
 
 	class Main {
-		
+
 		public static function newSmarty() {
 			$moddir=dirname(__FILE__);
 			$sm = new \Smarty();
@@ -17,8 +17,14 @@ namespace mod\smarty {
 
 			$sm->registerResource('mod', new Smarty_Resource_Mod());
 			$sm->default_resource_type='mod';
+			$sm->registerResource('ajaxhack', new Smarty_Resource_AjaxHack());
 			
-			self::loadPlugins($sm);    
+			$smarty->merge_compiled_includes = false;
+
+			if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+				$sm->compile_id='ajaxhack';
+
+			self::loadPlugins($sm);
 
 			return $sm;
 		}
@@ -172,8 +178,7 @@ namespace mod\smarty {
 		}
 		
 		public static function _hook_template($hookname, $userdata, $params, $template, $result) {
-			$name=str_replace('mod_smarty_hook_', '', $hookname);
-			error_log("_hook_template: $userdata ($hookname)");
+			$name=str_replace('smarty_hook_', '', $hookname);
 			$result->display.='<span class="'.$name.'">'.$template->smarty->fetch($userdata).'</span>';
 		}
 		
@@ -234,7 +239,7 @@ namespace mod\smarty {
 			$filepath=$this->nametofile($name);
 			if (is_file($filepath)) {
 				$mtime=filemtime($filepath);
-				$source=file_get_contents($filepath);
+				$source='<span class="tpl_'.$name.'">'.file_get_contents($filepath).'</span>';
 			} else {
 				throw new \Exception("template '$filepath' ($name) not found !");
 			}
@@ -255,11 +260,43 @@ namespace mod\smarty {
 	}	
 
 
+	/**
+	 * this class implement the tplextends ajax hack
+	 */
+	class Smarty_Resource_AjaxHack extends \Smarty_Resource_Custom {
+		/**
+		 * Fetch a template and its modification time from database
+		 *
+		 * @param string $name template name
+		 * @param string $source template source
+		 * @param integer $mtime template modification timestamp (epoch)
+		 * @return void
+		 */
+		protected function fetch($name, &$source, &$mtime) {
+			$mtime=0;
+			$source="{block name='$name'}{/block}";
+		}
+ 
+		protected function fetchTimestamp($name) {
+			return 0;
+		}
+	}
+
 }
 
 // This function is outside of any namespace, because smarty seem to not like it
 namespace {
-	function tplextends($extended_tpl) {
+	function tplextends($extended_tpl, $options='') {
+		$options=explode(',', $options);
+		foreach($options as $option) {
+			if (trim($option)=='') continue;
+			list($k,$v)=explode(':',$option, 2);
+			if ($k == 'onajax') {
+				if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+					return "ajaxhack:$v";
+				}
+			}
+		}
 		return $extended_tpl;
 	}
 }

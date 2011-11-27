@@ -5,8 +5,7 @@ namespace mod\field;
 class Main {
 
   public static function smartyFunction_FieldForm($params, $template) {
-		$fieldform=new FieldForm($params['id'], $params['tpl'],
-														 isset($params['hookonpost']) ? $params['hookonpost'] : null);
+		$fieldform=new FieldForm($params['id'], $params['tpl'], $params);
 		return $fieldform->getHtml($template->smarty->tpl_vars->webpage);
   }
 
