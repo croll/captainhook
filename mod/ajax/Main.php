@@ -24,7 +24,6 @@ class Main {
 		try {
 			return call_user_func_array('\\mod\\'.$mod.'\\Ajax::'.$method, array($params));
 		} catch (\Exception $e) {
-			Core::log('\\mod\\ajax\\Main::call -- Unable to call \\mod\\'.$mod.'\\Ajax::'.$method);
       throw $e;
 		}
 	}
