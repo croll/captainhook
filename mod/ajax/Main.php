@@ -12,6 +12,9 @@ class Main {
 					echo -1;
 					return false;
 				}
+				header('Cache-Control: no-cache, must-revalidate');
+				header('Expires: Mon, 10 Jan 1970 05:00:00 GMT');
+				header('Content-type: application/json');
 				echo json_encode(self::call($args[1], $args[2], $_REQUEST['params']));
 				break;
 			default:

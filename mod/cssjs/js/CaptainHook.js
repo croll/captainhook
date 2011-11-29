@@ -1,4 +1,4 @@
-var CaptainHook = new new Class({
+var CHCore =new Class({
 
 	Implements: [Events, Options],
 
@@ -34,18 +34,19 @@ var CaptainHook = new new Class({
 			document.getElements('script').get('src').each(function(src) {
 				keys = Object.keys(this.jsStack);
 				if (!keys || !keys.contains(name))
-				this.addJsFile(src);
+					this.addJsFile(src);
 			}, this);
 		},
 
 		addJsFile: function(src) {
+			if (typeOf(src) != 'string') return;
 			var name = src.split('/').getLast().split('.')[0].camelCase();
 			this.jsStack[name] = src;
 		},
 
 		addJs: function(options) {
-			if (this.jsStack[options.name]) {
-				options.func.call();
+			if (this.jsStack[options.class]) {
+				this.callHookListener(options.hook);
 				return;
 			}
 			this.callPHP('cssjs', 'getScriptFiles', {mod: options.mod, class: options.class}, function(response) {
@@ -62,4 +63,10 @@ var CaptainHook = new new Class({
 			);
 		}
 
+});
+
+var CaptainHook;
+
+window.addEvent('domready', function() {
+	CaptainHook = new CHCore();
 });

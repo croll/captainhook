@@ -260,7 +260,7 @@ var GooCompleter = new Class({
 		if (this.field.get('value').trim() != '')
 		{
 			
-			if (this.suggestions[0] != this.field.get('value'))
+			if (!this.suggestions[0] || (this.suggestions[0].value != this.field.get('value')))
 			{
 				var request = new Request.JSON({
 					url: this.options.action,
@@ -310,7 +310,7 @@ var GooCompleter = new Class({
 				
 			Object.each(suggestions, function(value) {
 				
-				var html_value = value;
+				var html_value = value.value;
 			
 				// Show new result list
 				if (this.options.use_listbox)
@@ -319,8 +319,8 @@ var GooCompleter = new Class({
 					if (this.options.hightlight)
 					{
 						// This way is more faster than the regular expressions method
-						html_value = value.substr(0, this.field.get('value').length) + '<span class="goocompleter_hightlight">';
-						html_value = html_value + value.substr(this.field.get('value').length) + '</span>';
+						html_value = value.value.substr(0, this.field.get('value').length) + '<span class="goocompleter_hightlight">';
+						html_value = html_value + value.value.substr(this.field.get('value').length) + '</span>';
 						
 						//html_value = value.substr(0, this.field.get('value').length) + value.substr(this.field.get('value').length).bold();
 					}
@@ -382,7 +382,7 @@ var GooCompleter = new Class({
 		
 		Object.each(this.suggestions, function(value) {
 			
-			if (search.toLowerCase() == value.substr(0, search.length).toLowerCase())								
+			if (search.toLowerCase() == value.value.substr(0, search.length).toLowerCase())								
 				found[found.length] = value;
 							
 		});			
