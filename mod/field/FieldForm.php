@@ -56,7 +56,7 @@ class FieldForm {
 			$js.=$validator->getMootoolsJs();
 		}
 		//$js.="myForm.validate();";
-		if ($this->ajaxreplaceid) $js.="new Form.Request(myForm, $('".$this->ajaxreplaceid."'));\n";
+    if ($this->ajaxreplaceid) $js.="new Form.Request(myForm, $('".$this->ajaxreplaceid."'));\n";
 		$js.="</script>";
 		return "<form ".$this->getParamsStr()." id='".$this->id."' method='POST' action=''><input type='hidden' name='field_fieldform_id' value='".$this->id."'/>".$this->html."</form>$js";
 	}
