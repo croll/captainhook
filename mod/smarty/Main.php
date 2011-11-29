@@ -192,6 +192,16 @@ namespace mod\smarty {
 			return $result->display;
 		}
 		
+    public static function smartyBlock_bloc($params, $content, $smarty, &$repeat) {
+      if ($content !== NULL) { // close tag
+        $nospan = isset($params['nospan']);
+        if ($nospan) unset($params['nospan']);
+        $params_str='';
+        foreach($params as $k=>$v) $params_str.=" $k=$v";
+        return $smarty->fetch('string:'.($nospan ? '' : '<span class="bloc_'.$params['name'].'">').'{block'.$params_str.'}'.$content.'{/block}'.($nospan ? '' : '</span>'));
+      }
+		}
+		
 	}
 
 
@@ -239,7 +249,7 @@ namespace mod\smarty {
 			$filepath=$this->nametofile($name);
 			if (is_file($filepath)) {
 				$mtime=filemtime($filepath);
-				$source='<span class="tpl_'.$name.'">'.file_get_contents($filepath).'</span>';
+        $source=file_get_contents($filepath);
 			} else {
 				throw new \Exception("template '$filepath' ($name) not found !");
 			}
