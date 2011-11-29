@@ -11,4 +11,5 @@ class Main {
 	public static function addCss($webpageInstance, $file) {
 		$webpageInstance->csss[] = $file;
 	}
+
 }
