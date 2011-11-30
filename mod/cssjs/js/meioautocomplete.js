@@ -373,7 +373,7 @@ provides: [Meio.Autocomplete]
 				this.elements.field.node.set('value', text);
 				var index = list.focusedItem.get('data-index');
 				this.fireEvent('select', [this.elements, this.itemsData[index], text, index]);
-				this.elements.field.node.fireEvent('select', [this.elements, this.itemsData[index], text, index]);
+				this.elements.field.node.fireEvent('change', [this.elements, this.itemsData[index], text, index]);
 			}
 			list.hide();
 		},
