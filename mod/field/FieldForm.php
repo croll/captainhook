@@ -13,21 +13,23 @@ class FieldForm {
 	
 	public function __construct($id, $tpl,
 															$options=array('hookonpost' => null, 'hookoninvalidpost' => null,
-																						 'ajaxreplaceid' => null)) {
+																						 'ajaxreplaceid' => null, 'sendjson' => null)) {
 		$this->id=$id;
 		$this->smarty=\mod\smarty\Main::newSmarty();
 		$this->smarty->assign('fieldform', $this);
 		$this->html=$this->smarty->fetch($tpl);
 		$this->ajaxreplaceid=isset($options['ajaxreplaceid']) ? $options['ajaxreplaceid'] : false;
+		$this->sendjson=isset($options['sendjson']) ? $options['sendjson'] : false;
 
-		if ($this->isPosted()) {
-			if ($this->isValid())
+
+		if ($this->isPosted())
+			if ($this->isValid()) {
 				if (isset($options['hookonpost']) && $options['hookonpost'] !== null)
 					\core\Hook::call($options['hookonpost'], $this);
-			else
+			} else {
 				if (isset($options['hookoninvalidpost']) && $options['hookoninvalidpost'] !== null)
 					\core\Hook::call($options['hookoninvalidpost'], $this);
-		}
+			}
 	}
 
 	// used internaly by smarty functions
@@ -57,6 +59,7 @@ class FieldForm {
 		}
 		//$js.="myForm.validate();";
     if ($this->ajaxreplaceid) $js.="new Form.Request(myForm, $('".$this->ajaxreplaceid."'));\n";
+		if ($this->sendjson) $js.="myForm.addEvent('submit', function() { myForm.send(); return false; });";
 		$js.="</script>";
 		return "<form ".$this->getParamsStr()." id='".$this->id."' method='POST' action=''><input type='hidden' name='field_fieldform_id' value='".$this->id."'/>".$this->html."</form>$js";
 	}
