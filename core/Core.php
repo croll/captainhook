@@ -124,8 +124,19 @@ class Core {
 	 * @return void
 	 */
 	public static function log($msg) {
-    if (is_string($msg)) error_log($msg);
-    else error_log(var_export($msg, true));
+		$log = '['.date('D M d H:i:s Y').'] [debug] [client '.$_SERVER['REMOTE_ADDR'].']';
+		$bt = debug_backtrace();
+		$log .= ' CaptainHook -- '.$bt[1]['class'].$bt[1]['type'].$bt[1]['function'].' > ';
+    if (is_string($msg)) $log .= $msg;
+    else {
+			ob_start();
+			print_r($msg);
+			$log .= ob_get_contents();
+			ob_end_clean();
+		}
+		$stderr = fopen('php://stderr', 'w'); 
+		fwrite($stderr, $log."\n"); 
+    fclose($stderr); 
 	}
 
 }
