@@ -14,6 +14,11 @@ class Main {
 					return false;
 				}
 				$method = (strstr($args[2], '?')) ? substr($args[2], 0, strpos($args[2], '?', 0)) : $args[2];
+
+				if (!preg_match("/^[a-zA-Z-_]+$/", $args[1]) || !preg_match("/^[a-zA-Z-_]+$/", $method)) {
+					throw new \Exception("/mod/ajax > hook_mod_ajax : classname or methodname invalid");
+					return -1;
+				}
 				while(list($k, $v) = each($_REQUEST)) {
 					$methodParams[$k] = filter_var($v, FILTER_SANITIZE_STRING);
 				}

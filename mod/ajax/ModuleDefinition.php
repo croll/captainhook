@@ -14,7 +14,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
 
 	function install() {
 		parent::install();
-		\mod\regroute\Main::registerRoute($this->id, '#/ajax/(.*)#', 'mod_ajax', \mod\regroute\Main::flag_xmlhttprequest);
+		\mod\regroute\Main::registerRoute($this->id, '#^/ajax/(.*)$#', 'mod_ajax', \mod\regroute\Main::flag_xmlhttprequest);
 	}
 
 	function uninstall() {
