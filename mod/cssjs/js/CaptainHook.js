@@ -56,8 +56,9 @@ var CHCore =new Class({
 					this.jsStack[options.name] = 'embedded';
 					if (response.js)
 						new Element('script').set('html', response.js).inject(document.head);
-					if (response.css)
-						new Element('style', {type: 'text/css'}).set('html', response.js).inject(document.head);
+					if (response.css) {
+						new Element('style', {type: 'text/css'}).set('html', response.css).inject(document.head);
+					}
 					this.callHookListener(options.hook);
 				}}.bind(this)
 			);
