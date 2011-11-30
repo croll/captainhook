@@ -27,7 +27,7 @@ var CHCore =new Class({
 			var req = {url: '/ajax/call/'+mod+'/'+method};
 			if (typeOf(onSuccess) == 'function')
 				Object.append(req, {onSuccess: onSuccess});
-			new Request.JSON(req).post({params: params});
+			new Request.JSON(req).post(params);
 		},
 
 		fillJsStack: function() {
@@ -45,11 +45,11 @@ var CHCore =new Class({
 		},
 
 		addJs: function(options) {
-			if (this.jsStack[options.class]) {
+			if (this.jsStack[options.script]) {
 				this.callHookListener(options.hook);
 				return;
 			}
-			this.callPHP('cssjs', 'getScriptFiles', {mod: options.mod, class: options.class}, function(response) {
+			this.callPHP('cssjs', 'getScriptFiles', {mod: options.mod, class: options.script}, function(response) {
 				if (response == -1) {
 					return false;
 				} else {
