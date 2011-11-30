@@ -124,9 +124,9 @@ class Core {
 	 * @return void
 	 */
 	public static function log($msg) {
-		$log = '['.date('D M d H:i:s Y').'] [debug] [client '.$_SERVER['REMOTE_ADDR'].']';
+		$log = '['.date('D M d H:i:s Y').'] [debug] [client '.$_SERVER['REMOTE_ADDR'].'] ';
 		$bt = debug_backtrace();
-		$log .= ' CaptainHook -- '.$bt[1]['class'].$bt[1]['type'].$bt[1]['function'].' > ';
+		$log .= $bt[1]['class'].$bt[1]['type'].$bt[1]['function'].' -- ';
     if (is_string($msg)) $log .= $msg;
     else {
 			ob_start();
