@@ -124,7 +124,8 @@ class Core {
 	 * @return void
 	 */
 	public static function log($msg) {
-		$log = '['.date('D M d H:i:s Y').'] [debug] [client '.$_SERVER['REMOTE_ADDR'].'] ';
+		$remote = (isset($_SERVER['REMOTE_ADDR'])) ? '[client '.$_SERVER['REMOTE_ADDR'].']' : '';
+		$log = '['.date('D M d H:i:s Y').'] [debug] '.$remote.' ';
 		$bt = debug_backtrace();
 		$log .= $bt[1]['class'].$bt[1]['type'].$bt[1]['function'].' -- ';
     if (is_string($msg)) $log .= $msg;
