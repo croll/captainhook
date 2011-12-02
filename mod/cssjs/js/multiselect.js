@@ -1,4 +1,4 @@
-var multiselect = new Class({
+var Multiselect = new Class({
 		Implements: [Options,Events],
 		options: {
 			list: 'list',
