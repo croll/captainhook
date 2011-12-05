@@ -1,4 +1,4 @@
-var CHCore =new Class({
+var CHCore = new Class({
 
 	Implements: [Events, Options],
 
@@ -6,7 +6,6 @@ var CHCore =new Class({
 		jsStack: {},
 
 		initialize: function() {
-			this.fillJsStack();
 		},
 
 		registerHookListener: function(name, func) {
@@ -66,8 +65,8 @@ var CHCore =new Class({
 
 });
 
-var CaptainHook;
+var CaptainHook = new CHCore();
 
 window.addEvent('domready', function() {
-	CaptainHook = new CHCore();
+			CaptainHook.fillJsStack();
 });
