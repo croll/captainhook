@@ -15,7 +15,7 @@
 
 <script>
 window.addEvent('domready', function(){
-  document.id('niclotest').getElements('[type=text], [type=password]').each(function(el){
+  document.id('user_loginform').getElements('[type=text], [type=password]').each(function(el){
     new OverText(el);
   });
 });
