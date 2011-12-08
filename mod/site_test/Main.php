@@ -30,7 +30,7 @@ class Main {
 	}
 
 	private static function test_field($page) {
-		$form = new \mod\field\FieldForm('site_test_myform', 'site_test/myform');
+		$form = new \mod\field\FieldForm($page->smarty, 'site_test_myform', 'site_test/myform');
 
 		$page->setLayout('site_test/field');
 		if ($form->isPosted() && $form->isValid()) {
