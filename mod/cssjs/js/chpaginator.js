@@ -48,6 +48,8 @@ var CHPaginator =new Class({
 				}
 		},
 
+		/* all functions below should be considered "private" */
+
 		updateDisplay: function() {
 				var pagescount = Math.floor((this.rowscount-1) / this.rowsperpage) +1;
 
