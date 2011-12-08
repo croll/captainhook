@@ -48,8 +48,8 @@ class FieldForm {
 	}
 
 	public function getHtml($webpage) {
-		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.js');
-		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools-more-all.js');
+		//\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.js');
+		//\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools-more-all.js');
 		//\mod\cssjs\Main::addJs($webpage, '/mod/field/js/field.js');
 		$js="<script>\n";
 		$js.="myForm=document.id('".$this->id."');\n";
