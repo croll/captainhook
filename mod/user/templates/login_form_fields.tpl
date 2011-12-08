@@ -16,7 +16,9 @@
 <script>
 window.addEvent('domready', function(){
   document.id('user_loginform').getElements('[type=text], [type=password]').each(function(el){
-    new OverText(el);
+    new OverText(el, {
+			poll: true
+		});
   });
 });
 </script>

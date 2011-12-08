@@ -1,0 +1,197 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+.clearfix {
+ /*	display: inline-block; */
+}
+
+html[xmlns] .clearfix {
+	display: block;
+}
+
+* html .clearfix {
+  height: 1%;
+}
+
+body {
+	margin: 0px;
+	padding: 0px;
+	background-color: #FFF;
+	font-family: arial, helvetica, sans-serif ;
+	font-size:12px;
+}
+
+a {
+	text-decoration: none;
+}
+
+
+button, input {
+  line-height: normal;
+  *overflow: visible;
+}
+
+button::-moz-focus-inner, input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+input[type="search"] {
+  -webkit-appearance: textfield;
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+textarea {
+  overflow: auto;
+  vertical-align: top;
+}
+
+input[type="file"] {
+  background-color: #ffffff;
+  padding: initial;
+  border: initial;
+  line-height: initial;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+}
+
+input[type="button"], 
+input[type="submit"], 
+input[type="reset"], 
+input[type="radio"], 
+input[type="checkbox"], 
+select {
+	margin: 0;
+	border:1px solid #999;
+	padding: 2px 5px 2px 5px;
+	height: 24px;
+  cursor: pointer;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #c0c0c0;
+	background-image: -moz-linear-gradient(#fff, #c0c0c0);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#c0c0c0));    
+	background-image: -webkit-linear-gradient(#fff, #c0c0c0);
+	background-image: -o-linear-gradient(#fff, #c0c0c0);
+	background-image: -ms-linear-gradient(#fff, #c0c0c0);
+	background-image: linear-gradient(#fff, #c0c0c0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#fff', EndColorStr='#c0c0c0');     
+}
+
+input[type="button"]:hover, 
+input[type="submit"]:hover, 
+input[type="reset"]:hover, 
+input[type="radio"]:hover, 
+input[type="checkbox"]:hover, 
+select:hover {
+	background-color: #fff;
+	background-image: -moz-linear-gradient(#c0c0c0, #fff);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#c0c0c0), to(#fff));      
+	background-image: -webkit-linear-gradient(#c0c0c0, #fff);
+	background-image: -o-linear-gradient(#c0c0c0, #fff);
+	background-image: -ms-linear-gradient(#c0c0c0, #fff);
+	background-image: linear-gradient(#c0c0c0, #fff);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#c0c0c0', EndColorStr='#fff');    
+}
+
+input[type="button"]:active, 
+input[type="submit"]:active, 
+input[type="reset"]:active, 
+input[type="radio"]:active, 
+input[type="checkbox"]:active, 
+select:active {
+	background: #c0c0c0;
+	position: relative;
+	top: 1px;
+	-moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.7) inset;
+	-webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.7) inset;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.7) inset; 
+}
+
+input[type="radio"], 
+input[type="checkbox"] {
+	height: 12px;
+}
+
+input[type="file"]:focus, 
+input[type="radio"]:focus, 
+input[type="checkbox"]:focus, 
+select:focus {
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  outline: 1px dotted #666;
+}
+
+form *:disabled {
+  cursor: not-allowed;
+	border: 1px solid #d0d0d0;
+	color: #c0c0c0;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	background-color: #d0d0d0;
+	background-image: -moz-linear-gradient(#fff, #d0d0d0);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#d0d0d0));    
+	background-image: -webkit-linear-gradient(#fff, #d0d0d0);
+	background-image: -o-linear-gradient(#fff, #d0d0d0);
+	background-image: -ms-linear-gradient(#fff, #d0d0d0);
+	background-image: linear-gradient(#fff, #d0d0d0);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#fff', EndColorStr='#d0d0d0');     
+}
+
+input, textarea {
+	border: 1px solid #ccc;
+  -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+  -o-transition: border linear 0.2s, box-shadow linear 0.2s;
+  transition: border linear 0.2s, box-shadow linear 0.2s;
+  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+	border: solid 1px #999;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+input:focus, 
+textarea:focus {
+  outline: 0;
+  border-color: rgba(82, 168, 236, 0.8);
+  -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+  -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6);
+}
+
+input[type="text"], 
+textarea {
+	padding: 2px 3px 2px 3px;
+	height: 18px;
+	-moz-box-shadow: 0 2px 4px #bbb inset;
+	-webkit-box-shadow: 0 2px 4px #bbb inset;
+	box-shadow: 0 2px 4px #bbb inset;
+
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+}
