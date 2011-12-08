@@ -176,7 +176,7 @@ class Element {
 		if (!isset($params['name']))
 			throw new \Exception("Element must have a name parameter");
 		$this->name=$params['name'];
-		$this->value=isset($this->value) ? $this->value : '';
+		$this->value=isset($params['value']) ? $params['value'] : '';
 		$this->params=$params;
 		$this->form=$form;
 		foreach($this->params as $paramname => $param) {
@@ -214,7 +214,7 @@ class Element {
 	}
 
 	public function getValue() {
-		if (isset($_POST[$this->name])) return $_POST[$this->name];
+    if ($this->form->isPosted()) return isset($_POST[$this->name]) ? $_POST[$this->name] : NULL;
 		return isset($this->params['value']) ? $this->params['value'] : '';
 	}
 
@@ -371,7 +371,7 @@ class Button extends Element {
 	public function render_edit_pre() {
 		return sprintf("<input %s type='button' name='%s' value='%s'/>",
 									 $this->getParamsStr(array('name','value','type')),
-									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
+									 $this->name, htmlspecialchars($this->value, ENT_QUOTES)
 									 );
 	}
 }
@@ -380,7 +380,7 @@ class Submit extends Element {
 	public function render_edit_pre() {
 		return sprintf("<input %s type='submit' name='%s' value='%s'/>",
 									 $this->getParamsStr(array('name','value','type')),
-									 $this->name, htmlspecialchars($this->getValue(), ENT_QUOTES)
+									 $this->name, htmlspecialchars($this->value, ENT_QUOTES)
 									 );
 	}
 }
