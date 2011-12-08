@@ -116,8 +116,7 @@ input[type="button"]:active,
 input[type="submit"]:active, 
 input[type="reset"]:active, 
 input[type="radio"]:active, 
-input[type="checkbox"]:active, 
-select:active {
+input[type="checkbox"]:active {
 	background: #c0c0c0;
 	position: relative;
 	top: 1px;
