@@ -11,11 +11,11 @@ class FieldForm {
 	private $ajaxreplaceid=null;
 	private static $validators=array();
 	
-	public function __construct($id, $tpl,
+	public function __construct($smarty, $id, $tpl,
 															$options=array('hookonpost' => null, 'hookoninvalidpost' => null,
 																						 'ajaxreplaceid' => null, 'sendjson' => null)) {
 		$this->id=$id;
-		$this->smarty=\mod\smarty\Main::newSmarty();
+    $this->smarty=$smarty;
 		$this->smarty->assign('fieldform', $this);
 		$this->html=$this->smarty->fetch($tpl);
 		$this->ajaxreplaceid=isset($options['ajaxreplaceid']) ? $options['ajaxreplaceid'] : false;

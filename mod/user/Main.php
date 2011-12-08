@@ -282,8 +282,8 @@ class Main {
 
 	public static function hook_mod_user_login($hookname, $userdata, $urlmatches) {
 		$displayForm = true;
-		$form = new \mod\field\FieldForm('user_loginform', 'user/login_form_fields');
 		$page = new \mod\webpage\Main();
+		$form = new \mod\field\FieldForm($page->smarty, 'user_loginform', 'user/login_form_fields');
 		$page->setLayout('user/login');
 		if (!self::userIsLoggedIn()) { 
 			if ($form->isPosted() && $form->isValid()) {

@@ -5,7 +5,7 @@ namespace mod\field;
 class Main {
 
   public static function smartyFunction_FieldForm($params, $template) {
-		$fieldform=new FieldForm($params['id'], $params['tpl'], $params);
+		$fieldform=new FieldForm($template->smarty, $params['id'], $params['tpl'], $params);
 		return $fieldform->getHtml($template->smarty->tpl_vars->webpage);
   }
 
