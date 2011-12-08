@@ -9,19 +9,13 @@ class SmartyPlugins {
 	}
 
 	public static function function_css($params, $template) {
-		$csss = &$template->smarty->tpl_vars->webpage->value->csss;
 		if (!isset($params['file'])) throw new \Exception("{css} function must have a 'file' parameter");
-		if (!in_array($params['file'], $csss))
-			$csss[] = $params['file'];
-		return;
+    Main::addCss($template->smarty->tpl_vars->webpage->value, $params['file']);
 	}
 
 	public static function function_js($params, $template) {
-		$scripts = &$template->smarty->tpl_vars->webpage->value->scripts;
 		if (!isset($params['file'])) throw new \Exception("{js} function must have a 'file' parameter");
-		if (!in_array($params['file'], $scripts))
-			$scripts[] = $params['file'];
-		return;
+    Main::addJs($template->smarty->tpl_vars->webpage->value, $params['file']);
 	}
 
 	public static function outputFilter_processJsAndCss($output, $template) {
