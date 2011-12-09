@@ -17,7 +17,8 @@ CaptainHook.Message = {
 				message: txt,
 				offset: 150,
 				centered: true,
-				top: true
+				top: true,
+				stack: false
 			}, options)).say();
 		} 
 
