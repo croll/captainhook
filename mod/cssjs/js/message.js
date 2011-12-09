@@ -1,6 +1,5 @@
 CaptainHook.Message = {
 		show: function(txt, messageType, options) {
-		console.log(txt);
 			var icon;
 			switch(messageType) {
 				case 'OK':
