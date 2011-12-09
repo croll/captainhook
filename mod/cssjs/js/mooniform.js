@@ -136,7 +136,8 @@ var Mooniform = new Class({
       selected = [elem.getFirst()];
     }
     
-    spanElement.set('html',selected[0].get('html'));
+		if (selected[0])
+			spanElement.set('html',selected[0].get('html'));
     
     elem.setStyle('opacity', 0).setStyle('visibility','');
     divElement.inject(elem, 'before').adopt(elem);
@@ -504,7 +505,8 @@ var Mooniform = new Class({
         divTag.removeClass(o.hoverClass).removeClass(o.focusClass).removeClass(o.activeClass);
 
         //reset current selected text
-        spanTag.set('html',el.getSelected()[0].get('html'));
+				if(el.getSelected()[0])
+				 spanTag.set('html',el.getSelected()[0].get('html'));
 
         if(el.get("disabled")){
           divTag.addClass(o.disabledClass);

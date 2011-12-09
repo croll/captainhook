@@ -76,40 +76,38 @@ input[type="button"],
 input[type="submit"], 
 input[type="reset"], 
 input[type="radio"], 
-input[type="checkbox"], 
-select {
+input[type="checkbox"] {
 	margin: 0;
-	border:1px solid #999;
+	border:1px solid #bbb;
 	padding: 2px 5px 2px 5px;
 	height: 24px;
   cursor: pointer;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
-	background-color: #c0c0c0;
-	background-image: -moz-linear-gradient(#fff, #c0c0c0);
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#c0c0c0));    
-	background-image: -webkit-linear-gradient(#fff, #c0c0c0);
-	background-image: -o-linear-gradient(#fff, #c0c0c0);
-	background-image: -ms-linear-gradient(#fff, #c0c0c0);
-	background-image: linear-gradient(#fff, #c0c0c0);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#fff', EndColorStr='#c0c0c0');     
+	background-color: #e7e7e7;
+	background-image: -moz-linear-gradient(#fff, #e7e7e7);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#e7e7e7));    
+	background-image: -webkit-linear-gradient(#fff, #e7e7e7);
+	background-image: -o-linear-gradient(#fff, #e7e7e7);
+	background-image: -ms-linear-gradient(#fff, #e7e7e7);
+	background-image: linear-gradient(#fff, #e7e7e7);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#fff', EndColorStr='#e7e7e7');     
 }
 
 input[type="button"]:hover, 
 input[type="submit"]:hover, 
 input[type="reset"]:hover, 
 input[type="radio"]:hover, 
-input[type="checkbox"]:hover, 
-select:hover {
+input[type="checkbox"]:hover {
 	background-color: #fff;
-	background-image: -moz-linear-gradient(#c0c0c0, #fff);
-	background-image: -webkit-gradient(linear, left top, left bottom, from(#c0c0c0), to(#fff));      
-	background-image: -webkit-linear-gradient(#c0c0c0, #fff);
-	background-image: -o-linear-gradient(#c0c0c0, #fff);
-	background-image: -ms-linear-gradient(#c0c0c0, #fff);
-	background-image: linear-gradient(#c0c0c0, #fff);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#c0c0c0', EndColorStr='#fff');    
+	background-image: -moz-linear-gradient(#e7e7e7, #fff);
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#e7e7e7), to(#fff));      
+	background-image: -webkit-linear-gradient(#e7e7e7, #fff);
+	background-image: -o-linear-gradient(#e7e7e7, #fff);
+	background-image: -ms-linear-gradient(#e7e7e7, #fff);
+	background-image: linear-gradient(#e7e7e7, #fff);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#e7e7e7', EndColorStr='#fff');    
 }
 
 input[type="button"]:active, 
@@ -117,7 +115,7 @@ input[type="submit"]:active,
 input[type="reset"]:active, 
 input[type="radio"]:active, 
 input[type="checkbox"]:active {
-	background: #c0c0c0;
+	background: #e7e7e7;
 	position: relative;
 	top: 1px;
 	-moz-box-shadow: 0 0 3px rgba(0, 0, 0, 0.7) inset;
@@ -132,8 +130,7 @@ input[type="checkbox"] {
 
 input[type="file"]:focus, 
 input[type="radio"]:focus, 
-input[type="checkbox"]:focus, 
-select:focus {
+input[type="checkbox"]:focus {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -158,7 +155,11 @@ form *:disabled {
 }
 
 input, textarea {
-	border: 1px solid #ccc;
+  border-top: solid 1px #aaa;
+  border-left: solid 1px #aaa;
+  border-bottom: solid 1px #ccc;
+  border-right: solid 1px #ccc;
+  color: #555;
   -webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
   -moz-transition: border linear 0.2s, box-shadow linear 0.2s;
   -ms-transition: border linear 0.2s, box-shadow linear 0.2s;
@@ -167,11 +168,15 @@ input, textarea {
   -webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   -moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-	border: solid 1px #999;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+	-moz-box-shadow: 0 2px 4px #e7e7e7 inset;
+	-webkit-box-shadow: 0 2px 4px #e7e7e7 inset;
+	box-shadow: 0 2px 4px #e7e7e7 inset;
 }
+
+/* INPUT & TEXTAREA */
 
 input:focus, 
 textarea:focus {
@@ -186,11 +191,4 @@ input[type="text"],
 textarea {
 	padding: 2px 3px 2px 3px;
 	height: 18px;
-	-moz-box-shadow: 0 2px 4px #bbb inset;
-	-webkit-box-shadow: 0 2px 4px #bbb inset;
-	box-shadow: 0 2px 4px #bbb inset;
-
-	-moz-border-radius: 3px;
-	-webkit-border-radius: 3px;
-	border-radius: 3px;
 }
