@@ -1,54 +1,61 @@
-#message {
-  margin: 27px auto 0px auto;
-	padding: 5px 0px 5px 8px; 
-	width: 600px; 
-	color: #222;
-	position: relative; 
-	background:white;
-	text-shadow: 0px 0px 5px #56593d;
+@charset "utf-8";
+/* CSS Document */
+
+/* Message Boxes */
+.msgBox{
+	font-family:Arial, Helvetica, sans-serif;
 	opacity: 0;
-	-moz-opacity : 0;
-	-ms-filter: "alpha(opacity=0)";
-	filter : alpha(opacity=0);
-	font-weight: bold; 
-	text-transform:uppercase; 
-	-webkit-border-radius: 5px; 
-	-moz-border-radius: 5px; 
-	border-radius: 5px; 
+	position:absolute;
+	top:-1000px;
+	left:0px;
+	max-width: 250px;
+	min-width: 150px;
+	color:#fff;
+	background: rgb(68, 68, 68); /* compatibility fallback */
+	background: rgba(68, 68, 68, 0.8);
+	padding: 10px;
+	border-radius: 10px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	box-shadow: 1px 1px 1px orange;
+	-moz-box-shadow: 1px 1px 1px orange;
+	-webkit-box-shadow: 2px 1px 1px orange;
+	z-index:-1;
 }
 
-.messageWarning {
-	background: #fef5be;
-	color: #56593d;
-	opacity: 1;
-	-moz-opacity : 1;
-	-ms-filter: "alpha(opacity=100)";
-	filter : alpha(opacity=100);
+.msgBoxImage{
+	width: 40px;
+	height: 40px;
 }
 
-.messageError {
-	background: #fbe3e4;
-	color: #870e1d;
-	opacity: 1;
-	-moz-opacity : 1;
-	-ms-filter: "alpha(opacity=100)";
-	filter : alpha(opacity=100);
-	opacity: 1;
+.msgBoxIcon{
+	float:left;
+	width: 40px;
+	height: 40px;
+	padding-right: 7px;
 }
 
-.messageOk {
-	background: #e5eec1;
-	color: #4d511a;
-	opacity: 1;
-	-moz-opacity : 1;
-	-ms-filter: "alpha(opacity=100)";
-	filter : alpha(opacity=100);
+.msgBoxTitle{
+	float:left;
+	color: #FFFFFF;
 }
 
-.messageHide {
-	opacity: 0;
-	-moz-opacity : 0;
-	-ms-filter: "alpha(opacity=0)"; /* IE 8 */
-	filter : alpha(opacity=0); /* IE < 8 */
+.msgBoxContent{ 
+	float:left;
+	max-width: 80%;
+	font-size:12px;
 }
 
+.msgBoxMessage{		float:left;}
+.msgBoxLink{		color:#6699CC;}
+.msgBoxLink:hover{	color:#FF9900;}
+
+.msgEditable{
+	font-family:Arial, Helvetica, sans-serif;
+	font-size:12px;
+	width:250px;
+	background: rgb(0, 0, 0); /* compatibility fallback */
+	background: rgba(255, 255, 255, 0.1);
+	border:#000;
+	color:#FFF;
+}
