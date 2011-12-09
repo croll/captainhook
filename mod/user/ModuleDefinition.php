@@ -76,6 +76,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
 		\mod\regroute\Main::registerRoute($this->id, '#^/logout/?$#', 'mod_user_logout');
 		\mod\regroute\Main::registerRoute($this->id, '#^/user/([a-z]+)/?$#', 'mod_user_manage_users');
 		\mod\regroute\Main::registerRoute($this->id, '#^/group/([a-z]+)/?$#', 'mod_user_manage_groups');
+
 		parent::install();
 	}
 

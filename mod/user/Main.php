@@ -48,15 +48,15 @@ class Main {
 	}
 
 	public static function addUser($name, $login, $password, $status=1) {
-		Core::$db->exec('INSERT INTO `ch_user` (`full_name`, `login`, `pass`, `status`) VALUES (?,?,MD5(?),?)', 
+		Core::$db->query('INSERT INTO `ch_user` (`full_name`, `login`, `pass`, `status`) VALUES (?,?,MD5(?),?)', 
 												array($name, $login, $password, $status));
 		return (isset(Core::$db->Insert_ID)) ? Core::$db->Insert_ID : NULL;
 	}
 
 	public static function getUserInfos($id) {
-		$result = Core::$db->exec('SELECT * FROM `ch_user` WHERE `uid`=?',
+		$result = Core::$db->query('SELECT * FROM `ch_user` WHERE `uid`=?',
 																	array((int)$id));
-		return $result->FetchRow();
+		return $result->fetchRow();
 	}
 
 	public static function getUserId($name) {
@@ -67,10 +67,10 @@ class Main {
 
 	public static function delUser($user) {
 		if (is_int($user))
-			Core::$db->exec('DELETE FROM `ch_user` WHERE `name` = ?', 
+			Core::$db->query('DELETE FROM `ch_user` WHERE `uid` = ?', 
 												array($user));
 		else
-			Core::$db->exec('DELETE FROM `ch_user` WHERE `uid` = ?', 
+			Core::$db->query('DELETE FROM `ch_user` WHERE `login` = ?', 
 												array($user));
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
 	}
@@ -78,7 +78,7 @@ class Main {
 	public static function listUsersList() {
 		$result = Core::$db->Execute('SELECT * FROM `ch_user`');
 		$u = array();
-		while($row = $result->FetchRow()) {
+		while($row = $result->fetchRow()) {
 			$u[] = $row;
 		}
 		return $u;
@@ -91,15 +91,15 @@ class Main {
 	}
 
 	public static function addGroup($name, $status=1) {
-		Core::$db->exec('INSERT INTO `ch_group` (`name`, `status`) VALUES (?, ?)', 
+		Core::$db->query('INSERT INTO `ch_group` (`name`, `status`) VALUES (?, ?)', 
 												array($name, (int)$status));
 		return (isset(Core::$db->Insert_ID)) ? Core::$db->Insert_ID : NULL;
 	}
 
 	public static function getGroup($id) {
-		$result = Core::$db->exec('SELECT * FROM `ch_group` WHERE `gid`=?',
+		$result = Core::$db->query('SELECT * FROM `ch_group` WHERE `gid`=?',
 																	array((int)$id));
-		return $result->FetchRow();
+		return $result->fetchRow();
 	}
 
 	public static function getGroupId($name) {
@@ -109,35 +109,52 @@ class Main {
 	}
 
 	public static function delGroup($group) {
+		self::delAllGroupAssignation($group);
 		if (is_int($group))
-			Core::$db->exec('DELETE FROM `ch_group` WHERE `name` = ?)', 
+			Core::$db->query('DELETE FROM `ch_group` WHERE `gid` = ?', 
 												array($group));
 		else
-			Core::$db->exec('DELETE FROM `ch_group` WHERE `gid` = ?)', 
+			Core::$db->query('DELETE FROM `ch_group` WHERE `name` = ?', 
 												array($group));
+		return (isset(Core::$db->Affected_Rows)) ? true : false;
+	}
+
+	public static function delAllGroupAssignation($group) {
+		// Get gid
+		if (is_int($group)) $gid = $group;
+		else {
+			try {
+				$gid = self::getGroupId($group);
+			} catch (\Exception $e) { 
+				throw new \Exception("Unable to assign user to group. Group $group not found");
+				return false;
+			}
+		}
+		Core::$db->query('DELETE FROM `ch_user_group` WHERE `gid` = ?', 
+											array($gid));
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
 	}
 
 	public static function getUserGroups($user) {
 		if (is_int($user))
-			$result = Core::$db->exec('SELECT gr.`gid`, gr.`name` FROM `ch_group` gr LEFT JOIN `ch_user_group` ug ON gr.`gid` = ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid`  WHERE us.`name`=?',
+			$result = Core::$db->query('SELECT gr.`gid`, gr.`name` FROM `ch_group` gr LEFT JOIN `ch_user_group` ug ON gr.`gid` = ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid`  WHERE us.`name`=?',
 																	array($name));
 		else {
 			$uid = self::getUserId($user);
-			$result = Core::$db->exec('SELECT gr.`gid`, gr.`name` FROM `ch_group` gr LEFT JOIN `ch_user_group` ug ON gr.`gid` = ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid` WHERE us.`uid`=?',
+			$result = Core::$db->query('SELECT gr.`gid`, gr.`name` FROM `ch_group` gr LEFT JOIN `ch_user_group` ug ON gr.`gid` = ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid` WHERE us.`uid`=?',
 																	array((int)$uid));
 		}
-		while($row = $result->FetchRow()) {
+		while($row = $result->fetchRow()) {
 			$g[] = array('id' => $row['gid'], 'name' => $row['name']);
 		}
 		return $g;
 	}
 
 	public static function getGroupsList($status=1) {
-		$result = Core::$db->exec('SELECT * FROM `ch_group` WHERE status=?',
+		$result = Core::$db->query('SELECT * FROM `ch_group` WHERE status=?',
 															array($status));
 		$g = array();
-		while($row = $result->FetchRow()) {
+		while($row = $result->fetchRow()) {
 			$g[] = $row;
 		}
 		return $g;
@@ -154,13 +171,63 @@ class Main {
 
 	}
 
+	public static function assignUserToGroup($login, $group) {
+		// Get uid
+		if (is_int($login)) $uid = $login;
+		else {
+			try {
+				$uid = self::getUserId($login);
+			} catch (\Exception $e) { 
+				throw new \Exception("Unable to assign user to group. User $login not found");
+				return false;
+			}
+		}
+		// Get gid
+		if (is_int($group)) $gid = $group;
+		else {
+			try {
+				$gid = self::getGroupId($group);
+			} catch (\Exception $e) { 
+				throw new \Exception("Unable to assign user to group. Group $group not found");
+				return false;
+			}
+		}
+		return (Core::$db->query('INSERT INTO `ch_user_group` (uid, gid) VALUES (?,?)',
+																	array((int)$uid, (int)$gid))) ? true : false;
+	}
+
+	public static function removeUserFromGroup($login, $group) {
+		// Get uid
+		if (is_int($login)) $uid = $login;
+		else {
+			try {
+				$uid = self::getUserId($login);
+			} catch (\Exception $e) { 
+				throw new \Exception("Unable to assign user to group. User $login not found");
+				return false;
+			}
+		}
+		// Get gid
+		if (is_int($group)) $gid = $group;
+		else {
+			try {
+				$gid = self::getGroupId($group);
+			} catch (\Exception $e) { 
+				throw new \Exception("Unable to assign user to group. Group $group not found");
+				return false;
+			}
+		}
+		return (Core::$db->Execute('DELETE FROM `ch_user_group` WHWEE uid = ? AND  gid = ?',
+																	array((int)$uid, (int)$gid))) ? true : false;
+	}
+
 	public static function addRight($name, $description=NULL) {
 		$right = self::getRightId($name);
 		if (!is_null($right)) {
 			throw new \Exception("A right with name $name already exist");
 			return false; 
 		} else {
-			Core::$db->exec('INSERT INTO `ch_right` (`name`, `description`) VALUES (?,?)', 
+			Core::$db->query('INSERT INTO `ch_right` (`name`, `description`) VALUES (?,?)', 
 												array($name, $description));
 				return (isset(Core::$db->Insert_ID)) ? Core::$db->Insert_ID : NULL;
 		}
@@ -181,7 +248,7 @@ class Main {
 		// Delete right assignation
 		self::delRightAssignation($name);
 		// Delete Right
-		Core::$db->exec('DELETE FROM `ch_right` WHERE `name` = ?', 
+		Core::$db->query('DELETE FROM `ch_right` WHERE `name` = ?', 
 											array($name));
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
 	}
@@ -208,10 +275,7 @@ class Main {
 			throw new \Exception("Right $name already assigned to group $group");
 			return true;
 		}
-		self::groupHasRight($group, $right);
-		self::groupHasRight($group, $right);
-		self::groupHasRight($group, $right);
-		Core::$db->exec('INSERT INTO `ch_group_right` (`gid`, `rid`) VALUES (?,?)', 
+		Core::$db->query('INSERT INTO `ch_group_right` (`gid`, `rid`) VALUES (?,?)', 
 											array($gid, $rid));
 		$assignationId = (isset(Core::$db->Insert_ID)) ? Core::$db->Insert_ID : NULL;
 
@@ -229,10 +293,10 @@ class Main {
 			$rid = self::getRightId($right);
 
 		if (is_null($group)) {
-			Core::$db->exec('DELETE FROM `ch_group_right` WHERE `rid`=?',
+			Core::$db->query('DELETE FROM `ch_group_right` WHERE `rid`=?',
 																		array($rid));
 		} else {
-			Core::$db->exec('DELETE FROM `ch_group_right` WHERE `rid`=? AND gr.`gid`=?',
+			Core::$db->query('DELETE FROM `ch_group_right` WHERE `rid`=? AND gr.`gid`=?',
 																		array($rid, (int)$gid));
 		}
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
@@ -240,10 +304,10 @@ class Main {
 
 	public static function getUserRights($user) {
 		$uid = (is_string($user)) ? self::getUserId($user) : $user;
-		$result = Core::$db->exec('SELECT ri.`name` FROM `ch_right` ri LEFT JOIN `ch_group_right` gr ON ri.`rid`=gr.`rid` LEFT JOIN `ch_group` g ON gr.`gid`=g.`gid` LEFT JOIN `ch_user_group` ug ON g.`gid`=ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid` WHERE us.`uid`=?',
+		$result = Core::$db->query('SELECT ri.`name` FROM `ch_right` ri LEFT JOIN `ch_group_right` gr ON ri.`rid`=gr.`rid` LEFT JOIN `ch_group` g ON gr.`gid`=g.`gid` LEFT JOIN `ch_user_group` ug ON g.`gid`=ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid` WHERE us.`uid`=?',
 															array($uid));
 		$r = array();
-		while($row = $result->FetchRow()) {
+		while($row = $result->fetchRow()) {
 			$r[] = $row['name'];
 		}
 		return (sizeof($r) > 0) ? $r : NULL;
@@ -251,10 +315,10 @@ class Main {
 
 	public static function getGroupRights($group) {
 		$gid = (is_string($group)) ? self::getGroupId($group) : $group;
-		$result = Core::$db->exec('SELECT ri.`name` FROM `ch_right` ri LEFT JOIN `ch_group_right` gr ON ri.`rid`=gr.`rid` LEFT JOIN `ch_group` g ON gr.`gid`=g.`gid` WHERE g.`gid`=?',
+		$result = Core::$db->query('SELECT ri.`name` FROM `ch_right` ri LEFT JOIN `ch_group_right` gr ON ri.`rid`=gr.`rid` LEFT JOIN `ch_group` g ON gr.`gid`=g.`gid` WHERE g.`gid`=?',
 															array($gid));
 		$r = array();
-		while($row = $result->FetchRow()) {
+		while($row = $result->fetchRow()) {
 			$r[] = $row['name'];
 		}
 		return (sizeof($r) > 0) ? $r : NULL;
