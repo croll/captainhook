@@ -8,7 +8,7 @@ class Main {
    *                     'content' will return the pdf content
    */
   public static function htmltopdf($html, $returntype = 'file', $options='') {
-   	$bin=dirname(__FILE__).'/bin/wkhtmltopdf-i386';
+   	$bin=dirname(__FILE__).'/bin/wkhtmltopdf-amd64';
     $htmlfilename=tempnam('/tmp', 'htmltopdf-html-').'.html';
     $pdffilename=tempnam('/tmp', 'htmltopdf-pdf-').'.pdf';
     file_put_contents($htmlfilename, $html);

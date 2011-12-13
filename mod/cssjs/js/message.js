@@ -21,7 +21,7 @@ CaptainHook.Message = {
 				centered: true,
 				width: 360,
 				top: true,
-				stack: false
+				stack: true 
 			}, options)).say();
 		} 
 

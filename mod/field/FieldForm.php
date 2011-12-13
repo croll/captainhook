@@ -22,7 +22,7 @@ class FieldForm {
 		$this->sendjson=isset($options['sendjson']) ? $options['sendjson'] : false;
 
 
-		if ($this->isPosted())
+		if ($this->isPosted()) {
 			if ($this->isValid()) {
 				if (isset($options['hookonpost']) && $options['hookonpost'] !== null)
 					\core\Hook::call($options['hookonpost'], $this);
@@ -30,6 +30,7 @@ class FieldForm {
 				if (isset($options['hookoninvalidpost']) && $options['hookoninvalidpost'] !== null)
 					\core\Hook::call($options['hookoninvalidpost'], $this);
 			}
+		}
 	}
 
 	// used internaly by smarty functions
@@ -53,7 +54,7 @@ class FieldForm {
 		//\mod\cssjs\Main::addJs($webpage, '/mod/field/js/field.js');
 		$js="<script>\n";
 		$js.="myForm=document.id('".$this->id."');\n";
-		$js.="var myFormValidator = new Form.Validator.Tips(myForm, { evaluateFieldsOnChange: true, warningPrefix: '', errorPrefix: '' });\n";
+		$js.="var myFormValidator = new Form.Validator.Tips(myForm, { evaluateFieldsOnChange: false, warningPrefix: '', errorPrefix: '' });\n";
 		foreach(self::$validators as $validator) {
 			$js.=$validator->getMootoolsJs();
 		}
