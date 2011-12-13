@@ -4,8 +4,10 @@ CaptainHook.Message = {
 			switch(messageType) {
 				case 'OK':
 					icon = 'okMedium.png';
+				break;
 				case 'ERROR':
 					icon = 'errorMedium.png';
+				break;
 				default:
 					icon = 'cautionMedium.png';
 			}

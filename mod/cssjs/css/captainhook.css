@@ -144,6 +144,11 @@ form *:disabled {
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
 	border-radius: 5px;
+	background-color: #efefef;
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#fff', EndColorStr='#d0d0d0');     
+}
+
+form input[type="button"] {
 	background-color: #d0d0d0;
 	background-image: -moz-linear-gradient(#fff, #d0d0d0);
 	background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#d0d0d0));    
@@ -151,7 +156,6 @@ form *:disabled {
 	background-image: -o-linear-gradient(#fff, #d0d0d0);
 	background-image: -ms-linear-gradient(#fff, #d0d0d0);
 	background-image: linear-gradient(#fff, #d0d0d0);
-	filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#fff', EndColorStr='#d0d0d0');     
 }
 
 input, textarea {
