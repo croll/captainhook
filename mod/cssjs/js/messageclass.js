@@ -65,7 +65,8 @@ var Message = new Class({
 		fxOutTransition: null,		// set the out transition
 		fxOutDuration: 'normal',		// se the out duration
 		yesLink: "Yes",
-		noLink: "No"
+		noLink: "No",
+		duration: 2000
 	},
 	
 	initialize: function(options){
@@ -149,7 +150,7 @@ var Message = new Class({
 		// Must set the wait time to 0 when it's urgent otherwise the message will not dismiss immediately when the user
 		// clicks a dismissing link.
 		var waitTime
-		if(this.options.callback != null || this.options.autoDismiss == false || this.options.dismissOnEvent) waitTime = 0; else waitTime = 2000 ;
+		if(this.options.callback != null || this.options.autoDismiss == false || this.options.dismissOnEvent) waitTime = 0; else waitTime = this.options.duration ;
 		
 		// Shows the message, waits, then closes it.
 		this.msgChain.wait(
