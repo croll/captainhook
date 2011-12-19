@@ -11,6 +11,12 @@ CaptainHook.Message = {
 				default:
 					icon = 'cautionMedium.png';
 			}
+			
+			if (options == undefined) options = {};
+			if (options.duration == undefined) {
+				options.duration = Math.floor(2000+(((txt.length-35)/35)*2000));
+			}
+			console.log(options.duration);
 
 			var msg = new Message(Object.merge({
 				iconPath: '/mod/cssjs/images/message/',
