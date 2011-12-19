@@ -135,7 +135,7 @@ class Main {
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
 	}
 
-	public static function getUserGroups($user) {
+	public static function getUserGroups($user, $key=NULL) {
 		if (is_int($user))
 			$result = Core::$db->query('SELECT gr.`gid`, gr.`name` FROM `ch_group` gr LEFT JOIN `ch_user_group` ug ON gr.`gid` = ug.`gid` LEFT JOIN `ch_user` us ON ug.`uid`=us.`uid`  WHERE us.`name`=?',
 																	array($name));
@@ -145,7 +145,16 @@ class Main {
 																	array((int)$uid));
 		}
 		while($row = $result->fetchRow()) {
-			$g[] = array('id' => $row['gid'], 'name' => $row['name']);
+			switch($key) {
+				case 'id':
+					$g[] = $row['gid'];
+				break;
+				case 'name':
+					$g[] = $row['name'];
+				break;
+				default:
+					$g[] = array('id' => $row['gid'], 'name' => $row['name']);
+			}
 		}
 		return $g;
 	}
@@ -325,6 +334,7 @@ class Main {
 	}
 
 	public static function userHasRight($right, $user=NULL) {
+			\core\Core::log($right);
 			if (is_null($user)) {
 				if (!empty($_SESSION['login'])) $user = $_SESSION['login'];
 				else return false;
