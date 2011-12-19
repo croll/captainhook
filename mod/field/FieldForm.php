@@ -52,15 +52,16 @@ class FieldForm {
 		//\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.js');
 		//\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools-more-all.js');
 		//\mod\cssjs\Main::addJs($webpage, '/mod/field/js/field.js');
+		$formJsObj = 'chForm_'.$this->id;
 		$js="<script>\n";
-		$js.="myForm=document.id('".$this->id."');\n";
-		$js.="var myFormValidator = new Form.Validator.Tips(myForm, { evaluateFieldsOnChange: false, warningPrefix: '', errorPrefix: '' });\n";
+		$js.="var $formJsObj=document.id('".$this->id."');\n";
+		$js.="var ${formJsObj}Validator = new Form.Validator.Tips($formJsObj, { evaluateFieldsOnChange: false, warningPrefix: '', errorPrefix: '' });\n";
 		foreach(self::$validators as $validator) {
 			$js.=$validator->getMootoolsJs();
 		}
 		//$js.="myForm.validate();";
-    if ($this->ajaxreplaceid) $js.="new Form.Request(myForm, $('".$this->ajaxreplaceid."'));\n";
-		if ($this->sendjson) $js.="myForm.addEvent('submit', function() { myForm.send(); return false; });";
+    if ($this->ajaxreplaceid) $js.="new Form.Request($formJsObj, $('".$this->ajaxreplaceid."'));\n";
+		if ($this->sendjson) $js.="$formJsObj.addEvent('submit', function() { $formJsObj.send(); return false; });";
 		$js.="</script>";
 		return "<form ".$this->getParamsStr()." id='".$this->id."' method='POST' action=''><input type='hidden' name='field_fieldform_id' value='".$this->id."'/>".$this->html."</form>$js";
 	}
