@@ -1,4 +1,4 @@
-<?php
+<?php  //  -*- mode:php; tab-width:2; c-basic-offset:2; -*-
 
 namespace mod\ajax;
 
@@ -22,10 +22,7 @@ class Main {
 				while(list($k, $v) = each($_REQUEST)) {
 					$methodParams[$k] = filter_var($v, FILTER_SANITIZE_STRING);
 				}
-				header('Cache-Control: no-cache, must-revalidate');
-				header('Expires: Mon, 10 Jan 1970 05:00:00 GMT');
-				header('Content-type: application/json');
-				echo json_encode(self::call($args[1], $method, $methodParams));
+        self::display(self::call($args[1], $method, $methodParams));
 				break;
 			default:
 				echo null;
@@ -41,4 +38,11 @@ class Main {
 		}
 	}
 
+  public static function display($blah) {
+    header('Cache-Control: no-cache, must-revalidate');
+    header('Expires: Mon, 10 Jan 1970 05:00:00 GMT');
+    header('Content-type: application/json');
+    echo json_encode($blah);
+  }
+  
 }
