@@ -329,6 +329,8 @@ provides: [Meio.Autocomplete]
 			}
 			list.focusedItem = null;
 			this.fireEvent('deselect', [this.elements]);
+			// bv
+			this.oldInputedText = null;
 			list.list.set('html', html);
 			if (this.options.maxVisibleItems) list.applyMaxHeight(this.options.maxVisibleItems);
 		},
