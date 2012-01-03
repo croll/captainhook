@@ -16,8 +16,6 @@ CaptainHook.Message = {
 			if (options.duration == undefined) {
 				options.duration = Math.floor(2000+(((txt.length-35)/35)*2000));
 			}
-			console.log(options.duration);
-
 			var msg = new Message(Object.merge({
 				iconPath: '/mod/cssjs/images/message/',
 				icon: icon,
@@ -25,7 +23,7 @@ CaptainHook.Message = {
 				message: txt,
 				offset: 150,
 				centered: true,
-				width: 360,
+				width: 480,
 				top: true,
 				stack: true 
 			}, options)).say();
