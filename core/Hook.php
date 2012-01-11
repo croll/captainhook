@@ -119,7 +119,7 @@ class Hook {
    * @return void
    */
   public static function call($name) {
-    Core::log("Hook: call: ".$name);
+    //Core::log("Hook: call: ".$name);
 
     $args=func_get_args();
     array_unshift($args, $name);
@@ -127,7 +127,7 @@ class Hook {
     if (!self::$callbacks) self::_initCache();
     if (isset(self::$callbacks[$name])) {
       foreach(self::$callbacks[$name] as $row) {
-				Core::log("Hook: calling: ".$row['callback']);
+				//Core::log("Hook: calling: ".$row['callback']);
         $args[1]=$row['userdata'];
 				if (call_user_func_array($row['callback'], $args) == 'stop')
 					return;
