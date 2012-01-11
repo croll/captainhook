@@ -7,7 +7,7 @@
  * @category  CaptainHook
  * @package   Core 
  * @author    Christophe Beveraggi (beve) and Nicolas Dimitrijevic (niclone)
- * @copyright 2011 CROLL (http://www.croll.fr)
+ * @copyright 2011-2012 CROLL (http://www.croll.fr)
  * @link      http://github.com/croll/captainhook
  * @license   LGPLv3
  *
@@ -32,12 +32,6 @@ define('CH_ROOTDIR', dirname(dirname(__FILE__)));
 
 /* the full path of CaptainHook mod directory on the filesystem */
 define('CH_MODDIR', CH_ROOTDIR.'/mod');
-
-/**
- * Use adodb lowecase syntax
- */
-
-define('ADODB_ASSOC_CASE', 0);
 
 /**
  * Store number of class loaded, for performance benchmarking purpose.
@@ -70,6 +64,12 @@ spl_autoload_register('\core\__autoload_custom');
 /**
  * This class provides a bootstrap for all modules who wish to interface 
  * with CaptainHook.
+ *
+ * @category  CaptainHook
+ * @package   Core
+ * @author    Christophe Beveraggi (beve) and Nicolas Dimitrijevic (niclone)
+ * @license   LGPLv3
+ * @link      http://github.com/croll/captainhook
  *
  * The boostraper is responsible for setting up the configuration, the db
  * interface. It also provides convenience log function.
@@ -116,6 +116,7 @@ class Core {
 	 * Logs the string passed as argument into apache error log (or stderr if executed from a shell).
 	 *
 	 * This method is useful to perform quick debug/trace. 
+	 * Logs are stored in the standard website error log.
 	 *
 	 * @param string $msg
 	 *

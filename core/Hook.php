@@ -5,11 +5,11 @@
  * PHP Version 5
  *
  * @category  CaptainHook
- * @package   Hook
+ * @package   Core
  * @author    Christophe Beveraggi (beve) and Nicolas Dimitrijevic (niclone)
- * @copyright 2011 CROLL (http://www.croll.fr)
- * @link      http://github.com/croll/captainhook
+ * @copyright 2011-2012 CROLL (http://www.croll.fr)
  * @license   LGPLv3
+ * @link      http://github.com/croll/captainhook
  *
  * CaptainHook is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,11 +30,18 @@ namespace core;
 /**
  * This class is both the heart and the brain of the Captain. 
  *
+ * @category  CaptainHook
+ * @package   Core
+ * @author    Christophe Beveraggi (beve) and Nicolas Dimitrijevic (niclone)
+ * @license   LGPLv3
+ * @link      http://github.com/croll/captainhook
+ *
  * It allows to register hook listeners, call listeners, change the position
  * of hooks in the stack, etc.
  */
 class Hook {
 
+	/** @var array Store all the hooks callback */
 	private static $callbacks = NULL;
 
   /*
@@ -117,7 +124,7 @@ class Hook {
     $args=func_get_args();
     array_unshift($args, $name);
 
-    if (!self::$callbacks) self::initCache();
+    if (!self::$callbacks) self::_initCache();
     if (isset(self::$callbacks[$name])) {
       foreach(self::$callbacks[$name] as $row) {
 				Core::log("Hook: calling: ".$row['callback']);
@@ -129,11 +136,11 @@ class Hook {
   }
 
   /*
-   * fill self::$callbacks
+   * Private function, to fill self::$callbacks
 	 *
    * @return void
    */
-  private static function initCache() {
+  private static function _initCache() {
 		$callbacks = Core::$db->fetchAll("SELECT `ch_hook`.*, `ch_module`.`name` AS `module_name` FROM `ch_hook` LEFT JOIN `ch_module` ON `ch_hook`.`mid` = `ch_module`.`mid` ORDER BY `position`,`hid`");
     self::$callbacks=array();
     foreach($callbacks as $callback) {

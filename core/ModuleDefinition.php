@@ -1,16 +1,62 @@
 <?php  //  -*- mode:php; tab-width:2; c-basic-offset:2; -*-
+/**
+ * CaptainHook
+ *
+ * PHP Version 5
+ *
+ * @category  CaptainHook
+ * @package   Core 
+ * @author    Christophe Beveraggi (beve) and Nicolas Dimitrijevic (niclone)
+ * @copyright 2011-2012 CROLL (http://www.croll.fr)
+ * @link      http://github.com/croll/captainhook
+ * @license   LGPLv3
+ *
+ * CaptainHook is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * CaptainHook is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with CaptainHook.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 namespace core;
 
+/**
+ * This class provides an interface to all modules.
+ *
+ * @category  CaptainHook
+ * @package   Core
+ * @author    Christophe Beveraggi (beve) and Nicolas Dimitrijevic (niclone)
+ * @license   LGPLv3
+ * @link      http://github.com/croll/captainhook
+ *
+ * Modules are based on this interface. It allows to define important informations about
+ * module and provides essential functions as install/uninstall etc.
+ */
 abstract class ModuleDefinition {
 
+		/** @var string Module name */
 		public $name;
+		/** @var float Module version */
 		public $version;
+		/** @var string Module descrption */
 		public $description;
+		/** @var int Internal module id */
 		public $id;
+		/** @var array List of modules needed to be installed */
 		public $dependencies = array();
+		/** @var array Informations about modules */
 		private static $_cache = NULL;
 
+		/**
+		 * Initialize the class
+		 */
 		function __construct() {
 			if (!isset(self::$_cache) || !isset(self::$_cache[$this->name]) || empty(self::$_cache[$this->name]['id'])) {
 				if (!is_array(self::$_cache))
@@ -29,6 +75,11 @@ abstract class ModuleDefinition {
 			}
 		}
 
+
+		/**
+		 * Install the module.
+		 * Register the informations into the database
+		 */
 		function install() {
 			if ($this->id) throw new \Exception("install a module which already have an id ?");
 
@@ -51,6 +102,14 @@ abstract class ModuleDefinition {
       \core\Hook::call('core_ModuleDefinition_install', $this);
 		}
 
+
+		/**
+		 * Check and register hooks provided by the module.
+		 * They can be functions in the Main.php with name like hook_[a-z]+
+		 * They also can be declared into a Hooks.php inside the module main folder.
+		 *
+		 * @return void
+		 */
     private function install_hooks() {
       $moddir = dirname(__FILE__).'/../mod/'.$this->name;
 
@@ -76,6 +135,13 @@ abstract class ModuleDefinition {
 
     }
 
+		/**
+		 * Unregister module hooks from CaptainHook.
+		 * All informations about module are deleted from database, so use it carefully. 
+		 * If you want disable the module for possible later use, use 'disable' function instead.
+		 *
+		 * @return void
+		 */
 		function uninstall() {
 			if (!$this->id) throw new \Exception("uninstall a module which don't have an id ?");
 
@@ -91,6 +157,12 @@ abstract class ModuleDefinition {
       $this->id = null;
 		}
 
+		/**
+		 * Enable the module.
+		 * A module can be installed but not activated.
+		 *
+		 * @return void
+		 */
 		function enable() {
 			if (!$this->id) throw new \Exception("enabling a module which don't have an id ?");
 
@@ -100,6 +172,11 @@ abstract class ModuleDefinition {
       if ($affected <= 0) throw new \Exception("Module was not found in database");
 		}
 
+		/**
+		 * Disable the module.
+		 *
+		 * @return void
+		 */
 		function disable() {
 			if (!$this->id) throw new \Exception("disable a module which don't have an id ?");
 
@@ -109,20 +186,4 @@ abstract class ModuleDefinition {
       if ($affected <= 0) throw new \Exception("Module was not found in database");
 		}
 
-		function registerHookListener($name, $callback, $userdata, $position = 0) {
-			if (substr($callback, 0, 1) != '\\') {
-				$trace = debug_backtrace(false);
-				$modNameDef = $trace[1]['class'];
-				if(is_string($modNameDef)) {
-					$callback = '\\'.str_replace(array('\\ModuleDefinition'), array(''), $modNameDef).'\\'.$callback;
-				} else {
-					throw new \Exception("Bad module name");
-				}
-			}
-			return Hook::registerHookListener($name, $callback, $userdata, $this->id, $position);
-		}
-
-		function unregisterHookListener($name, $callback) {
-			return Hook::unregisterHookListener($name, $callback, $this->id);
-		}
 }
