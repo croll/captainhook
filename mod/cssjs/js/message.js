@@ -1,3 +1,5 @@
+var msgCurrentlyDisplayed = [];
+
 CaptainHook.Message = {
 		show: function(txt, messageType, options) {
 			var icon;
@@ -14,19 +16,31 @@ CaptainHook.Message = {
 			
 			if (options == undefined) options = {};
 			if (options.duration == undefined) {
-				options.duration = Math.floor(2000+(((txt.length-35)/35)*2000));
+				options.duration = Math.floor(2000+(((txt.length-35)/35)*200));
 			}
-			var msg = new Message(Object.merge({
-				iconPath: '/mod/cssjs/images/message/',
-				icon: icon,
-				title: 'Information',
-				message: txt,
-				offset: 150,
-				centered: true,
-				width: 480,
-				top: true,
-				stack: true 
-			}, options)).say();
+			if (!msgCurrentlyDisplayed.contains(txt)) {
+				msgCurrentlyDisplayed.push(txt);
+				var msg = new Message(Object.merge({
+					iconPath: '/mod/cssjs/images/message/',
+					icon: icon,
+					title: 'Information',
+					message: txt,
+					offset: 150,
+					centered: true,
+					width: 480,
+					top: true,
+					stack: true,
+					onHide: function() {
+						var mm = [];
+						msgCurrentlyDisplayed.each(function(m) {
+							if (m != txt) {
+								mm.push(m);
+							}
+						});
+						msgCurrentlyDisplayed = mm;
+					}
+				}, options)).say();
+			}
 		} 
 
 }

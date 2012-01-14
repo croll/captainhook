@@ -158,7 +158,7 @@ var Message = new Class({
 		).chain(
 			function(){
 				if(!this.cancel) this.showMsg(); else this.complete(); // destroys the message if it's been canceled.
-				this.fireEvent('onShow'); // a nifty feature that lets you know when the message is shown.
+				this.fireEvent('show'); // a nifty feature that lets you know when the message is shown.
 			}.bind(this)
 		).wait(
 			waitTime // the default delay before hidding the message
@@ -497,7 +497,8 @@ var Message = new Class({
 		this.box.dispose(); // A James-Bond-style, self destruct feature when it's all done.
 		this.end = true; // Message status support (just in case you need it).
 		this.isDisplayed = false;
-		this.fireEvent('onComplete'); // If you've set an onComplete event during instantiation of the class, it will fire here.
+		this.fireEvent('complete'); // If you've set an onComplete event during instantiation of the class, it will fire here.
+		this.fireEvent('hide');
 		$(document.body).setStyle('overflow', 'auto');
 	},
 		

@@ -55,7 +55,7 @@ class FieldForm {
 		$formJsObj = 'chForm_'.$this->id;
 		$js="<script>\n";
 		$js.="var $formJsObj=document.id('".$this->id."');\n";
-		$js.="var ${formJsObj}Validator = new Form.Validator.Tips($formJsObj, { evaluateFieldsOnChange: false, warningPrefix: '', errorPrefix: '' });\n";
+		$js.="var ${formJsObj}Validator = new Form.Validator.Tips($formJsObj, { evaluateFieldsOnChange: false, evaluateFieldsOnBlur: false, warningPrefix: '', errorPrefix: '' });\n";
 		foreach(self::$validators as $validator) {
 			$js.=$validator->getMootoolsJs();
 		}
