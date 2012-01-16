@@ -331,11 +331,13 @@ provides: [Meio.Autocomplete]
 			// bv
 			this.oldInputedText = null;
 			list.list.set('html', html);
+			/*
 			if (itemsData.length == 1) {
 				this.elements.list.focusedItem = list.list.getElement('li');
 				this.setInputValue();
 				this.fireEvent('oneItemFound', [this.elements, itemsData[0]]);
 			}
+			*/
 			// -- 
 			list.focusedItem = null;
 			if (this.options.maxVisibleItems) list.applyMaxHeight(this.options.maxVisibleItems);
