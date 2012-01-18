@@ -96,8 +96,15 @@ class Core {
 
 		/** Database */
 		if (isset($ini['database'])) {
-			require_once(CH_ROOTDIR.'/ext/pdoex/mysql.php');
-			self::$db = new \MySQL($ini['database']);
+      if ($ini['database']['type'] == 'mysql') {
+        require_once(CH_ROOTDIR.'/ext/pdoex/mysql.php');
+        self::$db = new \MySQL($ini['database']);
+      } else {
+        require_once(CH_ROOTDIR.'/ext/pdoex/pdoex.php');
+        self::$db = new \PDOEX($ini['database']['type'].':dbname='.$ini['database']['dbname']
+                               .';host='.$ini['database']['host'],
+                               $ini['database']['username'], $ini['database']['password']);
+      }
 		}
 
 		/** Timezone */
