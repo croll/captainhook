@@ -1,0 +1,17 @@
+CREATE TABLE "ch_smarty_plugins" (
+       "id_module" int NULL,
+       "name" VARCHAR(255) NOT NULL,
+       "type" ENUM('function','block','compiler','modifier','preFilter','postFilter','outputFilter') NOT NULL,
+       "method" VARCHAR(255) NOT NULL,
+       KEY "kidmodule" ("id_module"),
+       KEY "kname" ("name")
+);
+
+CREATE TABLE "ch_smarty_override" (
+       "id_module" INT NULL,
+       "orig" VARCHAR(255) NOT NULL,
+       "replace" VARCHAR(255) NOT NULL,
+       KEY "kidmodule" ("id_module"),
+       KEY "korig" ("orig")
+);
+

@@ -53,7 +53,7 @@ class Hook {
    * @param int positon position of the listener in de "call stack"
    */
   public static function registerHookListener($name, $callback, $userdata = NULL, $id_module = NULL, $position = 0) {
-    Core::$db->exec("INSERT INTO `ch_hook` (`name`, `callback`, `userdata`, `mid`, `position`) VALUES (?,?,?,?,?)",
+    Core::$db->exec('INSERT INTO "ch_hook" ("name", "callback", "userdata", "mid", "position") VALUES (?,?,?,?,?)',
 										array($name, $callback, $userdata, $id_module, $position));
     self::$callbacks = NULL;
   }
@@ -66,7 +66,7 @@ class Hook {
    * @param int id_module if the listener is a module, the id of this module
    */
   public static function unregisterHookListener($name, $callback, $id_module = NULL) {
-    Core::$db->exec("DELETE FROM `ch_hook` WHERE `name`=? AND `callback`=? AND `mid`=?",
+    Core::$db->exec('DELETE FROM "ch_hook" WHERE "name"=? AND "callback"=? AND "mid"=?',
 										array($name, $callback, $id_module));
     self::$callbacks = NULL;
   }
@@ -76,7 +76,7 @@ class Hook {
    * @param int id_module if the listener is a module, the id of this module
    */
   public static function unregisterModuleListeners($id_module) {
-    Core::$db->exec("DELETE FROM `ch_hook` WHERE `mid`=?",
+    Core::$db->exec('DELETE FROM "ch_hook" WHERE "mid"=?',
 										array($id_module));
     self::$callbacks = NULL;
   }
@@ -90,7 +90,7 @@ class Hook {
    * @param int id_module if the listener is a module. the id of this module
    */
 	public static function checkHookListener($name, $callback, $id_module = NULL) {
-		$exist = Core::$db->fetchOne("SELECT hid FROM `ch_hook` WHERE `name`=? AND `callback`=? AND `mid`=?",
+		$exist = Core::$db->fetchOne('SELECT hid FROM "ch_hook" WHERE "name"=? AND "callback"=? AND "mid"=?',
 																 array($name, $callback, $id_module));	
 		return ($exist) ? true : false;
 	}
@@ -103,7 +103,7 @@ class Hook {
    * @param int positon position of the listener in de "call stack"
 	 */
 	public static function changeListenerPosition($name, $callback, $id_module = NULL, $position = 0) {
-    Core::$db->exec("UPDATE `ch_hook` SET `position` = ? WHERE `name`=? AND `callback`=? AND `mid`=?",
+    Core::$db->exec('UPDATE "ch_hook" SET "position" = ? WHERE "name"=? AND "callback"=? AND "mid"=?',
 										array($position, $name, $callback, $id_module));
 		return (!Core::$db->ErrorMsg()) ? true : false;
 	}
@@ -141,7 +141,7 @@ class Hook {
    * @return void
    */
   private static function _initCache() {
-		$callbacks = Core::$db->fetchAll("SELECT `ch_hook`.*, `ch_module`.`name` AS `module_name` FROM `ch_hook` LEFT JOIN `ch_module` ON `ch_hook`.`mid` = `ch_module`.`mid` ORDER BY `position`,`hid`");
+		$callbacks = Core::$db->fetchAll('SELECT "ch_hook".*, "ch_module"."name" AS "module_name" FROM "ch_hook" LEFT JOIN "ch_module" ON "ch_hook"."mid" = "ch_module"."mid" ORDER BY "position","hid"');
     self::$callbacks=array();
     foreach($callbacks as $callback) {
       if (!isset(self::$callbacks[$callback['name']])) self::$callbacks[$callback['name']]=array();

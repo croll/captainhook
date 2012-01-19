@@ -61,7 +61,7 @@ abstract class ModuleDefinition {
 			if (!isset(self::$_cache) || !isset(self::$_cache[$this->name]) || empty(self::$_cache[$this->name]['id'])) {
 				if (!is_array(self::$_cache))
 					self::$_cache = array();
-				$modinfos = Core::$db->fetchRow('SELECT `mid` AS id, `active` FROM ch_module WHERE name=?',
+				$modinfos = Core::$db->fetchRow('SELECT "mid" AS id, "active" FROM ch_module WHERE name=?',
 																				array($this->name));
 				if ($modinfos)
 					self::$_cache[$this->name] = $modinfos;
@@ -84,23 +84,34 @@ abstract class ModuleDefinition {
 			if ($this->id) throw new \Exception("install a module which already have an id ?");
 
 			// Check if module is already loaded
-			$exist = Core::$db->fetchOne('SELECT `mid` FROM ch_module WHERE name=?', 
+			$exist = Core::$db->fetchOne('SELECT "mid" FROM ch_module WHERE name=?', 
 																	 array($this->name));
 			if ($exist) throw new \Exception("module already installed");
 
       $moddir = dirname(__FILE__).'/../mod/'.$this->name;
-      $options=array();
-      if (file_exists($moddir.'/smarty_plugins/')) $options[]='smarty_plugins';
+
+      $dbtype=\core\Core::$ini['database']['type'];
+      // uninstall first
+      if (file_exists($moddir.'/db-uninstall.'.$dbtype))
+        $this->exec_dbfile($moddir.'/db-uninstall.'.$dbtype);
+      if (file_exists($moddir.'/db-uninstall.sql'))
+        $this->exec_dbfile($moddir.'/db-uninstall.sql');
+      // then install
+      if (file_exists($moddir.'/db-install.'.$dbtype))
+        $this->exec_dbfile($moddir.'/db-install.'.$dbtype);
+      if (file_exists($moddir.'/db-install.sql'))
+        $this->exec_dbfile($moddir.'/db-install.sql');
+
 
 			// Create module instance
-			Core::$db->exec('INSERT INTO ch_module (`name`, `active`, `options`) VALUES (?,1,?)', 
-                         array($this->name, implode(',', $options)));
+			Core::$db->exec('INSERT INTO ch_module ("name", "active") VALUES (?,?)', 
+                         array($this->name, 1));
 
 			$this->id = Core::$db->lastInsertId();
 
       $this->install_hooks();
       \core\Hook::call('core_ModuleDefinition_install', $this);
-		}
+    }
 
 
 		/**
@@ -150,10 +161,18 @@ abstract class ModuleDefinition {
 			// Delete hooks
 			Hook::unregisterModuleListeners($this->id);
 
-			$affected=Core::$db->exec('DELETE FROM ch_module WHERE `mid` = ? ', 
+			$affected=Core::$db->exec('DELETE FROM ch_module WHERE "mid" = ? ', 
 																array($this->id));
 
       if ($affected <= 0) throw new \Exception("Module was not installed in database");
+
+      $moddir = dirname(__FILE__).'/../mod/'.$this->name;
+      $dbtype=\core\Core::$ini['database']['type'];
+      if (file_exists($moddir.'/db-uninstall.'.$dbtype))
+        $this->exec_dbfile($moddir.'/db-uninstall.'.$dbtype);
+      if (file_exists($moddir.'/db-uninstall.sql'))
+        $this->exec_dbfile($moddir.'/db-uninstall.sql');
+
       $this->id = null;
 		}
 
@@ -167,7 +186,7 @@ abstract class ModuleDefinition {
 			if (!$this->id) throw new \Exception("enabling a module which don't have an id ?");
 
 			// Enable module
-			$affected=Core::$db->exec('UPDATE ch_module SET `active` = 1 WHERE mid=?', 
+			$affected=Core::$db->exec('UPDATE ch_module SET "active" = 1 WHERE mid=?', 
                          array($this->id));
       if ($affected <= 0) throw new \Exception("Module was not found in database");
 		}
@@ -181,9 +200,18 @@ abstract class ModuleDefinition {
 			if (!$this->id) throw new \Exception("disable a module which don't have an id ?");
 
 			// Disable module
-			$affected=Core::$db->exec('UPDATE ch_module SET `active` = 0 WHERE mid=?', 
+			$affected=Core::$db->exec('UPDATE ch_module SET "active" = 0 WHERE mid=?', 
                          array($this->id));
       if ($affected <= 0) throw new \Exception("Module was not found in database");
 		}
 
+
+    function exec_dbfile($dbfile) {
+      $sql=file_get_contents($dbfile);
+      $sqls=explode(";\n", $sql);      
+      foreach($sqls as $bloc)
+        if (trim($bloc))
+          \core\Core::$db->exec($bloc);
+    }
+    
 }

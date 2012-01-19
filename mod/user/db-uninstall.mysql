@@ -1,0 +1,5 @@
+DROP TABLE IF EXISTS "ch_user";
+DROP TABLE IF EXISTS "ch_group";
+DROP TABLE IF EXISTS "ch_user_group";
+DROP TABLE IF EXISTS "ch_right";
+DROP TABLE IF EXISTS "ch_group_right";

@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS "ch_smarty_plugins";
+DROP TABLE IF EXISTS "ch_smarty_override";

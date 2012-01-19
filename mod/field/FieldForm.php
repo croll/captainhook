@@ -109,7 +109,7 @@ class FieldForm {
 				$querys[$sqltable]=array('vals' => array(), 'a' => '', 'b' => '');
 			$query=&$querys[$sqltable];
 
-			$query['a'].=($query['a'] == '' ? '' : ',').'`'.$field->name.'`';
+			$query['a'].=($query['a'] == '' ? '' : ',').'"'.$field->name.'"';
 			$query['b'].=($query['b'] == '' ? '' : ',').'?';
 			$query['vals'][]=$field->getValue();
 		}
@@ -117,7 +117,7 @@ class FieldForm {
 		if (!count($querys)) throw new \Exception("No columns found to insert, maybe you have omited to add sqltable args to you're fields");
 
 		foreach($querys as $sqltable => $query) {
-			$q="INSERT INTO `".$sqltable."` (".$query['a'].") VALUES (".$query['b'].")";
+			$q='INSERT INTO "'.$sqltable.'" ('.$query['a'].') VALUES ('.$query['b'].')';
 			\core\Core::$db->query($q, $query['vals']);
 		}
 
@@ -128,11 +128,11 @@ class FieldForm {
 		$vals=array();
 		$a='';
 		foreach($this->fields as $field) {
-			$a.=($a == '' ? '' : ',').'`'.$field->name.'`=?';
+			$a.=($a == '' ? '' : ',').'"'.$field->name.'"=?';
 			$vals[]=$field->getValue();
 		}
 
-		$q="UPDATE `$table` SET $a WHERE `id`=?";
+		$q='UPDATE "$table" SET $a WHERE "id"=?';
 		$vals[]=$id;
 		\core\Core::$db->query($q, $vals);
 

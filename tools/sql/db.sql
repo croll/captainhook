@@ -1,73 +1,21 @@
--- MySQL dump 10.13  Distrib 5.1.58, for debian-linux-gnu (x86_64)
---
--- Host: localhost    Database: captainhook
--- ------------------------------------------------------
--- Server version	5.1.58-1
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP TABLE IF EXISTS "ch_module";
+CREATE TABLE "ch_module" (
+  "mid" serial NOT NULL,
+  "name" varchar(50) NOT NULL,
+  "active" smallint DEFAULT 0,
+  PRIMARY KEY ("mid")
+);
+CREATE INDEX ch_module_name_idx ON "ch_hook" ("name");
 
 
---
--- Table structure for table `ch_module`
---
-
-DROP TABLE IF EXISTS `ch_module`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ch_module` (
-  `mid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `active` tinyint(1) unsigned DEFAULT 0,
-  `options` set('smarty_plugins','plop') CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`mid`),
-  KEY `kname` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `ch_hook`
---
-
-DROP TABLE IF EXISTS `ch_hook`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `ch_hook` (
-  `hid` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `mid` int(11) DEFAULT NULL,
-  `callback` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `userdata` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL,
-  `position` int(3) NOT NULL,
-  PRIMARY KEY (`hid`),
-  KEY `kmid` (`mid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `ch_hook`
---
-
-LOCK TABLES `ch_hook` WRITE;
-/*!40000 ALTER TABLE `ch_hook` DISABLE KEYS */;
-/*!40000 ALTER TABLE `ch_hook` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2011-09-15 20:09:18
+DROP TABLE IF EXISTS "ch_hook";
+CREATE TABLE "ch_hook" (
+  "hid" serial NOT NULL,
+  "name" varchar(255) NOT NULL,
+  "mid" int DEFAULT NULL,
+  "callback" varchar(255) NOT NULL,
+  "userdata" varchar(255) NULL,
+  "position" int NOT NULL,
+  PRIMARY KEY ("hid")
+);
+CREATE INDEX ch_hook_mid_idx ON "ch_hook" ("mid");

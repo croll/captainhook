@@ -10,7 +10,7 @@ class Main {
 
   private static function regroutes() {
     if (self::$regroutes === null) 
-      self::$regroutes=\core\Core::$db->fetchAll('SELECT * FROM `ch_regroute`');
+      self::$regroutes=\core\Core::$db->fetchAll('SELECT * FROM "ch_regroute"');
     return self::$regroutes;
   }
 
@@ -40,20 +40,20 @@ class Main {
 	 */
   public static function registerRoute($id_module, $regexp, $hook,
 																			 $flags=self::flag_html) {
-    \core\Core::$db->exec('INSERT INTO `ch_regroute` (`id_module`, `regexp`, `hook`, `flags`) VALUES (?,?,?,?)',
+    \core\Core::$db->exec('INSERT INTO "ch_regroute" ("id_module", "regexp", "hook", "flags") VALUES (?,?,?,?)',
 													array($id_module, $regexp, $hook, $flags));
     self::$regroutes=null;
   }
 
   public static function unregister($id_module, $regexp = NULL, $hook = NULL) {
-    $query = 'DELETE FROM `ch_regroute` WHERE `id_module`=?';
+    $query = 'DELETE FROM "ch_regroute" WHERE "id_module"=?';
     $vals = array($id_module);
     if ($regexp !== null) {
-      $query.= ' AND `regexp`=?';
+      $query.= ' AND "regexp"=?';
       $vals[]=$regexp;
     }
     if ($hook !== null) {
-      $query.= ' AND `hook`=?';
+      $query.= ' AND "hook"=?';
       $vals[]=$hook;
     }
     \core\Core::$db->exec($query, $vals);

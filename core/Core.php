@@ -79,6 +79,8 @@ class Core {
 	/** @var object the db object, used in whole application and modules to perform database queries */
 	public static $db;
 
+	public static $ini;
+
 	/**
 	 * Convenience method that does the complete initialization for CaptainHook.
 	 *
@@ -92,24 +94,24 @@ class Core {
 		if (!empty($_GET["page"]) && !preg_match("/^[a-zA-Z]+$/", $_GET["page"])) die("No way");
 		if (!is_file(CH_ROOTDIR.'/conf/general.conf'))
 			die('Config file '.CH_ROOTDIR.'/conf/general.conf'.' does not exist. Take a look at '.CH_ROOTDIR.'/conf/general.conf.dist');
-		$ini = parse_ini_file(CH_ROOTDIR.'/conf/general.conf', true);
+    self::$ini = parse_ini_file(CH_ROOTDIR.'/conf/general.conf', true);
 
 		/** Database */
-		if (isset($ini['database'])) {
-      if ($ini['database']['type'] == 'mysql') {
+		if (isset(self::$ini['database'])) {
+      if (self::$ini['database']['type'] == 'mysql') {
         require_once(CH_ROOTDIR.'/ext/pdoex/mysql.php');
-        self::$db = new \MySQL($ini['database']);
+        self::$db = new \MySQL(self::$ini['database']);
       } else {
         require_once(CH_ROOTDIR.'/ext/pdoex/pdoex.php');
-        self::$db = new \PDOEX($ini['database']['type'].':dbname='.$ini['database']['dbname']
-                               .';host='.$ini['database']['host'],
-                               $ini['database']['username'], $ini['database']['password']);
+        self::$db = new \PDOEX(self::$ini['database']['type'].':dbname='.self::$ini['database']['dbname']
+                               .';host='.self::$ini['database']['host'],
+                               self::$ini['database']['username'], self::$ini['database']['password']);
       }
 		}
 
 		/** Timezone */
-		if (isset($ini['general']['timezone']))
-			date_default_timezone_set($ini['general']['timezone']);
+		if (isset(self::$ini['general']['timezone']))
+			date_default_timezone_set(self::$ini['general']['timezone']);
 
 		/** Trigger hook */
 		Hook::call('core_init');
