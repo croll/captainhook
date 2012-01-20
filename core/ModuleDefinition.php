@@ -104,10 +104,8 @@ abstract class ModuleDefinition {
 
 
 			// Create module instance
-			Core::$db->exec('INSERT INTO ch_module ("name", "active") VALUES (?,?)', 
-                         array($this->name, 1));
-
-			$this->id = Core::$db->lastInsertId();
+			$this->id = Core::$db->exec_returning('INSERT INTO ch_module ("name", "active") VALUES (?,?)', 
+                                            array($this->name, 1), 'mid');
 
       $this->install_hooks();
       \core\Hook::call('core_ModuleDefinition_install', $this);

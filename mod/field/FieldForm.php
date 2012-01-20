@@ -120,8 +120,6 @@ class FieldForm {
 			$q='INSERT INTO "'.$sqltable.'" ('.$query['a'].') VALUES ('.$query['b'].')';
 			\core\Core::$db->query($q, $query['vals']);
 		}
-
-		return \core\Core::$db->lastInsertId();
 	}
 
 	public function sqlUpdate($id) {

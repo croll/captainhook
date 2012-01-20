@@ -101,6 +101,11 @@ class Core {
       if (self::$ini['database']['type'] == 'mysql') {
         require_once(CH_ROOTDIR.'/ext/pdoex/mysql.php');
         self::$db = new \MySQL(self::$ini['database']);
+      } else if (self::$ini['database']['type'] == 'pgsql') {
+        require_once(CH_ROOTDIR.'/ext/pdoex/pgsql.php');
+        self::$db = new \PgSQL(self::$ini['database']['type'].':dbname='.self::$ini['database']['dbname']
+                               .';host='.self::$ini['database']['host'],
+                               self::$ini['database']['username'], self::$ini['database']['password']);
       } else {
         require_once(CH_ROOTDIR.'/ext/pdoex/pdoex.php');
         self::$db = new \PDOEX(self::$ini['database']['type'].':dbname='.self::$ini['database']['dbname']

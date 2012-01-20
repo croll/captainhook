@@ -145,6 +145,17 @@ class PDOEX extends PDO
 		return parent::exec($statement);
 	}
 	
+	public function exec_returning($statement, $bind = false, $returning = false)
+	{
+		if($bind)
+		{
+			$statement = $this->buildQuery($statement, $bind);
+		}
+		$ret=parent::exec($statement);
+        if ($returning) return $this->lastInsertId();
+        else return $ret;
+	}
+	
     /**
      * Fetches the first column of the first row of the SQL result
      */
