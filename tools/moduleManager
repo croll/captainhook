@@ -31,7 +31,7 @@ switch($action) {
     triggerOff($action);
     break;
   case 'reinstall':
-    $mods=\core\Core::$db->fetchAll("select `name` from `ch_module` order by `mid`");
+    $mods=\core\Core::$db->fetchAll('select "name" from "ch_module" order by "mid"');
     foreach (array_reverse($mods) as $mod) {
       $moduleName=$mod['name'];
       echo "uninstalling '$moduleName' ...\n";
