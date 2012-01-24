@@ -5,7 +5,7 @@ CREATE TABLE "ch_module" (
   "active" smallint DEFAULT 0,
   PRIMARY KEY ("mid")
 );
-CREATE INDEX ch_module_name_idx ON "ch_hook" ("name");
+CREATE INDEX ch_module_name_idx ON "ch_module" ("name");
 
 
 DROP TABLE IF EXISTS "ch_hook";
