@@ -3,4 +3,5 @@
 namespace mod\map;
 
 class Main {
+
 }

@@ -14,8 +14,10 @@ class ModuleDefinition extends \core\ModuleDefinition {
 
 	function install() {
 		parent::install();
+		//\mod\regroute\Main::registerRoute($this->id, '#^/marker/(.*)$#', 'mod_yourmodulename_getmarker');
 	}
 
 	function uninstall() {
+		parent::uninstall();
 	}
 }
