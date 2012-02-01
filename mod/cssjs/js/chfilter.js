@@ -1,4 +1,4 @@
-var Filter = new Class({
+var CHFilter = new Class({
 	Implements: [Options,Events],
 	options: {
 		paginateElement: 'paginate',

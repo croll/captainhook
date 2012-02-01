@@ -1,5 +1,5 @@
 //  -*- mode:js; tab-width:2; c-basic-offset:2; -*-
-var Paginate = new Class({
+var CHMyPaginate = new Class({
 	Implements: [Options,Events],
 	options: {
 		paginateElement: 'paginate',
@@ -30,7 +30,7 @@ var Paginate = new Class({
 	setFilters: function(options) {
 		this.setOptions(options);
 		// you need filter.js to call class Filter
-		var myFilter = new Filter({
+		var myFilter = new CHFilter({
 			paginateElement: options.paginateElement,
 			formElement: 'filterForm',
 			path: options.path,
