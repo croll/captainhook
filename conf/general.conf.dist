@@ -1,5 +1,5 @@
 [database]
-type = mysql
+type = pgsql
 host = localhost
 username = captainhook
 password = clochette
