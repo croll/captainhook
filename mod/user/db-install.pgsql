@@ -3,8 +3,11 @@ CREATE TABLE "ch_user" (
                            "full_name" varchar(255) NOT NULL,
                            "login" varchar(32) NOT NULL,
                            "pass" varchar(32) DEFAULT NULL,
+                           "email" varchar(255) DEFAULT NULL,
                            "hash" varchar(64) DEFAULT NULL,
                            "status" smallint NOT NULL DEFAULT 1,
+                           "created" timestamp NULL DEFAULT NULL,
+                           "updated" timestamp NULL DEFAULT NULL,
                            "last_connexion" timestamp NULL DEFAULT NULL,
                            PRIMARY KEY ("uid")
 );
