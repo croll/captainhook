@@ -395,14 +395,107 @@ class Main {
 			return;
 		}
 		$section = $urlmatches[1];
+		$page = new \mod\webpage\Main();
 		switch($section) {
 			case 'list':
+			//$page->setLayout('user/user/list');
 			break;
 		}
-		$page = new \mod\webpage\Main();
-		$page->setLayout('user/user/list');
 		$page->display();
 	}
+    public static function hook_mod_user_list($hookname, $userdata, $matches, $flags) {
+                self::redirectIfNotLoggedIn();
+		
+		// check perm 
+		if (!self::userHasRight('Manage page')) {
+			return "error Manage user ";
+		}
+		// check for optionals parameters 
+		if ((array)$matches && $matches[1]) {	
+			$check=split('/', $matches[1]);
+			$params=array();
+			for ($i=0; $i <= count($check); $i++) {
+				if ($check[$i] != "") {
+					$iNext= $i+1;
+					$params[$check[$i]]= $check[$iNext];
+					$i++;
+				}
+			}
+			if ($params["sort"]) {
+				$sort = $params["sort"];
+			}	
+			if ($params["maxrow"] && (int)$params["maxrow"]) {
+				$maxrow=$params["maxrow"];
+			}
+			if ($params["offset"] && (int)$params["offset"]) {
+				$offset=$params["offset"];
+			}
+			if ($params["filter"]) {
+				$filter=$params["filter"];
+			}
+		}	
+		// set default list parameter 
+		if (!$sort) $sort="login_asc";		
+		if (!$maxrow) $maxrow= 10;		
+		if (!$offset) $offset= 0;
+                $page = new \mod\webpage\Main();
+		$db=\core\Core::$db;
+		$dbParams=array();
+
+		$mid = "";
+		if ($filter) {
+			$filters = split('@', $filter);
+			for($i=0; $i<count($filters); $i++) {
+				if ($i == 0) {
+				 	$mid .=" WHERE";	
+				} else {
+				 	$mid .=" AND";	
+				}
+				$fd=split(':', $filters[$i]);
+				if ($fd[0] == 'login') {
+				 	$mid .=" u.login = ?";	
+					$dbParams[]=$fd[1];
+				} else if ($fd[0] == 'name') {
+				 	$mid .=" u.full_name = ?";	
+					$dbParams[]=$fd[1];
+				}
+			}
+		}
+		$dbParams[]=(int)$maxrow;
+		$dbParams[]=(int)$offset;
+		
+		$q="SELECT * FROM ch_user u";
+		$q .= $mid;
+		$q .= self::order_by($sort);
+		$q .=" LIMIT ? OFFSET ?";
+		$list = $db->fetchAll($q, $dbParams); 
+		
+		$q2="SELECT count(u.uid) as quant FROM ch_user u";
+		$quant= $db->fetchOne($q2, NULL);
+		$page->smarty->assign('list', $list);
+		$page->smarty->assign('filter', $filter);
+		$page->smarty->assign('sort', $sort);
+		$page->smarty->assign('offset', $offset);
+		$page->smarty->assign('maxrow', $maxrow);
+		$page->smarty->assign('quant', $quant);
+    		$page->smarty->assign('user_mode', 'list');
+		if ($flags & \mod\regroute\Main::flag_xmlhttprequest) {
+                        $page->smarty->fetch('user/admin/list');
+                } else {
+                        $page->setLayout('user/admin/list');
+                        $page->display();
+                }
+  }
+  private function dbSort($sort) {
+		$s=explode('_',$sort);
+		$s[1]=strtoupper($s[1]);
+		return $s[0]." ".$s[1];
+  }
+  private function order_by($sort) {
+		$sorted = self::dbSort($sort);
+		$q =" ORDER BY ".$sorted;
+		return $q;
+   } 
 
 	public static function hook_mod_user_manage_groups($hookname, $userdata, $urlmatches) {
 		echo "ici";

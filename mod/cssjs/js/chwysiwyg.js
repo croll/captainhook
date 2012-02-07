@@ -13,7 +13,7 @@ var CHWysiwyg = new Class({
 		initialize: function(options) {
         		var editor = CKEDITOR.replace('editor1', {
 				contentsCss : 'assets/output_xhtml.css',
-				extraPlugins : 'stylesheetparser',
+				extraPlugins : 'autogrow',
 				language: 'fr',
 				//toolbar_Basic:[[ 'Source', '-', 'Bold', 'Italic' ], ],
 				//toolbar: 'basic',

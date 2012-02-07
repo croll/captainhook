@@ -40,7 +40,8 @@ var CHMyPaginate = new Class({
 			quant: options.quant,
 			filters: options.filters,
 			filter: options.filter
-		});
+					});
+		
 	},
 	hide: function(options) {
 		this.setOptions(options);
@@ -152,7 +153,7 @@ var CHMyPaginate = new Class({
 				myO.inject(myMaxRow);
 				i = (i+(options.quant/5));
 			}	
-			var listAll = new Element('option').set('html', 'All results on 1 page').set('value', '/page/list/offset/0/maxrow/'+ options.quant +'/').inject(myMaxRow);	
+			var listAll = new Element('option').set('html', 'All results on 1 page ('+options.quant+')').set('value', '/page/list/offset/0/maxrow/'+ options.quant +'/').inject(myMaxRow);	
 			
 			myMaxRow.inject(myConf);
 			myMaxRow.addEvent('click', function(event){
@@ -186,14 +187,21 @@ var CHMyPaginate = new Class({
 		var tableHeader = table.getElements('thead tr th');
 		tableHeader.each(function(el, index) {
 			if (fields[index]) {
+				var myIcon = new Element ('i');
 				if (options.sort == fields[index]+'_asc' || options.sort == fields[index]+'_desc'){
+					// if the column is sorted
 					var arrow = options.sort.split('_')[1];
-					el.getChildren('div').addClass(arrow);
+					if (arrow == 'asc') {
+						myIcon.addClass('icon-chevron-up float');
+					} else if (arrow == 'desc') {
+						myIcon.addClass('icon-chevron-down float');
+					}
+					el.getChildren('div').adopt(myIcon);
 					el.addClass('sorted');
-				} else {
-					el.getChildren('span').addClass('asc');
-				};
-
+					this.setColumnSelected(options, index);
+				}
+				
+				el.getChildren('div').adopt(myIcon);
 				el.addEvent('click', function(){
 					if (el.hasClass('sorted')) {
     						if (options.sort.split('_')[1] == 'asc') {
@@ -208,7 +216,22 @@ var CHMyPaginate = new Class({
 					window.location.replace(url);
 				}).addClass('link');
 			}
-		});
+		}.bind(this));
+	},
+	setColumnSelected: function(options, thindex) {
+		
+		var table = $(options.tableElement);
+                var tableHeader = table.getElements('thead tr th');	
+                var tableBody = table.getElements('tbody tr');
+		tableBody.each(function(el) {
+			var tableRow =el.getElements('td');
+			tableRow.each(function(el, index) {
+				if (index == thindex) {
+					el.addClass('selected');
+				}
+			}.bind(this));
+		}.bind(this));
 	}
+
 }); 
 
