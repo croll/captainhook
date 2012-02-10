@@ -17,6 +17,7 @@ class Main {
     $this->smarty->assign('title', $this->title);
     $this->smarty->assign('favicon', $this->favicon);
 		$this->smarty->assignByRef('webpage', $this);
+		\core\Hook::call("mod_webpage_construct", $this);
 	}
 
 	public function setLayout($name) {
