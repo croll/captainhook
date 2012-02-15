@@ -33,7 +33,10 @@ class Main {
 	*/
 
 	public static function smartyFunction_t($params, $template) {
-		$paf=array('d' => $params['d'], 'm' => $params['m'], 'p' => array());
+		foreach($params as $k => $v)
+			if (!preg_match('/^p[0-9]+$/', $k))
+				$paf[$k]=$v;
+
 		for ($i=0; isset($params['p'.$i]); $i++) $paf['p'][]=$params['p'.$i];
 		return self::ch_t($paf);
 	}
@@ -46,8 +49,13 @@ class Main {
 
     if (isset($ch_langs[$ch_lang]) && isset($ch_langs[$ch_lang][$paf['d']]) && isset($ch_langs[$ch_lang][$paf['d']][$paf['m']]))
 			$m=$ch_langs[$ch_lang][$paf['d']][$paf['m']];
-		
-		return '<span class="ch_lang_trad" paf="'.urlencode(json_encode($paf)).'">'.vsprintf($m, $paf['p']).'</span>';
+
+		$tag=isset($paf['tag']) ? $paf['tag'] : 'span';
+		$p=isset($paf['p']) ? $paf['p'] : array();
+		unset($paf['tag']);
+		unset($paf['p']);
+
+		return "<$tag class='ch_lang_trad' paf=\"".urlencode(json_encode($paf)).'">'.vsprintf($m, $p)."</$tag>";
 	}
 
 }
