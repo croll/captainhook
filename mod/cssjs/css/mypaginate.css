@@ -1,0 +1,88 @@
+#pagination {
+	text-align: center;
+	margin: 7 auto;
+	width: 100%;
+}
+#pagination .active a {
+	background-color:  #EEE;
+}
+#paginate_conf {
+	width: 90%;
+}
+.float {
+	float: right;
+}
+
+#filterForm {
+	margin-left: 40%;
+	margin-right: 10%;
+}
+#filterForm .row {
+	margin-left: 0;
+}
+#filterForm .row label  {
+	text-align: left;
+}
+.form-inline .input {
+	margin: 0;
+}
+.hidden {
+	visibility: hidden;
+}
+.link:hover {
+	cursor: pointer;
+	color: #0069D6;
+}
+
+TABLE#page_list td.selected, TABLE#page_list th.sorted, TABLE#page_list th:hover {
+	background-color: whiteSmoke;
+}
+.config {
+	width: 100%;
+	margin: 0 auto;
+	margin-left: 15%;
+}
+.sorted {
+}
+.asc {
+	padding-right: 16px;
+	background: transparent url(../images/up.png) no-repeat top right;
+}
+.desc {
+	padding-right: 16px;
+	background: transparent url(../images/down.png) no-repeat top right;
+}
+#pagination ul {
+	width: 98%;
+	margin: 0 auto;
+}
+#paginator_nums {
+	width: 62%;
+}
+#thumbnails .row {
+	margin-left: -20px;
+}
+ul.thumbnails li {
+	display: block;
+}
+.container {
+	width: 1170px;
+}
+.section {
+	margin-left: 5px;;
+}
+.label-important {
+  background-color: #b94a48;
+}
+.label-warning {
+  background-color: #f89406;
+}
+.label-success {
+  background-color: #468847;
+}
+.label-info {
+  background-color: #3a87ad;
+}
+select.btn {
+	margin-right: 10px;
+}
