@@ -78,3 +78,56 @@ var Multiselect = new Class({
 			}.bind(this));
 		}
 });
+
+var MultiselectPopup = new Class({
+    Implements: [Options,Events],
+    options: {
+	buttonelem: null,
+    },
+    multiselect: null,
+    showing: false,
+    back: null,
+
+    initialize: function(options, multiselectoptions) {
+	this.setOptions(options);
+	this.multiselect = new Multiselect(multiselectoptions);
+	var buttonelem=$(this.options.buttonelem);
+	var me=this;
+	buttonelem.addEvent('click', function() {
+	    if (me.showing) me.close();
+	    else me.open();
+	});
+    },
+
+    close: function() {
+	this.multiselect.listEl.set('styles', { display: 'none' });
+	this.back.destroy();
+	this.showing=false;
+    },
+
+    open: function() {
+	var me=this;
+ 	me.back=new Element('div', {
+	    styles: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 0,
+		bottom: 0,
+		'z-index': 1999,
+	    }
+	});
+	me.back.inject($$('body')[0]);
+	me.back.addEvent('click', function(e) {
+	    me.close();
+	});
+	
+	me.multiselect.listEl.set('styles', {
+	    display: '',
+	    position: 'absolute',
+	    'z-index': 2000,
+	});
+	me.showing=true;
+    },
+    
+});
