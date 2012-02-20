@@ -8,6 +8,3 @@ CREATE TABLE ch_page (
        created timestamp  NULL,
        updated timestamp  NULL
 );
-insert into ch_right (name, description) values ('View page', 'Allow user to see page');
-insert into ch_right (name, description) values ('Manage page', 'Allow user to add/edit/delete page');
-

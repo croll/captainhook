@@ -32,6 +32,9 @@ class ModuleDefinition extends \core\ModuleDefinition {
 	}
 
 	function uninstall() {
+		\mod\user\Main::delRight('View page');
+                \mod\user\Main::delRight('Manage page');
+		
 		// do things here by default (before parent::uninstall)
 		// delete route
 		\mod\regroute\Main::unregister($this->id);
