@@ -1,0 +1,2 @@
+DROP TABLE IF EXISTS 'ch_page';
+DELETE FROM 'ch_right' WHERE name='View pages' or name='Manage pages';
