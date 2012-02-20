@@ -7,7 +7,7 @@ class Main {
  public static function hook_mod_page_render($hookname, $userdata, $matches, $flags) {
 		// check perm 
 		if (!\mod\user\Main::userHasRight('View page')) {
-		//	return false;
+			return false;
 		}
 		// get function params
 		$sysname=$matches[1]; 
@@ -103,7 +103,7 @@ class Main {
   }
   
   public static function hook_mod_page_list($hookname, $userdata, $matches, $flags) {
-                \mod\user\Main::redirectIfNotLoggedIn();
+		\mod\user\Main::redirectIfNotLoggedIn();
 		
 		// check perm 
 		if (!\mod\user\Main::userHasRight('Manage page')) {
@@ -137,8 +137,10 @@ class Main {
 		if (!$sort) $sort="updated_desc";		
 		if (!$maxrow) $maxrow= 10;		
 		if (!$offset) $offset= 0;
+		var_dump('toto');
                 $page = new \mod\webpage\Main();
 		$db=\core\Core::$db;
+		var_dump('toto');
 		$dbParams=array();
 
 		$mid = "";
@@ -176,6 +178,7 @@ class Main {
 		
 		$q2="SELECT count(p.pid) as quant FROM ch_page p, ch_user u WHERE p.authorId = u.uid";
 		$quant= $db->fetchOne($q2, NULL);
+		
 		$page->smarty->assign('list', $list);
 		$page->smarty->assign('filter', $filter);
 		$page->smarty->assign('sort', $sort);
@@ -183,6 +186,8 @@ class Main {
 		$page->smarty->assign('maxrow', $maxrow);
 		$page->smarty->assign('quant', $quant);
     		$page->smarty->assign('page_mode', 'list');
+                var_dump($list);
+                var_dump($flags);
                 if ($flags & \mod\regroute\Main::flag_xmlhttprequest) {
                         $page->smarty->fetch('page/list');
                 } else {
