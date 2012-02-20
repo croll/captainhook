@@ -1,0 +1,29 @@
+#page_content {
+	min-height: 500px;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 50px;
+}
+
+
+
+.page-title {
+	width: 90%;
+}
+.table-list {
+	width: 100%;
+}
+.table-list td.pagename, .table-list th.pagename {
+	text-align: left;
+}
+.page_content {
+	width: 90%;
+	margin: 10px;
+	min-height: 500px;
+	min-width: 400px;
+}
+.page_content_box {
+	margin: 10px;
+	min-height: 500px;
+	width: 97%;
+}
