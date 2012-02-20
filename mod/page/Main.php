@@ -137,10 +137,8 @@ class Main {
 		if (!$sort) $sort="updated_desc";		
 		if (!$maxrow) $maxrow= 10;		
 		if (!$offset) $offset= 0;
-		var_dump('toto');
                 $page = new \mod\webpage\Main();
 		$db=\core\Core::$db;
-		var_dump('toto');
 		$dbParams=array();
 
 		$mid = "";
@@ -186,8 +184,6 @@ class Main {
 		$page->smarty->assign('maxrow', $maxrow);
 		$page->smarty->assign('quant', $quant);
     		$page->smarty->assign('page_mode', 'list');
-                var_dump($list);
-                var_dump($flags);
                 if ($flags & \mod\regroute\Main::flag_xmlhttprequest) {
                         $page->smarty->fetch('page/list');
                 } else {
