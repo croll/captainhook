@@ -110,7 +110,7 @@ class Main {
 			return false;
 		}
 		// check for optionals parameters 
-		if ($matches[1]) {	
+		if (isset($matches[1])) {	
 			$check=split('/', $matches[1]);
 			$params=array();
 			for ($i=0; $i <= count($check); $i++) {
@@ -134,15 +134,15 @@ class Main {
 			}
 		}	
 		// set default list parameter 
-		if (!$sort) $sort="updated_desc";		
-		if (!$maxrow) $maxrow= 10;		
-		if (!$offset) $offset= 0;
+		if (!isset($sort)) $sort="updated_desc";		
+		if (!isset($maxrow)) $maxrow= 10;		
+		if (!isset($offset)) $offset= 0;
                 $page = new \mod\webpage\Main();
 		$db=\core\Core::$db;
 		$dbParams=array();
 
 		$mid = "";
-		if ($filter) {
+		if (isset($filter)) {
 			$filters = split('@', $filter);
 			for($i=0; $i<count($filters); $i++) {
 				//var_dump($filters);

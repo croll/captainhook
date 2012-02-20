@@ -6,7 +6,7 @@ class Ajax {
 
   public static function savePage($params) {
 	//return $params;
-	if(!$params['pid'] || $params['pid']==0) {
+	if(!isset($params['pid']) || $params['pid']==0) {
 		return \mod\page\Main::hook_mod_page_create($hookname, $userdata, $params, $flags);
 	} else {
 		return \mod\page\Main::hook_mod_page_update($hookname, $userdata, $params, $flags);
