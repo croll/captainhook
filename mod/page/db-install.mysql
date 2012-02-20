@@ -1,0 +1,16 @@
+CREATE TABLE 'ch_page' (
+       'pid' INT(11) NOT NULL auto_increment,
+       'sysname' VARCHAR(255) NOT NULL,
+       'name' VARCHAR(255) NOT NULL,
+       'authorid' INT(11) NOT NULL,
+       'published' VARCHAR(1) NOT NULL,
+       'content' LongText  NULL,
+       'created' DateTime  NULL,
+       'updated' DateTime  NULL,
+       KEY ('pid'),
+       INDEX ('sysname'),
+       INDEX ('authorid'),
+       INDEX ('published'),
+       INDEX ('created'),
+       INDEX ('updated')
+ );
