@@ -91,6 +91,8 @@ var MultiselectPopup = new Class({
     initialize: function(options, multiselectoptions) {
 	this.setOptions(options);
 	this.multiselect = new Multiselect(multiselectoptions);
+	this.multiselect.listEl = this.multiselect.listEl.dispose();
+	this.multiselect.listEl.inject($$('body')[0]);
 	var buttonelem = this.options.buttonelem = $(this.options.buttonelem);
 	var me=this;
 	buttonelem.addEvent('click', function() {
@@ -101,7 +103,9 @@ var MultiselectPopup = new Class({
     },
 
     close: function() {
-	this.multiselect.listEl = this.multiselect.listEl.dispose();
+	this.multiselect.listEl.setStyles({
+	    display: 'none'
+	});
 	if (this.back) {
 	    this.back.destroy();
 	    this.back=null;
@@ -133,7 +137,6 @@ var MultiselectPopup = new Class({
 	    left: this.options.buttonelem.getPosition().x + 'px',
 	    top: this.options.buttonelem.getPosition().y + 'px',
 	});
-	me.multiselect.listEl.inject($$('body')[0]);
 	me.showing=true;
     },
     
