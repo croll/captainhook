@@ -9,7 +9,7 @@
 	{js file="/mod/cssjs/js/message.js"}
 	{js file="/mod/cssjs/js/mooniform.js"}
 	{js file="/mod/cssjs/js/Modal.js"}
-	{js file="/mod/cssjs/js/chMyTable.js"}
+	{js file="/mod/cssjs/js/chtable.js"}
 	{js file="/mod/user/js/user.js"}
 	{js file="/mod/user/js/group.js"}
 	{js file="/mod/user/js/perm.js"}
