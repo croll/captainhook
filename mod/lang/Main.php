@@ -55,7 +55,10 @@ class Main {
 		unset($paf['tag']);
 		unset($paf['p']);
 
-		return "<$tag class='ch_lang_trad' paf=\"".urlencode(json_encode($paf)).'">'.vsprintf($m, $p)."</$tag>";
+		if ($tag=='')
+			return vsprintf($m, $p);
+		else
+			return "<$tag class='ch_lang_trad' paf=\"".urlencode(json_encode($paf)).'">'.vsprintf($m, $p)."</$tag>";
 	}
 
 }
