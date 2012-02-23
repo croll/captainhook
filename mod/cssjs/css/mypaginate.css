@@ -65,9 +65,6 @@ TABLE#page_list td.selected, TABLE#page_list th.sorted, TABLE#page_list th:hover
 ul.thumbnails li {
 	display: block;
 }
-.container {
-	width: 1170px;
-}
 .section {
 	margin-left: 5px;;
 }
