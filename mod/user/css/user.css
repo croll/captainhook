@@ -1,0 +1,130 @@
+#user_content {
+	min-height: 300px;
+	width: 100%;
+	margin: 0 auto;
+	margin-top: 50px;
+}
+#pagination {
+	text-align: center;
+	margin: 7 auto;
+	width: 100%;
+}
+.float {
+	float: right;
+}
+.hidden {
+	height: 0;
+}
+table.modal {
+	margin: 0 auto;
+}
+span.modal-close {
+	margin-top: -0.6em;
+	margin-right: -0.6em;
+}
+.modal-content input , .modal-content textarea {
+	margin-left: 1em;
+}
+.modal-header {
+	padding-right: 1.2em;
+
+}
+#pagination .active a {
+	background-color:  #EEE;
+}
+#paginate_conf {
+	width: 90%;
+}
+.btn i, .tab i {
+	margin-right: 0.5em;
+}
+#user-tabs ul.tabs {
+	margin: 0;
+}
+#user-tabs .content {
+	padding: 10px;
+	border: 1px solid #DDD;
+	border-top: none;
+	-webkit-border-radius: 4px 4px 0 0;
+	-moz-border-radius: 4px 4px 0 0;
+	border-radius: 4px 4px 0 0;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-webkit-transition: 0.1s linear all;
+	-moz-transition: 0.1s linear all;
+	-ms-transition: 0.1s linear all;
+	-o-transition: 0.1s linear all;
+	transition: 0.1s linear all;
+	border-image: initial;
+}
+.row.select {
+	display: block;
+	width: 100%;
+	padding: 0;
+	margin-left: -0.5em;
+	margin-right: 0.2em;
+	line-height: 1.8em;
+}
+.row.select div {
+	font-size: 2em;
+	font-weight: bold;
+	float: left;
+	margin-top: 0.2em;
+	margin-left: 4em;
+}
+.select .row.select div {
+	margin-top: 0.1em;
+	margin-left: 2em;
+}
+.row.select div span {
+	display: inline;
+	font-size: 0.6em;
+        font-weight: normal;
+	margin-left : 1em;
+	padding: 1em;
+}
+.select.checked {
+	background: transparent url(../images/check.png) no-repeat top left;
+}
+.msgBoxMessage form {
+
+}
+.msgBoxMessage form input {
+	font-weight: bold;
+}
+.msgBoxMessage form label {
+	margin: 0;
+	color: #FFF;
+	text-align: left;
+}
+.msgBoxMessage a.msgBoxLink {
+	cursor: pointer;
+	display: inline-block;
+	background-color: #E6E6E6;
+	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#e6e6e6));
+	background-image: -webkit-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	background-image: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #e6e6e6);
+	background-image: -ms-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+	padding: 5px 14px 6px;
+	text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
+	color: #333;
+	font-size: 13px;
+	border: 1px solid #CCC;
+	border-bottom-color: #BBB;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+	-webkit-transition: 0.1s linear all;
+	-moz-transition: 0.1s linear all;
+	-ms-transition: 0.1s linear all;
+	-o-transition: 0.1s linear all;
+	transition: 0.1s linear all;
+	border-image: initial;
+}
+ 
