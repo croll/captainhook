@@ -9,6 +9,9 @@
 	margin: 7 auto;
 	width: 100%;
 }
+.link {
+	cursor: pointer;
+}
 .float {
 	float: right;
 }
