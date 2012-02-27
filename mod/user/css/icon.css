@@ -1,0 +1,65 @@
+[class^="icon-"] {
+	display: inline-block;
+	width: 14px;
+	height: 14px;
+	vertical-align: text-top;
+	background-image: url(../../cssjs/ext/twitter-bootstrap/img/glyphicons-halflings.png);
+	background-position: 14px 14px;
+	background-repeat: no-repeat;
+}
+.glyph-white {
+	background-image: url(../../cssjs/ext/twitter-bootstrap/img/glyphicons-halflings-white.png);
+}
+
+.icon-chevron-up {
+	background-position: -288px -120px;
+}
+.icon-chevron-down {
+	background-position: -313px -119px;
+}
+.icon-edit {
+	background-position: -96px -72px;
+}
+.icon-remove {
+	background-position: -312px 0;
+}
+.icon-pencil {
+	background-position: 0 -72px;
+}
+.icon-th-list {
+	background-position: -264px 0;
+}
+.icon-eye-open {
+	background-position: -96px -120px;
+}
+.icon-home {
+	background-position: 0 -24px;
+}
+.icon-ok {
+	background-position: -288px 0;
+}
+.icon-remove-sign {
+	background-position: -48px -96px;
+}
+
+.icon-user {
+	background-position: -168px 0;
+}
+.icon-group {
+	background: transparent url(../images/group.png) no-repeat top left;
+}
+.icon-register {
+	width: 29px;
+	height: 32px;
+	background: transparent url(../images/register.png) no-repeat 5px 0px;
+}
+.tabs .tab a.icon-register {
+	padding-left: 2.8em;
+	padding-right: 2.8em;
+}
+.icon-loader {
+	background: transparent url(../images/kubik.gif) no-repeat top left;
+}
+.icon-perm {
+	background-position: -287px -24px;
+}
