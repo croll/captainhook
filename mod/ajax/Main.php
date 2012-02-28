@@ -19,9 +19,6 @@ class Main {
 					throw new \Exception("/mod/ajax > hook_mod_ajax : classname or methodname invalid");
 					return -1;
 				}
-				while(list($k, $v) = each($_REQUEST)) {
-					$methodParams[$k] = filter_var($v, FILTER_SANITIZE_STRING);
-				}
         self::display(self::call($args[1], $method, $methodParams));
 				break;
 			default:
