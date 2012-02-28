@@ -342,10 +342,9 @@ class Main {
 	}
 
 	public static function userHasRight($right, $user=NULL) {
-			\core\Core::log($right);
 			if (is_null($user)) {
 				if (!empty($_SESSION['login'])) $user = $_SESSION['login'];
-				else return false;
+				else return self::groupHasRight('anonymous',$right); 
 			}
 			$uid = (is_string($user)) ? self::getUserId($user) : $user;
 			if (!isset(self::$_cache) || is_null(self::$_cache['u']) || !isset(self::$_cache['u'][$uid]) || is_null(self::$_cache['u'][$uid])) {
