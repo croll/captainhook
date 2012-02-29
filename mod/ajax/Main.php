@@ -19,7 +19,10 @@ class Main {
 					throw new \Exception("/mod/ajax > hook_mod_ajax : classname or methodname invalid");
 					return -1;
 				}
-        self::display(self::call($args[1], $method, $methodParams));
+				while(list($k, $v) = each($_REQUEST)) {
+					$methodParams[$k] = $v;
+				}
+        			self::display(self::call($args[1], $method, $methodParams));
 				break;
 			default:
 				echo null;
