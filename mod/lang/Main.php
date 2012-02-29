@@ -38,10 +38,10 @@ class Main {
 				$paf[$k]=$v;
 
 		for ($i=0; isset($params['p'.$i]); $i++) $paf['p'][]=$params['p'.$i];
-		return self::ch_t($paf);
+		return self::t($paf);
 	}
 
-	private static function ch_t($paf) {
+	private static function t($paf) {
 		global $ch_langs;
 		global $ch_lang;
 
@@ -60,6 +60,13 @@ class Main {
 		else
 			return "<$tag class='ch_lang_trad' paf=\"".urlencode(json_encode($paf)).'">'.vsprintf($m, $p)."</$tag>";
 	}
+
+  public static function ch_t($d, $m) {
+    $paf=array('d' => $d, 'm' => $m);
+    for ($i=2; $i<func_num_args(); $i++)
+      $paf['$'.($i-2)]=func_get_arg($i);
+    return ch_t($paf);
+  }
 
   public static function getCurrentLang() {
     return $GLOBALS['ch_lang'];
