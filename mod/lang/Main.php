@@ -61,4 +61,15 @@ class Main {
 			return "<$tag class='ch_lang_trad' paf=\"".urlencode(json_encode($paf)).'">'.vsprintf($m, $p)."</$tag>";
 	}
 
+  public static function getCurrentLang() {
+    return $GLOBALS['ch_lang'];
+  }
+
+  public static function setCurrentLang($lang) {
+    $GLOBALS['ch_lang']=$lang;
+  }
+
+  public static function getActiveLangs() {
+    return array("fr_FR", "de_DE");
+  }
 }
