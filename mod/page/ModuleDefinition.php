@@ -23,8 +23,8 @@ class ModuleDefinition extends \core\ModuleDefinition {
 		
 		// create rights 
 
-                \mod\user\Main::addRight('View page', 'Allow user to see pages');
-                \mod\user\Main::addRight('Manage page', 'Allow user to add/edit/delete pages');
+    \mod\user\Main::addRight('View page', 'Allow user to see pages');
+    \mod\user\Main::addRight('Manage page', 'Allow user to add/edit/delete pages');
 		//assign rights to default groups 
 		\mod\user\Main::assignRight('View page', 'Admin');
 		\mod\user\Main::assignRight('Manage page', 'Admin');
@@ -33,11 +33,11 @@ class ModuleDefinition extends \core\ModuleDefinition {
 
 	function uninstall() {
 		\mod\user\Main::delRight('View page');
-                \mod\user\Main::delRight('Manage page');
+    \mod\user\Main::delRight('Manage page');
 		
 		// do things here by default (before parent::uninstall)
 		// delete route
 		\mod\regroute\Main::unregister($this->id);
-    		parent::uninstall();
+ 		parent::uninstall();
 	}
 }
