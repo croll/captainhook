@@ -12,7 +12,6 @@ class Main {
 		$ch_langs=array();
 
 		$ch_langs[$ch_lang]=json_decode(file_get_contents(CH_MODDIR.'/lang/cache/'.$GLOBALS['ch_lang'].'.js'), true);
-		\core\Core::log($GLOBALS['ch_langs']);
   }
 
   public static function hook_mod_webpage_construct($hookname, $userdata, $webpage) {
