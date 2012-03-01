@@ -8,7 +8,8 @@ function ch_t(domain, blah) {
     if (ch_langs[domain] && ch_langs[domain][ch_lang] && ch_langs[domain][ch_lang][blah])
 	args[0]=ch_langs[domain][ch_lang][blah];
 
-    document.write('<span class="ch_lang_trad" paf="'+escape(objectToString(args))+'">'+sprintf.apply(null, args)+'</span>');
+    //document.write('<span class="ch_lang_trad" paf="'+escape(objectToString(args))+'">'+sprintf.apply(null, args)+'</span>');
+    return sprintf.apply(null, args);
 }
 
 function ch_lang_decodeURL(url){return unescape(url.replace(/\+/g,  " "));}

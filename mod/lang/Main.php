@@ -49,7 +49,7 @@ class Main {
     if (isset($ch_langs[$ch_lang]) && isset($ch_langs[$ch_lang][$paf['d']]) && isset($ch_langs[$ch_lang][$paf['d']][$paf['m']]))
 			$m=$ch_langs[$ch_lang][$paf['d']][$paf['m']];
 
-		$tag=isset($paf['tag']) ? $paf['tag'] : 'span';
+		$tag=isset($paf['tag']) ? $paf['tag'] : '';
 		$p=isset($paf['p']) ? $paf['p'] : array();
 		unset($paf['tag']);
 		unset($paf['p']);
@@ -57,7 +57,8 @@ class Main {
 		if ($tag=='')
 			return vsprintf($m, $p);
 		else
-			return "<$tag class='ch_lang_trad' paf=\"".urlencode(json_encode($paf)).'">'.vsprintf($m, $p)."</$tag>";
+			return "<$tag>".vsprintf($m, $p)."</$tag>";
+    //return "<$tag class='ch_lang_trad' paf=\"".urlencode(json_encode($paf)).'">'.vsprintf($m, $p)."</$tag>";
 	}
 
   public static function ch_t($d, $m) {
