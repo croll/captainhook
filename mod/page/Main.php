@@ -27,7 +27,7 @@ class Main {
                 }
   }
    public static function hook_mod_page_create($hookname, $userdata, $matches, $flags) {
-                \mod\user\Main::redirectIfNotLoggedIn();
+		\mod\user\Main::redirectIfNotLoggedIn();
 		// check perm 
 		if (!\mod\user\Main::userHasRight('Manage page')) {
 			return false;
@@ -42,19 +42,22 @@ class Main {
 		$dbParams[]= self::cleanString($matches['name']);	
 		$dbParams[]=(int)$userId;	
 		$dbParams[]=(int)$matches['published'];	
+		$dbParams[]=$matches['lang'];	
+		$dbParams[]=(int)$matches['id_lang_reference'];	
 		$dbParams[]=stripslashes(html_entity_decode($matches['content']));	
 		$dbParams[]=date("Y-m-d H:i:s");	
 		$dbParams[]=date("Y-m-d H:i:s");	
-
 		$query= $db->query("INSERT INTO ch_page (
 				name, 
 				sysname, 
 				authorid, 
 				published, 
+				lang, 
+				id_lang_reference, 
 				content, 
 				created, 
 				updated) VALUES 
-					(?,?,?,?,?,?,?)", $dbParams);
+					(?,?,?,?,?,?,?,?,?)", $dbParams);
 		//return (isset($db->Insert_ID)) ? $db->Insert_ID : NULL;
 		return true;
   }
@@ -70,6 +73,9 @@ class Main {
 		$dbParams[]=$matches['name'];	
 		$dbParams[]=\mod\page\Main::cleanString($matches['name']);;	
 		$dbParams[]=(int)$matches['published'];	
+		$dbParams[]=$matches['lang'];	
+		$dbParams[]=(int)$matches['id_lang_reference'];	
+
 		$dbParams[]=stripslashes(html_entity_decode($matches['content']));
 		$dbParams[]=date("Y-m-d H:i:s");	
 		$dbParams[]=(int)$matches['pid'];	
@@ -78,6 +84,8 @@ class Main {
 				    SET name=?,
 					sysname=?,
 					published=?,
+					lang=?,
+					id_lang_reference=?,
 					content=?,
 					updated=?
 				    WHERE pid=?", $dbParams);
@@ -165,7 +173,7 @@ class Main {
 		
 		// mysql version	
 		//$q="SELECT p.`pid`, p.`sysname`, p.`name`, p.`authorId`, u.`login`, u.`full_name`, p.`published`, p.`created`, p.`updated` FROM `ch_page` p, `ch_user` u WHERE p.`authorId` = u.`uid` ORDER BY ? LIMIT ?,?".$mid;
-		$q="SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.created, p.updated FROM ch_page p, ch_user u WHERE p.authorId = u.uid";
+		$q="SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.lang, p.id_lang_reference, p.created, p.updated FROM ch_page p, ch_user u WHERE p.authorid = u.uid";
 		$q .= $mid;
 		$q .= self::order_by($sort);
 		$q .=" LIMIT ? OFFSET ?";
@@ -174,7 +182,7 @@ class Main {
 		// quant mysql version 
 		//$q2="SELECT count(p.`pid`) as `quant` FROM `ch_page` p, `ch_user` u WHERE p.`authorId` = u.`uid`";
 		
-		$q2="SELECT count(p.pid) as quant FROM ch_page p, ch_user u WHERE p.authorId = u.uid";
+		$q2="SELECT count(p.pid) as quant FROM ch_page p, ch_user u WHERE p.authorid = u.uid";
 		$quant= $db->fetchOne($q2, NULL);
 		
 		$page->smarty->assign('list', $list);
@@ -206,7 +214,8 @@ class Main {
 		//mysql
 		//$result = $db->query('SELECT p.`pid`, p.`sysname`, p.`name`, p.`authorId`, u.`login`, u.`full_name`, p.`published`, p.`created`, p.`updated`, p.`content` FROM `ch_page` p, ch_user u WHERE `sysname`=?', array($name));
 		//postgres
-		$result = $db->query('SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.created, p.updated, p.content FROM ch_page p, ch_user u WHERE sysname=?', array($name));
+		$result = $db->query('SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.lang, p.id_lang_reference, p.created, p.updated, p.content FROM ch_page p, ch_user u WHERE sysname=?', array($name));
+		consolde.log(pid);
 		return $result->fetchRow();
   }
   public static function getPageById($id) {
@@ -215,7 +224,7 @@ class Main {
 		//$result = $db->query('SELECT p.`pid`, p.`sysname`, p.`name`, p.`authorId`, u.`login`, u.`full_name`, p.`published`, p.`created`, p.`updated`, p.`content` FROM `ch_page` p, ch_user u WHERE `pid`=?', array((int)$id));
 		//postgresql
 		
-		$result = $db->query('SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.created, p.updated, p.content FROM ch_page p, ch_user u WHERE pid=?', array($id));
+		$result = $db->query('SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.lang, p.id_lang_reference, p.created, p.updated, p.content FROM ch_page p, ch_user u WHERE pid=?', array($id));
    		return $result->fetchRow();
    }
     public static function cleanString($msg, $toUrl=false) { 

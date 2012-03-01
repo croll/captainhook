@@ -3,6 +3,11 @@
 	margin: 7 auto;
 	width: 100%;
 }
+#pagination ul {
+	width: 98%;
+	margin: 0 auto;
+}
+
 #pagination .active a {
 	background-color:  #EEE;
 }
@@ -28,10 +33,6 @@
 }
 .hidden {
 	visibility: hidden;
-}
-.link:hover {
-	cursor: pointer;
-	color: #0069D6;
 }
 
 TABLE#page_list td.selected, TABLE#page_list th.sorted, TABLE#page_list th:hover {

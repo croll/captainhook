@@ -1,4 +1,22 @@
 {extends tplextends('user/admin/layout')}
+{block name='webpage_head' append}
+	{js file="/mod/cssjs/js/tabs.js"}
+	{js file="/mod/cssjs/js/messageclass.js"}
+	{js file="/mod/cssjs/js/message.js"}
+	{js file="/mod/cssjs/js/mooniform.js"}
+	{js file="/mod/cssjs/js/Modal.js"}
+	{js file="/mod/cssjs/js/chtable.js"}
+	{js file="/mod/user/js/user.js"}
+	{js file="/mod/user/js/group.js"}
+	{js file="/mod/user/js/perm.js"}
+		
+	{css file="/mod/cssjs/css/message.css"}
+	{css file="/mod/cssjs/css/tabs.css"}
+	{css file="/mod/cssjs/css/mooniform.css"}
+	{css file="/mod/cssjs/css/Modal.css"}
+	{css file="/mod/user/css/user.css"}
+	{css file="/mod/user/css/icon.css"}
+{/block}
 {block name='user_content'}
 <div class="user-list" id="user-tabs">
 	<ul class="tabs" data-behavior="BS.Tabs">
