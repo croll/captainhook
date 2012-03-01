@@ -36,7 +36,7 @@
           <input type='hidden' name='lang' value='{$lang|escape}'/>
           {foreach from=$trads item=trad key=m}
             <div class='m'>{$m|escape}</div>
-            <input type='text' class='trad' name='_{$m|escape}' value='{$trad|escape}'>
+            <input type='text' class='trad' name='_{urlencode($m)|escape}' value='{$trad|escape}'>
           {/foreach}
 	</form>
       {/foreach}

@@ -15,7 +15,7 @@ class Main {
       $langarray=array();
       foreach($_REQUEST as $k => $v) {
         if (substr($k, 0, 1) == '_') {
-          $m=substr($k, 1);
+          $m=urldecode(substr($k, 1));
           $langarray[$m]=$v;
         }
       }
