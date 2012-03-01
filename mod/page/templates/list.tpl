@@ -11,7 +11,7 @@
   		</ul>
 	</div>
 	{/block}
-	{block name='page_list'}
+		{block name='page_list'}
 	<table id="page_list" class="table zebra-striped condensed-table bordered-table table-list" summary="Page List" border="0" cellspacing="0" cellpadding="0">
 		<caption class="list">Pages list</caption>
 		<thead>
@@ -19,6 +19,8 @@
 			<th><div >Name </div></th>
 			<th><div>Created by</div></th>
 			<th><div>Published</div></th>
+			<th><div>Lang</div></th>
+			<th><div>IDLR</div></th>
 			<th><div>Created</div></th>
 			<th><div>Updated</div></th>
 			<th>Action</th>
@@ -30,6 +32,8 @@
 				<td><a href="/page/{$list[p].sysname}">{$list[p].name}</a></td>
 				<td>{$list[p].login}</td>
 				<td >{if $list[p].published eq 1}yes{else}no{/if}</td>
+				<td><i class="flag {$list[p].lang}"></i></td>
+				<td>{$list[p].id_lang_reference}</td>
 				<td >{$list[p].created|date_format: '%d %b %Y'}</td>
 				<td >{$list[p].updated|date_format: '%d %b %Y'}</td>
 				<td class="action">

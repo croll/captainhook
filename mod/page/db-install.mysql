@@ -5,12 +5,16 @@ CREATE TABLE 'ch_page' (
        'authorid' INT(11) NOT NULL,
        'published' VARCHAR(1) NOT NULL,
        'content' LongText  NULL,
+       'lang' VARCHAR(5)  NULL,
+       'id_lang_reference' INT(11)  NULL,
        'created' DateTime  NULL,
        'updated' DateTime  NULL,
        KEY ('pid'),
        INDEX ('sysname'),
        INDEX ('authorid'),
        INDEX ('published'),
+       INDEX ('lang'),
+       INDEX ('id_lang_reference'),
        INDEX ('created'),
        INDEX ('updated')
  );
