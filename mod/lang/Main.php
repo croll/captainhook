@@ -45,6 +45,7 @@ class Main {
 	*/
 
 	public static function smartyFunction_t($params, $template) {
+    self::init();
 		foreach($params as $k => $v)
 			if (!preg_match('/^p[0-9]+$/', $k))
 				$paf[$k]=$v;
@@ -56,6 +57,8 @@ class Main {
 	private static function t($paf) {
 		global $ch_langs;
 		global $ch_lang;
+
+    self::init();
 
 		$m=$paf['m'];
 
@@ -75,6 +78,7 @@ class Main {
 	}
 
   public static function ch_t($d, $m) {
+    self::init();
     $paf=array('d' => $d, 'm' => $m);
     for ($i=2; $i<func_num_args(); $i++)
       $paf['$'.($i-2)]=func_get_arg($i);
@@ -82,14 +86,17 @@ class Main {
   }
 
   public static function getCurrentLang() {
+    self::init();
     return $GLOBALS['ch_lang'];
   }
 
   public static function setCurrentLang($lang) {
+    self::init();
     $GLOBALS['ch_lang']=$lang;
   }
 
   public static function getActiveLangs() {
+    self::init();
     return array("fr_FR", "de_DE");
   }
 }
