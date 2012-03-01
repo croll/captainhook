@@ -45,7 +45,8 @@ function writelangs() {
 		file_put_contents($langdir.'/'.$lang.'.js', myjson_encode($langd));
 	}
 	if (!file_exists(CH_MODDIR.'/lang/cache') || !is_dir(CH_MODDIR.'/lang/cache')) mkdir(CH_MODDIR.'/lang/cache');
-	file_put_contents(CH_MODDIR.'/lang/cache/'.$lang.'.js', json_encode($langs));
+	file_put_contents(CH_MODDIR.'/lang/cache/'.$lang.'.json', json_encode($langs));
+	file_put_contents(CH_MODDIR.'/lang/cache/'.$lang.'.js', 'ch_langs["'.$lang.'"]='.json_encode($langs));
 }
 
 function scantemplates() {

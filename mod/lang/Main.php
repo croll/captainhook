@@ -4,23 +4,36 @@ namespace mod\lang;
 
 class Main {
 
-  public static function hook_core_init_http($hookname, $userdata) {
+  private static function init() {
 		global $ch_lang;
 		global $ch_langs;
+    global $ch_inited;
+
+    if (isset($ch_inited) && $ch_inited==1) continue;
+    $ch_inited==1;
 
 		$ch_lang='fr_FR';
 		$ch_langs=array();
 
-		$ch_langs[$ch_lang]=json_decode(file_get_contents(CH_MODDIR.'/lang/cache/'.$GLOBALS['ch_lang'].'.js'), true);
+		$ch_langs[$ch_lang]=json_decode(file_get_contents(CH_MODDIR.'/lang/cache/'.$GLOBALS['ch_lang'].'.json'), true);
+  }
+
+  public static function hook_core_init_http($hookname, $userdata) {
+    self::init();
   }
 
   public static function hook_mod_webpage_construct($hookname, $userdata, $webpage) {
 		global $ch_lang;
 		global $ch_langs;
 
+    self::init();
+
 		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/mootools.js');
 		\mod\cssjs\Main::addJs($webpage, '/mod/cssjs/js/sprintf-0.7-beta1.js');
 		\mod\cssjs\Main::addJs($webpage, '/mod/lang/js/lang.js');
+    $langfile=CH_MODDIR.'/lang/cache/'.$GLOBALS['ch_lang'].'.js';
+    error_log("LANG FILE : ".$langfile);
+    if (is_file($langfile)) \mod\cssjs\Main::addJs($webpage, '/mod/lang/cache/'.$GLOBALS['ch_lang'].'.js');
 	}
 
 	/*
