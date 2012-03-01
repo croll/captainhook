@@ -1,12 +1,42 @@
+#pagination {
+	text-align: center;
+	margin: 7 auto;
+	width: 100%;
+}
+table.modal {
+	margin: 0 auto;
+}
+#pagination ul {
+	width: 98%;
+	margin: 0 auto;
+}
+#page-trans.hidden {
+	height: 0;
+}
+#pagination .active a {
+	background-color:  #EEE;
+}
+#paginate_conf {
+	width: 90%;
+}
 #page_content {
 	min-height: 500px;
 	width: 100%;
 	margin: 0 auto;
 	margin-top: 50px;
 }
-
-
-
+#content .row , #page_edit, #page_edit .row, #pageForm .row {
+	margin: 0;
+}
+#filterForm {
+        margin-left: 15%;
+}
+#filterForm .clearfix .input label {
+        margin-right: 5px;
+}
+#page_edit label {
+	text-align: left;
+}
 .page-title {
 	width: 90%;
 }
@@ -26,4 +56,24 @@
 	margin: 10px;
 	min-height: 500px;
 	width: 97%;
+}
+
+/** Flags **/
+i.flag {
+	text-align: right;
+	line-height: 28px;
+	display: block;
+	float: left;
+	width: 31px;
+	height: 28px;
+
+}
+i.fr_FR {
+	background: transparent url(../images/flags/fr_FR.png) no-repeat scroll left top;
+}
+i.en_US {
+	background: transparent url(../images/flags/en_US.png) no-repeat scroll left top;
+}
+i.de_DE {
+	background: transparent url(../images/flags/de_DE.png) no-repeat scroll left top;
 }

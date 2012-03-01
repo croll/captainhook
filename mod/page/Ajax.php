@@ -5,12 +5,40 @@ namespace mod\page;
 class Ajax {
 
   public static function savePage($params) {
-	//return $params;
+	
+	//	return $params;
+	\mod\user\Main::redirectIfNotLoggedIn();
+	// check perm 
+	if (!\mod\user\Main::userHasRight('Manage page')) {
+			return false;
+	}
 	if(!isset($params['pid']) || $params['pid']==0) {
 		return \mod\page\Main::hook_mod_page_create($hookname, $userdata, $params, $flags);
 	} else {
 		return \mod\page\Main::hook_mod_page_update($hookname, $userdata, $params, $flags);
 	}
+  }
+  public static function idLangReference($params) {
+	// check perm 
+	if (!\mod\user\Main::userHasRight('Manage page')) {
+			return false;
+	}
+	$db=\core\Core::$db;
+	$dbParams= array();
+	$dbParams[]=$params['lang'];
+	$p=$db->fetchAll("SELECT pid, sysname, name, lang FROM ch_page WHERE lang != ?", $dbParams);
+	return $p;		
+  }
+  public static function render($params	) {
+
+	// check perm 
+	if (!\mod\user\Main::userHasRight('View page')) {
+			return false;
+	}
+	$sysname=$params['sysname'];
+	$db=\core\Core::$db;
+	$p=$db->fetchAll("SELECT * FROM ch_page WHERE sysname=?", array($sysname));
+	return $p[0];		
   }
   public static function deletePage($params) {
 	\mod\user\Main::redirectIfNotLoggedIn();
