@@ -103,6 +103,9 @@ class Main {
 		$pid=$matches[1]; 
 		$view = self::getPageById($pid);
                 $page = new \mod\webpage\Main();
+		//get lang 
+		$lang=\mod\lang\Main::getCurrentLang();
+		$page->smarty->assign('lang', $lang);
 		$page->smarty->assign('page', $view);
     		$page->smarty->assign('page_mode', 'edit');
                 if ($flags & \mod\regroute\Main::flag_xmlhttprequest) {
@@ -215,7 +218,10 @@ class Main {
 		$q =" ORDER BY ".$sorted;
 		return $q;
    }  
-  private function getPageBySysName($name) {
+  public static function getPageBySysName($name) {
+		if (!\mod\user\Main::userHasRight('View page')) {
+			return false;
+		}
 		$db=\core\Core::$db;
 		//mysql
 		//$result = $db->query('SELECT p.`pid`, p.`sysname`, p.`name`, p.`authorId`, u.`login`, u.`full_name`, p.`published`, p.`created`, p.`updated`, p.`content` FROM `ch_page` p, ch_user u WHERE `sysname`=?', array($name));
