@@ -118,7 +118,7 @@ var CHMyPaginate = new Class({
 				'id': 'paginate_conf'
 			});
 			//set offset configuration
-			var myOffset = new Element('select', {'class': 'btn primary'});
+			var myOffset = new Element('select', {'class': 'btn btn-primary'});
 			var label = new Element('option').set('html', 'Jump to page').set('value',0).inject(myOffset);	
 			var i=1;
 			while (i <= maxpage ) {
@@ -138,7 +138,7 @@ var CHMyPaginate = new Class({
 				
 			});
 			//set maxRow configuration
-			var myMaxRow = new Element('select', {'class': 'btn secondary'});
+			var myMaxRow = new Element('select', {'class': 'btn btn-secondary'});
 			var label = new Element('option').set('html', 'list length').set('value', 0).inject(myMaxRow);	
 ;
 			var i=10;

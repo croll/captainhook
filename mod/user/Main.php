@@ -401,6 +401,10 @@ class Main {
 			return "error Manage user ";
 		}
 		$page = new \mod\webpage\Main();
+		// get lang
+		$lang=\mod\lang\Main::getCurrentLang();
+		$page->smarty->assign('lang', $lang);
+		
 		$page->setLayout('user/admin/default');
 		$page->display();
 	}
