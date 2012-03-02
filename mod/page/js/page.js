@@ -75,7 +75,7 @@ var Page = new Class({
 					var k = Object.keys(resJSON);
 					var v = Object.values(resJSON);
 					var title = new Element ('h2', {'html': v[2]});		
-					var body = new Element ('div', {'class': 'well active content', 'html': v[5]});	
+					var body = new Element ('div', {'class': 'well', 'html': v[5]});	
 					$(update).empty().adopt(title).adopt(body).fade('toggle');	
 				} else {
 					//display as modal 	
