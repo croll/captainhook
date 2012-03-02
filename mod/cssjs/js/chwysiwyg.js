@@ -11,7 +11,8 @@ var CHWysiwyg = new Class({
 			onComplete: null
 		},
 		initialize: function(options) {
-        		var editor = CKEDITOR.replace('editor1', {
+			this.setOptions(options);
+        		var editor1 = CKEDITOR.replace('editor1', {
 				contentsCss : 'assets/output_xhtml.css',
 				extraPlugins : 'stylesheetparser',
 				language: 'fr',

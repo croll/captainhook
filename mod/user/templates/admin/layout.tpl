@@ -1,27 +1,9 @@
 {extends tplextends('webpage/webpage_main')}
 {block name='webpage_head' append}
-	{js file="/mod/cssjs/js/mootools.js"}
-	{js file="/mod/cssjs/js/mootools.more.js"}
-	{js file="/mod/cssjs/js/tabs.js"}
 	{js file="/mod/cssjs/js/captainhook.js"}
-	{js file="/mod/cssjs/js/meioautocomplete.js"}
-	{js file="/mod/cssjs/js/messageclass.js"}
-	{js file="/mod/cssjs/js/message.js"}
-	{js file="/mod/cssjs/js/mooniform.js"}
-	{js file="/mod/cssjs/js/Modal.js"}
-	{js file="/mod/cssjs/js/chtable.js"}
-	{js file="/mod/user/js/user.js"}
-	{js file="/mod/user/js/group.js"}
-	{js file="/mod/user/js/perm.js"}
 		
 	{css file="/mod/cssjs/css/captainhook.css"}
 	{css file="/mod/cssjs/css/bootstrap.css"}
-	{css file="/mod/cssjs/css/meioautocomplete.css"}
-	{css file="/mod/cssjs/css/message.css"}
-	{css file="/mod/cssjs/css/mooniform.css"}
-	{css file="/mod/cssjs/css/Modal.css"}
-	{css file="/mod/user/css/user.css"}
-	{css file="/mod/user/css/icon.css"}
 {/block}
 {block name='webpage_body' }
 <div class="topbar">
