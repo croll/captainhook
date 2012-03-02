@@ -7,7 +7,7 @@ class Ajax {
   public static function setCurrentLang($params) {
 		
 	\mod\lang\Main::setCurrentLang($params['lang']);
-	return \mod\lang\Main::getCurrentLang($params['lang']);
+	return \mod\lang\Main::getCurrentLang();
   }
 }
 	
