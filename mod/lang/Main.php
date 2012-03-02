@@ -12,7 +12,10 @@ class Main {
     if (isset($ch_inited) && $ch_inited==1) continue;
     $ch_inited==1;
 
-		$ch_lang='fr_FR';
+    if (isset($_COOKIE['lang']) && in_array($_COOKIE['lang'], self::getActiveLangs()))
+      $ch_lang=$_COOKIE['lang'];
+    else
+      $ch_lang='fr_FR';
 		$ch_langs=array();
 
 		$ch_langs[$ch_lang]=json_decode(file_get_contents(CH_MODDIR.'/lang/cache/'.$GLOBALS['ch_lang'].'.json'), true);
@@ -93,6 +96,7 @@ class Main {
   public static function setCurrentLang($lang) {
     self::init();
     $GLOBALS['ch_lang']=$lang;
+    setcookie('ch_lang', $lang, time()+60*60*24*30*12*20);
   }
 
   public static function getActiveLangs() {
