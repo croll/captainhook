@@ -9,12 +9,15 @@ class Main {
 		if (!\mod\user\Main::userHasRight('View page')) {
 			return false;
 		}
+		//get lang 
+		$lang=\mod\lang\Main::getCurrentLang();
 		// get function params
 		$sysname=$matches[1]; 
 		// get page 
 		$view = \mod\page\Main::getPageBySysName($sysname);
 		$page = new \mod\webpage\Main();
 		// assign data to the smarty template 
+		$page->smarty->assign('lang', $lang);
 		$page->smarty->assign('page', $view);
 		$page->smarty->assign('page_mode', 'view');
                 // as this function to be available both for http and ajax request set both layout options 
@@ -184,7 +187,10 @@ class Main {
 		
 		$q2="SELECT count(p.pid) as quant FROM ch_page p, ch_user u WHERE p.authorid = u.uid";
 		$quant= $db->fetchOne($q2, NULL);
-		
+		// get lang
+		$lang=\mod\lang\Main::getCurrentLang();
+		$page->smarty->assign('lang', $lang);
+
 		$page->smarty->assign('list', $list);
 		$page->smarty->assign('filter', $filter);
 		$page->smarty->assign('sort', $sort);
@@ -215,7 +221,6 @@ class Main {
 		//$result = $db->query('SELECT p.`pid`, p.`sysname`, p.`name`, p.`authorId`, u.`login`, u.`full_name`, p.`published`, p.`created`, p.`updated`, p.`content` FROM `ch_page` p, ch_user u WHERE `sysname`=?', array($name));
 		//postgres
 		$result = $db->query('SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.lang, p.id_lang_reference, p.created, p.updated, p.content FROM ch_page p, ch_user u WHERE sysname=?', array($name));
-		consolde.log(pid);
 		return $result->fetchRow();
   }
   public static function getPageById($id) {

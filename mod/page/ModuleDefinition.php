@@ -8,14 +8,14 @@ class ModuleDefinition extends \core\ModuleDefinition {
 		$this->description = 'edit web page content';
 		$this->name = 'page';
 		$this->version = '0.1';
-		$this->dependencies = array('ajax', 'cssjs', 'smarty', 'regroute');
+		$this->dependencies = array('ajax', 'cssjs', 'smarty', 'regroute', 'lang');
 		parent::__construct();
 	}
 
 	function install() {
 		parent::install();
 		
-    // do things here by default (after parent::install)
+    		// do things here by default (after parent::install)
 		// set default route
 		\mod\regroute\Main::registerRoute($this->id, '#^/page/([a-z0-9_-]+)$#', 'mod_page_render', \mod\regroute\Main::flag_html | \mod\regroute\Main::flag_xmlhttprequest);
 		\mod\regroute\Main::registerRoute($this->id, '#^/page/edit/([0-9]+)$#', 'mod_page_edit', \mod\regroute\Main::flag_html | \mod\regroute\Main::flag_xmlhttprequest);
