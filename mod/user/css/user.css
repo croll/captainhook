@@ -71,6 +71,13 @@ span.modal-close {
 	transition: 0.1s linear all;
 	border-image: initial;
 }
+#user_edit .row , #group_edit .row , #perm_edit .row {
+	margin: 0 auto;
+}
+#user_edit .row label , #group_edit .row label, #perm_edit .row label {
+	display: inline-table;
+	width: 150px;
+}
 .row.select {
 	display: block;
 	width: 100%;
