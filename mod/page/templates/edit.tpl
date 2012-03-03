@@ -6,7 +6,7 @@
 {/block}
 {block name='page_menu' append}
 		{if isset($page.pid) && $page.pid !=0} 
-		<li><a  href="/page/{$page.sysname}"><i class="icon-eye-open glyph-white"></i>  View</a></li>
+		<li><a  href="/page/{$page.sysname}"><i class="icon-eye-open glyph-white"></i>  {t d='page' m='View'}</a></li>
 		{/if}
 {/block}
 {block name='page_content'}
@@ -15,7 +15,7 @@
 	<div class="page-header" id="page_title">
 		<h1>{$page.name}</h1>
 		<small>
-			Created  {$page.created|date_format: '%d %b %Y'} by {$page.full_name} : last updated - {$page.updated|date_format: '%d %b %Y'}
+			{t d='page' m='Created %s by %s - last updated: %s' p0=$page.created|date_format: '%d %b %Y' p1=$page.full_name p2=$page.updated|date_format: '%d %b %Y'}
 		</small>
 	</div>
 	{/if}
@@ -30,34 +30,34 @@
 			<input type="hidden" name="updated" value="{$page.updated}" >
 
 			<div class="row">
-				<a class="btn btn-primary float" href="#" onclick="$('page-trans').toggleClass('hidden');";> Translations</a>
+				<a class="btn btn-primary float" href="#" onclick="$('page-trans').toggleClass('hidden');";> {t d='page' m='Translation'}</a>
 				<div id="page-trans" class="hidden float">
 					<div class="row">
-					<label for="lang"><span>Lang:</span></label>
+					<label for="lang"><span>{t d='page' m='Lang'}:</span></label>
 					<select name="lang" onchange="mypage.listIdLangReference('{$page.sysname}', this.value, 'page_reference');">
-						<option value=""> Untranslated</option>	
-						<option value="fr_FR" {if $page.lang == "fr_FR"} selected="selected"{/if}>French</option>	
-						<option value="de_DE" {if $page.lang == "de_DE"} selected="selected"{/if}>Deutch</option>	
+						<option value=""> {t d='page' m='Untranslated'}</option>	
+						<option value="fr_FR" {if $page.lang == "fr_FR"} selected="selected"{/if}>{t d='page' m='French'}</option>	
+						<option value="de_DE" {if $page.lang == "de_DE"} selected="selected"{/if}>{t d='page' m='Deutsch'}</option>	
 					</select>
 					</div>
 					<div class="row">
-					<label for="lang"><span>Is translation of:</span></label>
+					<label for="lang"><span>{t d='page' m='Is translation of'}:</span></label>
 					<select id="page_reference" name="id_lang_reference">
-						<option value="">None</option>	
+						<option value="">{t d='page' m='None'}</option>	
 						<option value="1" {if $page.id_lang_reference == "1"} selected="selected"{/if}>Blah </option>	
 						<option value="2" {if $page.id_lang_reference == "2"} selected="selected"{/if}>...</option>	
 					</select>
 					</div>
 				</div>
-				<label for="name"><span>Page title:</span></label><input class="xlarge" title="name" type="text" name="name" value="{$page.name}" ></div>
+				<label for="name"><span>{t d='page' m='Page title'}:</span></label><input class="xlarge" title="name" type="text" name="name" value="{$page.name}" ></div>
 			<div class="row">
 				<textarea cols="100" id="editor1" name="content" rows="10" style="visibility: hidden; display: none; ">{$page.content}</textarea>	
 			</div>
-			<div class="row"><label for="published"><span>Publish:</span><input onclick="var c=this.get('value'); if (c==0) this.set('value', 1); else this.set('value', 0);" class="checkbox" title="published" type="checkbox" name="published" {if $page.published == 1} checked ="checked" {/if} value="{$page.published}" ></label></div>
+			<div class="row"><label for="published"><span>{t d='page' m='Publish'}:</span><input onclick="var c=this.get('value'); if (c==0) this.set('value', 1); else this.set('value', 0);" class="checkbox" title="published" type="checkbox" name="published" {if $page.published == 1} checked ="checked" {/if} value="{$page.published}" ></label></div>
 
 			<div class="action">
-				<input class="btn primary" id='page_edit_submit'  type="submit" name="submit" value="Save changes">
-				<button type="reset" class="btn">Cancel</button>
+				<input class="btn primary" id='page_edit_submit'  type="submit" name="submit" value="{t d='page' m='Save'}">
+				<button type="reset" class="btn">{t d='page' m='Cancel'}</button>
 			</div>
 		
 		</form>
