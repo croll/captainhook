@@ -22,26 +22,26 @@
 <div class="topbar">
       <div class="fill">
         <div class="container">
-          <a class="brand" href="/page/list/">Captainhook page module demo</a>
+          <a class="brand" href="/page/list/">{t d='page' m='Captainhook page module demo'}</a>
 		<ul class="nav">
-		<li ><a  class="top-btn" href="/"><i class="icon-home glyph-white"></i>  Accueil</a></li>
+		<li ><a  class="top-btn" href="/"><i class="icon-home glyph-white"></i>  {t d='page' m='Accueil'}</a></li>
 	   {if \mod\user\Main::userHasRight('Manage page')}
   		<li class="dropdown active" onclick="this.toggleClass('open');">
     		<a href="#"
           		class="dropdown-toggle"
           		data-toggle="dropdown">
-				Page
+				{t d='page' m='Page'}
           		<b class="caret"></b>
     		</a>
     		<ul class="dropdown-menu">
 		{block name='page_menu' }
-		<li><a class="top-btn" href="/page/list/"><i class="icon-th-list glyph-white"></i>  List</a></li>
-        	<li><a class="top-btn" href="/page/edit/0"><i class="icon-pencil glyph-white"></i>  Add</a></li>
+		<li><a class="top-btn" href="/page/list/"><i class="icon-th-list glyph-white"></i>  {t d='page' m='List'}</a></li>
+        	<li><a class="top-btn" href="/page/edit/0"><i class="icon-pencil glyph-white"></i>  {t d='page' m='Add'}</a></li>
                 {/block}
     		</ul>
   		</li>
 	    {/if}
-            	<li ><a  class="top-btn" href="/user/"><i class="icon-user glyph-white"></i>  User</a></li>
+            	<li ><a  class="top-btn" href="/user/"><i class="icon-user glyph-white"></i>  {t d='user' m='User'}</a></li>
 	</ul>
            </div>
       </div>
@@ -54,14 +54,6 @@
 	</div>
 </div>
 {/block}
-{* 
-<script>
-    var behavior = new Behavior().apply(document.body);
-    var delegator = new Delegator({
-      getBehavior: function(){ return behavior; }
-    }).attach(document.body);
-  </script>
-* }
 <div id="footer">
 footer
 </div>
