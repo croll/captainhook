@@ -171,6 +171,20 @@ class Main {
 				} else if ($fd[0] == 'published') {
 				 	$mid .=" AND p.published = ?";	
 					$dbParams[]=(int)$fd[1];
+				} else if ($fd[0] == 'lang') {
+				 	$mid .=" AND p.lang = ?";	
+					if ($fd[1]==0) {
+						$dbParams[]="fr_FR";
+					} else {
+						$dbParams[]="de_DE";
+					}
+				} else if ($fd[0] == 'id_lang_reference') {
+					if ($fd[1]==0) {
+				 		$mid .=" AND p.id_lang_reference = ?";	
+					} else {
+				 		$mid .=" AND p.id_lang_reference != ?";	
+					}
+					$dbParams[]=0;
 				}
 			}
 		}

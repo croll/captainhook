@@ -9,10 +9,10 @@
 <div class="topbar">
       <div class="fill">
         <div class="container">
-          <a class="brand" href="/user/">Captainhook user module demo</a>
+          <a class="brand" href="/user/">{t d='user' m='Captainhook user module demo'}</a>
 	<ul class="nav">
-		<li ><a  class="top-btn" href="/page/accueil"><i class="icon-home glyph-white"></i>  Accueil</a></li>
-            	<li ><a  class="top-btn" href="/page/list/"><i class="icon-page glyph-white"></i>  Page</a></li>
+		<li ><a  class="top-btn" href="/page/accueil"><i class="icon-home glyph-white"></i>  {t d='user' m='Accueil'}</a></li>
+            	<li ><a  class="top-btn" href="/page/list/"><i class="icon-page glyph-white"></i>  {t d='page' m='Page'}</a></li>
 	   {if \mod\user\Main::userHasRight('Manage rights')}
   		<li class="dropdown active" onclick="this.toggleClass('open');">
     		<a href="#"

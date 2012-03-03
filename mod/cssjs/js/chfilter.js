@@ -40,7 +40,6 @@ var CHFilter = new Class({
 		this.setFilterBtn(options);
 	},
 	populateFilters: function(options) {
-		alert(options.filter);
 
 	},
 	setFilterBtn: function(options) {
