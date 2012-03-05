@@ -458,8 +458,11 @@ class Main {
 				created, 
 				updated) VALUES 
 					(?,?,?,?,md5(?),?,?)", $dbParams);
+		return $dbParams;
 		//return (isset($db->Insert_ID)) ? $db->Insert_ID : NULL;
-		return self::assignUserToGroup($login, "Registered");
+		// commented While missing some optionality for drirect 
+		// assignement to groups after user creation
+		// return self::assignUserToGroup($login, "Registered");
   }
 
   public static function hook_mod_user_update($hookname, $userdata, $matches, $flags) {
