@@ -180,7 +180,7 @@ var User = new Class({
 		myContainer.adopt(myForm);
 		umod.setTitle("<h1>Add user</h1>");
 		umod.setBody(myContainer.get('html'));
-		// asign var in edit mode 
+		// assign var in edit mode 
 		if (resJSON) {
 			$('user_edit').getChildren('div input').each(function(item) {
 				if (item.get('name') == 'login') item.set('value', resJSON.login);
@@ -192,6 +192,16 @@ var User = new Class({
 				if (item.get('name') == 'active') {
 					item.set('value', resJSON.status); 
 					if (resJSON.status == 1) item.set('checked', 'checked'); 
+					item.addEvent('click', function(event) {
+						if (item.get('value') == 0) {
+							item.set('value', 1);
+							item.set('checked', 'checked');
+						} else {
+							item.set('value', 0);
+							item.removeProperty('checked');
+
+						}	
+					});
 				}
 			});
 		}
