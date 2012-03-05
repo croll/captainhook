@@ -434,7 +434,7 @@ class Main {
 		}
 		$db=\core\Core::$db;
 		// prepare data for storage
-		
+		var_dump($matches);	
 		$dbParams=array();
 		$login=self::cleanString($matches['login']);
 		$dbParams[]=$login;	
