@@ -95,6 +95,10 @@ class Main {
 												array($name, (int)$status));
 		return (isset(Core::$db->Insert_ID)) ? Core::$db->Insert_ID : NULL;
 	}
+	public static function renameGroup($old, $new) {
+		Core::$db->query('UPDATE "ch_group" SET name=? WHERE name=?', array($old, $new));
+		return true;
+	}
 
 	public static function getGroup($id) {
 		$result = Core::$db->query('SELECT * FROM "ch_group" WHERE "gid"=?',array((int)$id));
