@@ -17,7 +17,7 @@ var CHTable = new Class({
 		create: function(options) {
 			this.setOptions(options);
 			var mc= new Element('div');
-			var myTable = new Element('table', {'class':'table zebra-striped condensed-table bordered-table table-list'});
+			var myTable = new Element('table', {'class':'table table-striped table-bordered table-condensed'});
 			var myTHead = new Element('thead');
 			var myTBody = new Element('tbody');	
 			options.rows.each(function(item,index) {
