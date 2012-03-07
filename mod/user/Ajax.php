@@ -6,7 +6,8 @@ class Ajax {
 
   public static function saveUser($params) {
 	//return $params;
-	if(isset($params['status'])) {
+	if(isset($params['status']) && $params['status'] == "on") {
+		$params['status'] = 1;
 		
 	}
 	if(!isset($params['uid']) || $params['uid']==0) {

@@ -36,7 +36,7 @@ var Page = new Class({
 		Object.each(resJSON, function(item, index) {
 			var k = Object.values(item);
 			var id_lang_reference = k[0];
-			var option = new Element('option', {'value': id_lang_reference, 'html': k[2]+'<i class="flag '+k[3]+'"></i>'});
+			var option = new Element('option', {'value': id_lang_reference, 'html': k[2]});
 			list.adopt(option);
 		});
 
