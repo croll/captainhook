@@ -19,7 +19,7 @@ namespace mod\smarty {
 			$sm->default_resource_type='mod';
 			$sm->registerResource('ajaxhack', new Smarty_Resource_AjaxHack());
 			
-			$smarty->merge_compiled_includes = false;
+			$sm->merge_compiled_includes = false;
 
 			if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
 				$sm->compile_id='ajaxhack';
