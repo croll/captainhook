@@ -100,7 +100,7 @@ class Form {
 			$elements[$field->name] = $field->render();
 		}
 		$this->_smarty->assign($this->_id, $elements);
-		$this->_smarty->assign('ch_form_'.$this->_id, &$this);
+		$this->_smarty->assign('ch_form_'.$this->_id, $this);
 	}
 
 	private function processElements($elements) {
