@@ -1,16 +1,17 @@
 {extends tplextends('page/layout', 'onajax:page_content')}
 {block name='page_menu' append}
 	{if $smarty.server.REQUEST_URI != '/page/list/'}
-	 <li><a href="/page/edit/{$page.pid}"><i class="icon-edit glyph-white"></i>  Edit</a></li>
+	 <li><a href="/page/edit/{$page.pid}"><i class="icon-edit glyph-white"></i>  {t d='page' m='Edit'}</a></li>
 	{/if}
 {/block}
 {block name='page_content'}
 	<div class="page-header" id="page_title">
-		<h1>{$page.name}</h1>
-		<small>
-			Created  {$page.created|date_format: '%d %b %Y'} by {$page.full_name} : last updated - {$page.updated|date_format: '%d %b %Y'}
+		{if \mod\user\Main::userHasRight('Manage page')}<a class="float" href="/page/edit/{$page.pid}"><i class="icon-edit"></i></a>{/if}
+		<h1 lang="fr-FR">{$page.name}</h1>
+		<small lang="fr-FR">
+			{t d='page' m='Created %s by %s - last updated: %s' p0=$page.created|date_format: '%d %b %Y' p1=$page.full_name p2=$page.updated|date_format: '%d %b %Y'}
 		</small>
 	</div>
-	<div id="page_rawcontent">{$page.content}</div>
+	<div id="page_rawcontent" lang="fr-FR">{$page.content}</div>
 {/block}
 

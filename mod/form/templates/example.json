@@ -1,0 +1,66 @@
+{
+	"method" : "post",
+	"id" : "dbUpload",
+	"action" : "/import/submit/",
+	"enctype" : "multipart/form-data",
+	"customValidators" : 
+	[
+		{ "name" : "validator-test",
+			"regexp" : "/^.+$/",
+			"errorMsg" : "Field is mandatory"
+		}
+	],
+	"elements" : 
+	[
+		{	"type" : "text",
+			"name" : "separator",
+			"id" : "separator",
+			"value" : ";",
+			"validators" : 
+			[ 
+				"validate-required",
+				"minLength:13",
+				"validator-test"
+			]
+		},
+		{	"type" : "select",
+			"name" : "select_carriagereturn",
+			"children" :
+			[
+				{ "type" : "option",
+					"value" : 0,
+					"label" : "\n"
+				},
+				{ "type" : "option",
+					"value" : 1,
+					"label" : "\r\n"
+				},
+				{ "type" : "option",
+					"value" : 2,
+					"label" : "(Mac)"
+				}
+			]	
+		},
+		{	"type" : "select",
+			"name" : "select_encoding",
+			"children" :
+			[
+				{ "type" : "option",
+					"value" : "latin1",
+					"label" : "ISO-8859-15 (latin1)"
+				},
+				{ "type" : "option",
+					"value" : "utf8",
+					"label" : "UTF-8"
+				}
+			]	
+		},
+		{	"type" : "file",
+			"name" : "dbfile",
+		},
+		{	"type" : "submit",
+			"name" : "submit",
+			"value" : "Submit"
+		}
+	]
+}

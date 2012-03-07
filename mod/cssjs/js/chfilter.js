@@ -27,7 +27,7 @@ var CHFilter = new Class({
 		}.bind(this));
 		
 		//add submit button
-		var mySubmit=new Element('input', {'class':'float btn primary clearfix',
+		var mySubmit=new Element('input', {'class':'float btn btn-primary clearfix',
 				'type':'submit',
 				'name': 'submit',
 				'value': 'Filter'}).addEvent('click', function(event) {
@@ -40,7 +40,6 @@ var CHFilter = new Class({
 		this.setFilterBtn(options);
 	},
 	populateFilters: function(options) {
-		alert(options.filter);
 
 	},
 	setFilterBtn: function(options) {
@@ -90,7 +89,7 @@ var CHFilter = new Class({
 	},
 	selectFilterInit: function(options,item) {
 		this.setOptions(options);
-		var mySelect =new Element('select', {'name': 'select', 'class': 'btn primary'});
+		var mySelect =new Element('select', {'name': 'select', 'class': 'btn btn-primary'});
 		if (item[3][1] == 'func') {
 			var callFunc=item[4][1];
 			var sels = CaptainHook.callPHP('page', callFunc,callFunc, function(res) {

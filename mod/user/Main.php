@@ -12,7 +12,7 @@ class Main {
 
 	public static function checkAuth($login='',$password='') {
 		if ((!empty($login)) && (!empty($password))) {
-			if ( (preg_match("/^[a-zA-Z0-9-_]+$/",$login)) && (preg_match("/^[a-zA-Z0-9-_]+$/",$password)) ) {
+			if ( (preg_match("/^[a-zA-Z0-9-_]+$/",$login)) && (preg_match("/^[a-zA-Z0-9-_!]+$/",$password)) ) {
 				$res = Core::$db->fetchAll('SELECT "full_name", "login" FROM "ch_user" WHERE UPPER("login")=UPPER(?) AND "pass"=md5(?) AND "status"=1', 
 																		array($login, $password));
 				if (count($res)) {
@@ -95,17 +95,19 @@ class Main {
 												array($name, (int)$status));
 		return (isset(Core::$db->Insert_ID)) ? Core::$db->Insert_ID : NULL;
 	}
+	public static function renameGroup($old, $new) {
+		Core::$db->query('UPDATE "ch_group" SET name=? WHERE name=?', array($old, $new));
+		return true;
+	}
 
 	public static function getGroup($id) {
-		$result = Core::$db->query('SELECT * FROM "ch_group" WHERE "gid"=?',
-																	array((int)$id));
+		$result = Core::$db->query('SELECT * FROM "ch_group" WHERE "gid"=?',array((int)$id));
 		return $result->fetchRow();
 	}
 
 	public static function getGroupId($name) {
-		 $id = Core::$db->fetchOne('SELECT "gid" FROM "ch_group" WHERE LOWER("name")=LOWER(?)',
-																	array($name));
-		 return ($id) ? (int)$id : NULL;
+		$id = \core\core::$db->fetchOne('SELECT "gid" FROM "ch_group" WHERE LOWER("name")=LOWER(?)',array($name));
+		return ($id) ? (int)$id : NULL;
 	}
 
 	public static function delGroup($group) {
@@ -136,14 +138,15 @@ class Main {
 	}
 
 	public static function getUserGroups($user, $key=NULL) {
-		if (is_int($user))
-			$result = Core::$db->query('SELECT gr."gid", gr."name" FROM "ch_group" gr LEFT JOIN "ch_user_group" ug ON gr."gid" = ug."gid" LEFT JOIN "ch_user" us ON ug."uid"=us."uid"  WHERE us."name"=?',
-																	array($name));
+		if ((int)($user))
+			$dbParam[]=$user;
 		else {
-			$uid = self::getUserId($user);
-			$result = Core::$db->query('SELECT gr."gid", gr."name" FROM "ch_group" gr LEFT JOIN "ch_user_group" ug ON gr."gid" = ug."gid" LEFT JOIN "ch_user" us ON ug."uid"=us."uid" WHERE us."uid"=?',
-																	array((int)$uid));
+			$dbParam[]=self::getUserId($user);
 		}
+		$db=\core\Core::$db;
+		$q="SELECT gr.gid, gr.name FROM ch_group gr LEFT JOIN ch_user_group ug ON gr.gid = ug.gid LEFT JOIN ch_user us ON ug.uid=us.uid WHERE us.uid=?";
+		$result = $db->query($q, $dbParam);
+		$g= array();
 		while($row = $result->fetchRow()) {
 			switch($key) {
 				case 'id':
@@ -182,7 +185,7 @@ class Main {
 
 	public static function assignUserToGroup($login, $group) {
 		// Get uid
-		if (is_int($login)) $uid = $login;
+		if ((int)($login)) $uid = $login;
 		else {
 			try {
 				$uid = self::getUserId($login);
@@ -192,7 +195,7 @@ class Main {
 			}
 		}
 		// Get gid
-		if (is_int($group)) $gid = $group;
+		if ((int)($group)) $gid = $group;
 		else {
 			try {
 				$gid = self::getGroupId($group);
@@ -204,10 +207,16 @@ class Main {
 		return (Core::$db->query('INSERT INTO "ch_user_group" (uid, gid) VALUES (?,?)',
 																	array((int)$uid, (int)$gid))) ? true : false;
 	}
-
+	
+	public static function removeUserFromAllGroups($user) {
+		$groups =self::getUserGroups($user, 'name');
+		for ($i=0; $i < count($groups); $i++) {
+			self::removeUserFromGroup($user, $groups[$i]);
+		}
+	}
 	public static function removeUserFromGroup($login, $group) {
 		// Get uid
-		if (is_int($login)) $uid = $login;
+		if ((int)($login)) $uid = $login;
 		else {
 			try {
 				$uid = self::getUserId($login);
@@ -217,7 +226,7 @@ class Main {
 			}
 		}
 		// Get gid
-		if (is_int($group)) $gid = $group;
+		if ((int)($group)) $gid = $group;
 		else {
 			try {
 				$gid = self::getGroupId($group);
@@ -226,8 +235,7 @@ class Main {
 				return false;
 			}
 		}
-		return (Core::$db->Execute('DELETE FROM "ch_user_group" WHWEE uid = ? AND  gid = ?',
-																	array((int)$uid, (int)$gid))) ? true : false;
+		return (Core::$db->Query('DELETE FROM "ch_user_group" WHERE uid = ? AND  gid = ?',array((int)$uid, (int)$gid))) ? true : false;
 	}
 
 	public static function addRight($name, $description=NULL) {
@@ -257,14 +265,13 @@ class Main {
 		// Delete right assignation
 		self::delRightAssignation($name);
 		// Delete Right
-		Core::$db->query('DELETE FROM "ch_right" WHERE "name" = ?', 
-											array($name));
+		Core::$db->query('DELETE FROM "ch_right" WHERE "name" = ?', array($name));
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
 	}
 
 	public static function assignRight($name, $group) {
 		// Get the gid
-		if (is_int($group)) $gid = $group;
+		if ((int)$group) $gid = $group;
 		else {
 			try {
 				$gid = self::getGroupId($group);
@@ -274,7 +281,12 @@ class Main {
 			}
 		}
 		// If right exists get his id
-		$rid = self::getRightId($name);
+		if ((int)$name) {
+
+			$rid = $name;
+		} else {
+			$rid = self::getRightId($name);
+		}
 		if (!$rid) {
 			throw new \Exception("Unable to assign right. Right $name does not exist");
 			return false;
@@ -334,10 +346,9 @@ class Main {
 	}
 
 	public static function userHasRight($right, $user=NULL) {
-			\core\Core::log($right);
 			if (is_null($user)) {
 				if (!empty($_SESSION['login'])) $user = $_SESSION['login'];
-				else return false;
+				else return self::groupHasRight('anonymous',$right); 
 			}
 			$uid = (is_string($user)) ? self::getUserId($user) : $user;
 			if (!isset(self::$_cache) || is_null(self::$_cache['u']) || !isset(self::$_cache['u'][$uid]) || is_null(self::$_cache['u'][$uid])) {
@@ -388,38 +399,131 @@ class Main {
 		$page->smarty->assign('url_redirect', 'http://'.$_SERVER['HTTP_HOST']);
 		$page->display();
 	}
-
-	public static function hook_mod_user_manage_users($hookname, $userdata, $urlmatches) {
-		if (!isset($urlmatches[1]) || !is_string($urlmatches[1])) {
-			throw new Exception("Page does not exists");
-			return;
-		}
-		$section = $urlmatches[1];
-		switch($section) {
-			case 'list':
-			break;
+	public static function hook_mod_user_manage_users($hookname, $userdata, $matches,$flags) {
+                self::redirectIfNotLoggedIn();
+		if (!self::userHasRight('Manage rights')) {
+			return "error Manage user ";
 		}
 		$page = new \mod\webpage\Main();
-		$page->setLayout('user/user/list');
+		// get lang
+		$lang=\mod\lang\Main::getCurrentLang();
+		$page->smarty->assign('lang', $lang);
+		
+		$page->setLayout('user/admin/default');
 		$page->display();
 	}
-
-	public static function hook_mod_user_manage_groups($hookname, $userdata, $urlmatches) {
-		echo "ici";
-	}
-
-	/*
-	public static function hook_core_init_http() {
-		try {
-			#echo self::addRight("test", "un droit de test")."<br>"; 
-			#echo self::assignRight("test", "admin")."<br>"; 
-			#echo self::delRight('test');	
-			#echo (int) self::userHasRight('admin', 'test');
-			#echo (int) self::groupHasRight('admin', 'test');
-		} catch (\Exception $e) {
-			echo $e->getMessage();
+  public static function hook_mod_user_edit($hookname, $userdata, $matches, $flags) {
+		self::redirectIfNotLoggedIn();
+		// check perm 
+		if (!self::userHasRight('Manage rights')) {
+			return false;
 		}
-	}
-  */
+		$uid=$matches[1]; 
+		$view = self::getUserInfos($uid);
+                $page = new \mod\webpage\Main();
+		$page->smarty->assign('user', $view);
+    		$page->smarty->assign('user_mode', 'edit');
+                if ($flags & \mod\regroute\Main::flag_xmlhttprequest) {
+                        $page->smarty->fetch('user/admin/edit');
+                } else {
+                        $page->setLayout('user/admin/edit');
+                        $page->display();
+                }
+  }
+  public static function hook_mod_user_create($hookname, $userdata, $matches, $flags) {
+                \mod\user\Main::redirectIfNotLoggedIn();
+		// check perm 
+		if (!self::userHasRight('Manage rights')) {
+			return false;
+		}
+		$db=\core\Core::$db;
+		// prepare data for storage
+		var_dump($matches);	
+		$dbParams=array();
+		$login=self::cleanString($matches['login']);
+		$dbParams[]=$login;	
+		$dbParams[]=$matches['full_name'];	
+		$dbParams[]=(int)$matches['active'];	
+		$dbParams[]=$matches['email'];	
+		$dbParams[]=$matches['password'];	
+		$dbParams[]=date("Y-m-d H:i:s");	
+		$dbParams[]=date("Y-m-d H:i:s");	
 
+		$query= $db->query("INSERT INTO ch_user (
+				login, 
+				full_name, 
+				status, 
+				email, 
+				pass, 
+				created, 
+				updated) VALUES 
+					(?,?,?,?,md5(?),?,?)", $dbParams);
+		return $dbParams;
+		//return (isset($db->Insert_ID)) ? $db->Insert_ID : NULL;
+		// commented While missing some optionality for drirect 
+		// assignement to groups after user creation
+		// return self::assignUserToGroup($login, "Registered");
+  }
+
+  public static function hook_mod_user_update($hookname, $userdata, $matches, $flags) {
+                self::redirectIfNotLoggedIn();
+		// check perm 
+		if (!self::userHasRight('Manage rights')) {
+			return false;
+		}
+		$db=\core\Core::$db;
+		// prepare data for storage
+		$dbParams=array();
+		$q ="UPDATE ch_user 
+				    SET login=?,
+					full_name=?,
+					status=?,
+					email=?,";
+		$login=self::cleanString($matches['login']);
+		$dbParams[]=$login;	
+		$dbParams[]=$matches['full_name'];	
+		$dbParams[]=(int)$matches['active'];	
+		$dbParams[]=$matches['email'];;
+		if ($matches['password']) {
+			$dbParams[]=$matches['password'];	
+			$q .=" pass=md5(?),";
+		}
+		$dbParams[]=date("Y-m-d H:i:s");	
+		$q .=" updated=? WHERE uid=?";
+		$dbParams[]=(int)$matches['uid'];	
+		$query= $db->query($q, $dbParams);
+		return $matches['uid'];
+	}
+  private static function dbSort($sort) {
+		$s=explode('_',$sort);
+		$s[1]=strtoupper($s[1]);
+		return $s[0]." ".$s[1];
+  }
+  private static function order_by($sort) {
+		$sorted = self::dbSort($sort);
+		$q =" ORDER BY ".$sorted;
+		return $q;
+   } 
+  public static function cleanString($msg, $toUrl=false) { 
+                // clea a string to make it compliant with the use of system_name compliant with a clean web url encoded path        
+                if (empty($msg)) return false; 
+                $msg = self::removeAccents($msg); 
+                $msg = str_replace("'", '_', $msg); 
+                $msg = str_replace('%20', ' ', $msg); 
+                $msg = preg_replace('~[^\\pL0-9-]+~u', '_', $msg); 
+                $msg = trim($msg, "_"); 
+                $msg = strtolower($msg); 
+                $msg = preg_replace('~[^_a-z0-9-]+~', '', $msg); 
+                if ($toUrl) { 
+                        $msg = iconv("utf-8", "us-ascii//TRANSLIT", $msg); 
+                        $msg = str_replace('_', '-', $msg); 
+                } 
+                return $msg; 
+   }
+   public static function removeAccents($msg) {
+                if (empty($msg)) return false;
+                $search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
+                $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
+                return str_replace($search, $replace, $msg);
+   }	
 }

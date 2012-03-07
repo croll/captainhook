@@ -11,6 +11,7 @@ $langs=array();
 
 function addstr($d, $m) {
 	global $langs;
+  echo "found: $d/$m\n";
 	if (!isset($langs[$d])) $langs[$d]=array();
 	if (!isset($langs[$d][$m])) $langs[$d][$m]=$m;
 }
@@ -44,7 +45,8 @@ function writelangs() {
 		file_put_contents($langdir.'/'.$lang.'.js', myjson_encode($langd));
 	}
 	if (!file_exists(CH_MODDIR.'/lang/cache') || !is_dir(CH_MODDIR.'/lang/cache')) mkdir(CH_MODDIR.'/lang/cache');
-	file_put_contents(CH_MODDIR.'/lang/cache/'.$lang.'.js', json_encode($langs));
+	file_put_contents(CH_MODDIR.'/lang/cache/'.$lang.'.json', json_encode($langs));
+	file_put_contents(CH_MODDIR.'/lang/cache/'.$lang.'.js', 'ch_langs["'.$lang.'"]='.json_encode($langs));
 }
 
 function scantemplates() {
@@ -71,6 +73,55 @@ function scantemplates() {
 	}
 }
 
+function scanjavascripts() {
+	foreach(scandir(CH_MODDIR) as $modname) {
+		if (substr($modname, 0, 1) == '.') continue;
+		if (!is_dir(CH_MODDIR.'/'.$modname)) continue;
+
+		$jsdir=CH_MODDIR.'/'.$modname.'/js';
+		if (!file_exists($jsdir) || !is_dir($jsdir)) continue;
+
+		foreach(scandir($jsdir) as $jsname) {
+			$jsfile=$jsdir.'/'.$jsname;
+			if (substr($jsname, 0, 1) == '.') continue;
+			if (!is_file($jsfile)) continue;
+
+			echo "parsing: $jsfile ...\n";
+			$jscontent=file_get_contents($jsfile);
+			$matches=array();
+			preg_match_all('/ch_t\([\'"]([^\'"]*)[\'"], "([^"]*)".*\)/', $jscontent, $matches);
+			foreach($matches[1] as $k=>$domain) addstr($domain, $matches[2][$k]);
+			preg_match_all('/ch_t\([\'"]([^\'"]*)[\'"], \'([^\']*)\'.*\)/', $jscontent, $matches);
+			foreach($matches[1] as $k=>$domain) addstr($domain, $matches[2][$k]);
+		}
+	}
+}
+
+function scanphps() {
+	foreach(scandir(CH_MODDIR) as $modname) {
+		if (substr($modname, 0, 1) == '.') continue;
+		if (!is_dir(CH_MODDIR.'/'.$modname)) continue;
+
+		$phpdir=CH_MODDIR.'/'.$modname;
+		if (!file_exists($phpdir) || !is_dir($phpdir)) continue;
+
+		foreach(scandir($phpdir) as $phpname) {
+			$phpfile=$phpdir.'/'.$phpname;
+			if (substr($phpname, 0, 1) == '.') continue;
+			if (!substr($phpname, -4) == '.php') continue;
+			if (!is_file($phpfile)) continue;
+
+			echo "parsing: $phpfile ...\n";
+			$phpcontent=file_get_contents($phpfile);
+			$matches=array();
+			preg_match_all('/ch_t\([\'"]([^\'"]*)[\'"], "([^"]*)".*\)/', $phpcontent, $matches);
+			foreach($matches[1] as $k=>$domain) addstr($domain, $matches[2][$k]);
+			preg_match_all('/ch_t\([\'"]([^\'"]*)[\'"], \'([^\']*)\'.*\)/', $phpcontent, $matches);
+			foreach($matches[1] as $k=>$domain) addstr($domain, $matches[2][$k]);
+		}
+	}
+}
+
 function myjson_encode($blup, $offset='') {
 	if (is_array($blup)) {
 		$res='';
@@ -89,5 +140,7 @@ else die($argv[0]." {lang}     # where {lang} can be fr_FR for exemple\n");
 
 scanlangs();
 scantemplates();
+scanjavascripts();
+scanphps();
 //print_r($langs);
 writelangs();

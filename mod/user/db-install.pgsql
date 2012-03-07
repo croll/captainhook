@@ -3,13 +3,16 @@ CREATE TABLE "ch_user" (
                            "full_name" varchar(255) NOT NULL,
                            "login" varchar(32) NOT NULL,
                            "pass" varchar(32) DEFAULT NULL,
+                           "email" varchar(255) DEFAULT NULL,
                            "hash" varchar(64) DEFAULT NULL,
                            "status" smallint NOT NULL DEFAULT 1,
+                           "created" timestamp NULL DEFAULT NULL,
+                           "updated" timestamp NULL DEFAULT NULL,
                            "last_connexion" timestamp NULL DEFAULT NULL,
                            PRIMARY KEY ("uid")
 );
     
-INSERT INTO "ch_user" ("uid", "full_name", "login", "pass", "status") VALUES (1,'The Admin', 'admin', MD5('admin'), 1);
+INSERT INTO "ch_user" ("uid", "full_name", "login", "pass", "status", "created") VALUES (1,'The Admin', 'admin', MD5('admin'), 1, now());
     
 CREATE TABLE "ch_group" (
                            "gid" serial NOT NULL,
