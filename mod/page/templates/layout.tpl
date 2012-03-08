@@ -9,7 +9,7 @@
 	{js file="/mod/cssjs/js/chfilter.js"}
 	
 	{css file="/mod/cssjs/css/captainhook.css"}
-	{css file="/mod/cssjs/ext/twitter-bootstrap/bootstrap.css"}
+	{css file="/mod/cssjs/ext/twitter-bootstrap/css/bootstrap.css"}
 	{css file="/mod/cssjs/css/meioautocomplete.css"}
 	{css file="/mod/cssjs/css/message.css"}
 	{css file="/mod/cssjs/css/mooniform.css"}
