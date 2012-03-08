@@ -14,8 +14,9 @@ class ModuleDefinition extends \core\ModuleDefinition {
 
 	function install() {
 		parent::install();
-
     // do things here by default (after parent::install)
+
+		\mod\regroute\Main::registerRoute($this->id, '#^/mod/lang/set_lang/([^/]*)/(.*)$#', 'mod_lang_set_lang');
 	}
 
 	function uninstall() {

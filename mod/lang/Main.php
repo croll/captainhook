@@ -7,13 +7,12 @@ class Main {
   private static function init() {
 		global $ch_lang;
 		global $ch_langs;
-    global $ch_inited;
 
-    if (isset($ch_inited) && $ch_inited==1) continue;
-    $ch_inited==1;
+    if (isset($GLOBALS['ch_inited'])) return;
+    $GLOBALS['ch_inited']=1;
 
-    if (isset($_COOKIE['lang']) && in_array($_COOKIE['lang'], self::getActiveLangs()))
-      $ch_lang=$_COOKIE['lang'];
+    if (isset($_COOKIE['ch_lang']) && in_array($_COOKIE['ch_lang'], self::getActiveLangs()))
+      $ch_lang=$_COOKIE['ch_lang'];
     else
       $ch_lang='fr_FR';
 		$ch_langs=array();
@@ -38,6 +37,13 @@ class Main {
     error_log("LANG FILE : ".$langfile);
     if (is_file($langfile)) \mod\cssjs\Main::addJs($webpage, '/mod/lang/cache/'.$GLOBALS['ch_lang'].'.js');
 	}
+
+  public static function hook_mod_lang_set_lang($hookname, $userdata, $params) {
+    self::setCurrentLang($params[1]);
+    if ($params[2][0] != '/')
+      throw new \Exception('redirect not authorized');
+    header("Location: ".$params[2]);
+  }
 
 	/*
 	public static function hook_smarty_new($hookname, $userdata, $sm) {
@@ -95,8 +101,10 @@ class Main {
 
   public static function setCurrentLang($lang) {
     self::init();
+    if (!in_array($lang, self::getActiveLangs()))
+      throw new \Exception("lang '$lang' is not available");
     $GLOBALS['ch_lang']=$lang;
-    setcookie('ch_lang', $lang, time()+60*60*24*30*12*20);
+    setcookie('ch_lang', $lang, time()+60*60*24*30*12*20, '/');
   }
 
   public static function getActiveLangs() {
