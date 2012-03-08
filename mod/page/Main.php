@@ -50,7 +50,7 @@ class Main {
 		$dbParams[]=stripslashes(html_entity_decode($matches['content']));	
 		$dbParams[]=date("Y-m-d H:i:s");	
 		$dbParams[]=date("Y-m-d H:i:s");	
-		return  $db->exec_returning("INSERT INTO ch_page (
+		return $db->exec_returning("INSERT INTO ch_page (
 				name, 
 				sysname, 
 				authorid, 
