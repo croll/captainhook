@@ -94,7 +94,7 @@ class Main {
 												array($name, (int)$status), 'gid');
 	}
 	public static function renameGroup($old, $new) {
-		Core::$db->query('UPDATE "ch_group" SET name=? WHERE name=?', array($old, $new));
+		Core::$db->query('UPDATE "ch_group" SET name=? WHERE name=?', array($new, $old));
 		return true;
 	}
 

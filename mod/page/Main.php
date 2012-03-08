@@ -103,7 +103,11 @@ class Main {
                 $page = new \mod\webpage\Main();
 		//get lang 
 		$lang=\mod\lang\Main::getCurrentLang();
+		$ll= array();
+		$ll['lang']=$lang;
+		$idReferences = self::idLangReference($ll);
 		$page->smarty->assign('lang', $lang);
+		$page->smarty->assign('idRefs', $idReferences);
 		$page->smarty->assign('page', $view);
     		$page->smarty->assign('page_mode', 'edit');
                 if ($flags & \mod\regroute\Main::flag_xmlhttprequest) {
@@ -112,6 +116,16 @@ class Main {
                         $page->setLayout('page/edit');
                         $page->display();
                 }
+  }
+  public static function idLangReference($params) {
+	// check perm 
+	if (!\mod\user\Main::userHasRight('Manage page')) {
+			return false;
+	}
+	$db=\core\Core::$db;
+	$dbParams= array();
+	$dbParams[]=$params['lang'];
+	return $db->fetchAll("SELECT pid, sysname, name, lang FROM ch_page WHERE lang != ?", $dbParams);
   }
   
   public static function hook_mod_page_list($hookname, $userdata, $matches, $flags) {
