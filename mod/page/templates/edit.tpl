@@ -44,8 +44,9 @@
 					<label for="lang"><span>{t d='page' m='Is translation of'}:</span></label>
 					<select id="page_reference" name="id_lang_reference">
 						<option value="">{t d='page' m='None'}</option>	
-						<option value="1" {if $page.id_lang_reference == "1"} selected="selected"{/if}>Blah </option>	
-						<option value="2" {if $page.id_lang_reference == "2"} selected="selected"{/if}>...</option>	
+						{section name=i loop=$idRefs}
+						<option value="{$idRefs[i].pid}" {if  $idRefs[i].pid == $page.id_lang_reference} selected="selected"{/if}>{$idRefs[i].name}</option>	
+						{/section}
 					</select>
 					</div>
 				</div>
@@ -93,7 +94,6 @@ Second line of text preceded by two line breaks.</textarea>
 <script>
 	var myeditor = new CHWysiwyg({ 'contentElement' : 'editor1',});
 	var mypage = new Page();
-	mypage.listIdLangReference('{$page.sysname}','{$page.lang}', 'page_reference');
 	$('page_edit_submit').addEvent('click', function(event){
 		event.stop(); //Prevents the browser from following the link.
 		var content = myeditor.prepareToSave();

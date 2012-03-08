@@ -19,15 +19,7 @@ class Ajax {
 	}
   }
   public static function idLangReference($params) {
-	// check perm 
-	if (!\mod\user\Main::userHasRight('Manage page')) {
-			return false;
-	}
-	$db=\core\Core::$db;
-	$dbParams= array();
-	$dbParams[]=$params['lang'];
-	$p=$db->fetchAll("SELECT pid, sysname, name, lang FROM ch_page WHERE lang != ?", $dbParams);
-	return $p;		
+	return \mod\page\Main::idLangReference($params);
   }
   public static function render($params	) {
 
