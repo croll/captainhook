@@ -16,4 +16,9 @@ class Main {
       $webpageInstance->csss[] = $file;
 	}
 
+	public static function addJsCode($webpageInstance, $code) {
+    if (!isset($webpageInstance->scripts)) $webpageInstance->scripts=array();
+    $webpageInstance->scripts[] = array('type' => 'code', 'code' => $code);
+  }
+
 }

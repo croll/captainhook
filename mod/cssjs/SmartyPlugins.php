@@ -30,7 +30,12 @@ class SmartyPlugins {
 			}
 		if (is_array($scripts) && sizeof($scripts) > 0)
 			foreach($scripts as $file) {
-				$js .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
+        if (is_array($file)) {
+          if ($file['type'] == 'code')
+            $js .= '<script type="text/javascript">'.$file['code']."</script>\n";
+        } else {
+          $js .= '<script type="text/javascript" src="'.$file.'"></script>'."\n";
+        }
 			}
 		return str_replace('</head>', $css.$js.'</head>', $output);
 	}
