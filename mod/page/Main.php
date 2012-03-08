@@ -50,7 +50,7 @@ class Main {
 		$dbParams[]=stripslashes(html_entity_decode($matches['content']));	
 		$dbParams[]=date("Y-m-d H:i:s");	
 		$dbParams[]=date("Y-m-d H:i:s");	
-		$query= $db->query("INSERT INTO ch_page (
+		return = $db->exec_returning("INSERT INTO ch_page (
 				name, 
 				sysname, 
 				authorid, 
@@ -60,9 +60,7 @@ class Main {
 				content, 
 				created, 
 				updated) VALUES 
-					(?,?,?,?,?,?,?,?,?)", $dbParams);
-		//return (isset($db->Insert_ID)) ? $db->Insert_ID : NULL;
-		return true;
+					(?,?,?,?,?,?,?,?,?)", $dbParams, 'pid');
   }
   public static function hook_mod_page_update($hookname, $userdata, $matches, $flags) {
                 \mod\user\Main::redirectIfNotLoggedIn();
