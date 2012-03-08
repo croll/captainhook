@@ -48,9 +48,8 @@ class Main {
 	}
 
 	public static function addUser($name, $login, $password, $status=1) {
-		Core::$db->query('INSERT INTO "ch_user" ("full_name", "login", "pass", "status") VALUES (?,?,MD5(?),?)', 
-												array($name, $login, $password, $status));
-		return (isset(Core::$db->Insert_ID)) ? Core::$db->Insert_ID : NULL;
+		return Core::$db->exec_returning('INSERT INTO "ch_user" ("full_name", "login", "pass", "status") VALUES (?,?,MD5(?),?)', 
+												array($name, $login, $password, $status), 'uid');
 	}
 
 	public static function getUserInfos($id) {
@@ -91,9 +90,8 @@ class Main {
 	}
 
 	public static function addGroup($name, $status=1) {
-		Core::$db->query('INSERT INTO "ch_group" ("name", "status") VALUES (?, ?)', 
-												array($name, (int)$status));
-		return (isset(Core::$db->Insert_ID)) ? Core::$db->Insert_ID : NULL;
+		return Core::$db->exec_returning('INSERT INTO "ch_group" ("name", "status") VALUES (?, ?)', 
+												array($name, (int)$status), 'gid');
 	}
 	public static function renameGroup($old, $new) {
 		Core::$db->query('UPDATE "ch_group" SET name=? WHERE name=?', array($old, $new));
@@ -204,8 +202,8 @@ class Main {
 				return false;
 			}
 		}
-		return (Core::$db->query('INSERT INTO "ch_user_group" (uid, gid) VALUES (?,?)',
-																	array((int)$uid, (int)$gid))) ? true : false;
+		return (Core::$db->exec_returning('INSERT INTO "ch_user_group" (uid, gid) VALUES (?,?)',
+																	array((int)$uid, (int)$gid), 'ugid')) ? true : false;
 	}
 	
 	public static function removeUserFromAllGroups($user) {
@@ -244,9 +242,8 @@ class Main {
 			throw new \Exception("A right with name $name already exist");
 			return false; 
 		} else {
-			Core::$db->query('INSERT INTO "ch_right" ("name", "description") VALUES (?,?)', 
-												array($name, $description));
-				return (isset(Core::$db->Insert_ID)) ? Core::$db->Insert_ID : NULL;
+			return Core::$db->exec_returning('INSERT INTO "ch_right" ("name", "description") VALUES (?,?)', 
+												array($name, $description),'rid');
 		}
 	}
 
@@ -296,9 +293,7 @@ class Main {
 			throw new \Exception("Right $name already assigned to group $group");
 			return true;
 		}
-		Core::$db->query('INSERT INTO "ch_group_right" ("gid", "rid") VALUES (?,?)', 
-											array($gid, $rid));
-		$assignationId = (isset(Core::$db->Insert_ID)) ? Core::$db->Insert_ID : NULL;
+		$assignationId = Core::$db->exec_returning('INSERT INTO "ch_group_right" ("gid", "rid") VALUES (?,?)',array($gid, $rid),'grid');
 
 		// Group rights changed, we destroy the cache
 		self::$_cache = NULL;
@@ -449,7 +444,7 @@ class Main {
 		$dbParams[]=date("Y-m-d H:i:s");	
 		$dbParams[]=date("Y-m-d H:i:s");	
 
-		$query= $db->query("INSERT INTO ch_user (
+		return $db->exec_returning("INSERT INTO ch_user (
 				login, 
 				full_name, 
 				status, 
@@ -457,9 +452,7 @@ class Main {
 				pass, 
 				created, 
 				updated) VALUES 
-					(?,?,?,?,md5(?),?,?)", $dbParams);
-		return $dbParams;
-		//return (isset($db->Insert_ID)) ? $db->Insert_ID : NULL;
+					(?,?,?,?,md5(?),?,?)", $dbParams, 'uid');
 		// commented While missing some optionality for drirect 
 		// assignement to groups after user creation
 		// return self::assignUserToGroup($login, "Registered");
