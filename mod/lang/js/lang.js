@@ -37,6 +37,7 @@ function ch_setlang(lang) {
 }
 */
 
-function ch_setlang(lang) {
-    window.location.href='/mod/lang/set_lang/'+encodeURIComponent(lang)+'/'+'/';
+function ch_setlang(lang, redirect) {
+    if (!redirect) redirect='/';
+    window.location.href='/mod/lang/set_lang/'+encodeURIComponent(lang)+'/'+redirect;
 }
