@@ -368,11 +368,12 @@ class Ajax {
 	if ($params['gid']) {
 		$dbParams[]=$params['gid'];
 		$q='UPDATE "ch_group" set name=?, status=? WHERE gid=?';
+		$save=$db->query($q, $dbParams);
+		return $params['gid'];
 	} else {
 		$q='INSERT INTO "ch_group" ("name", "status") VALUES (?,?)';
+		return $db->exec_returning($q, $dbParams,'gid');
 	}
-	$save=$db->query($q, $dbParams);
-	return $params;
   }
   public static function savePerm($params) {
 	\mod\user\Main::redirectIfNotLoggedIn();
@@ -387,11 +388,9 @@ class Ajax {
 	if (isset($params['rid']) && $params['rid'] !=0) {
 		$dbParams[]=$params['rid'];
 		$q='UPDATE "ch_right" set name=?, description=? WHERE rid=?';
+		$save=$db->query($q, $dbParams);
 	} else {
-		$q='INSERT INTO "ch_right" ("name", "description") VALUES (?,?)';
+		return $db->exec_returning('INSERT INTO "ch_right" ("name", "description") VALUES (?,?)', $dbParams, 'rid');
 	}
-	$save=$db->query($q, $dbParams);
-	return $params;
   }
-
 }
