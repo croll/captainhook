@@ -14,6 +14,7 @@ function ch_t(domain, blah) {
 
 function ch_lang_decodeURL(url){return unescape(url.replace(/\+/g,  " "));}
 
+/*
 function ch_setlang(lang) {
     ch_lang=lang;
     
@@ -34,4 +35,8 @@ function ch_setlang(lang) {
 	}
     }).get();
 }
+*/
 
+function ch_setlang(lang) {
+    window.location.href='/mod/lang/set_lang/'+encodeURIComponent(lang)+'/'+'/';
+}
