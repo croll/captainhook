@@ -18,7 +18,7 @@ class Marker {
 	function setIconParams($params) {
 		$filename = md5(serialize($params)).'.png';
 		$cachedImage = CH_MODDIR.'/map/cache/'.$filename;
-		if (!is_file($cachedImage)) {
+		if (11 || !is_file($cachedImage)) {
 			$params['filename'] = $filename;
 			$markerImage = self::buildIcon($params);
 		} else
@@ -36,7 +36,6 @@ class Marker {
 	}
 
 	public static function buildIcon($params) {
-		\core\Core::log($params);
 		require_once(dirname(__FILE__).'/MarkerBuilder.php');
 		$className = '\\mod\\map\\Marker'.ucfirst($params['shape']);
 		try {

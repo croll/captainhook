@@ -16,8 +16,19 @@ class MarkerBuilder {
 		$this->_drawObj->setFontSize(12);
 		$this->_drawObj->setFillColor(new \ImagickPixel($params['color']));
 
+		if (isset($params['alpha'])) {
+			$this->_drawObj->setFillAlpha($params['alpha']);
+			$this->_drawObj->setStrokeAlpha($params['alpha']);
+		}
+
+
+		if ($params['strokewidth']) {
+			$this->_drawObj->setStrokeWidth($params['strokewidth']);
+		}
+
 		if ($params['strokecolor']) {
 			$this->_drawObj->setStrokeColor(new \ImagickPixel($params['strokecolor']));
+			\core\Core::log($params['strokecolor']);
 		}
 		$this->draw();
 		$this->_imgObj->drawImage($this->_drawObj);
@@ -37,7 +48,36 @@ class MarkerBuilder {
 class MarkerCircle extends MarkerBuilder {
 
 	function draw() {
-		$this->_drawObj->circle($this->_params['size'][0]/2, $this->_params['size'][0]/2, ($this->_params['size'][1]/2)-2, $this->_params['size'][1]-2);  
+		$this->_drawObj->circle($this->_params['size'][0]/2, $this->_params['size'][0]/2, ($this->_params['size'][1]/2)-$this->_params['strokewidth'], $this->_params['size'][1]-$this->_params['strokewidth']);  
+	}
+
+}
+
+class MarkerRectangle extends MarkerBuilder {
+
+	function draw() {
+		$this->_drawObj->rectangle($this->_params['strokewidth'], $this->_params['strokewidth'], $this->_params['size'][0]-$this->_params['strokewidth'], $this->_params['size'][1]-$this->_params['strokewidth']);  
+	}
+
+}
+
+class MarkerDiamond extends MarkerBuilder {
+
+	function draw() {
+		$this->_drawObj->rectangle($this->_params['strokewidth'], $this->_params['strokewidth'], $this->_params['size'][0]-$this->_params['strokewidth'], $this->_params['size'][1]-$this->_params['strokewidth']);  
+		$this->_drawObj->rotate(45);
+	}
+
+}
+
+class MarkerTriangle extends MarkerBuilder {
+
+	function draw() {
+		$coords = array();
+		$coords[] = array('x' => $this->_params['size'][0]/2-$this->_params['strokewidth']+1, 'y' => $this->_params['strokewidth']);
+		$coords[] = array('x' => $this->_params['size'][0]-$this->_params['strokewidth'], 'y' => $this->_params['size'][1]-$this->_params['strokewidth']);
+		$coords[] = array('x' => $this->_params['strokewidth'], 'y' => $this->_params['size'][1]-$this->_params['strokewidth']);
+		$this->_drawObj->polygon($coords);
 	}
 
 }
