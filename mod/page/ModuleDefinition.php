@@ -22,9 +22,8 @@ class ModuleDefinition extends \core\ModuleDefinition {
 		\mod\regroute\Main::registerRoute($this->id, '#^/page/list/([a-z0-9/_:@]+)?$#', 'mod_page_list', \mod\regroute\Main::flag_html | \mod\regroute\Main::flag_xmlhttprequest);
 		
 		// create rights 
-
-    \mod\user\Main::addRight('View page', 'Allow user to see pages');
-    \mod\user\Main::addRight('Manage page', 'Allow user to add/edit/delete pages');
+    		\mod\user\Main::addRight('View page', 'Allow user to see pages');
+    		\mod\user\Main::addRight('Manage page', 'Allow user to add/edit/delete pages');
 		//assign rights to default groups 
 		\mod\user\Main::assignRight('View page', 'Admin');
 		\mod\user\Main::assignRight('Manage page', 'Admin');
