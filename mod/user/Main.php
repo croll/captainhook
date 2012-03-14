@@ -57,7 +57,9 @@ class Main {
 																	array((int)$id));
 		return $result->fetchRow();
 	}
-
+	public static function getUserFullName($login) {
+		return Core::$db->fetchOne('SELECT "full_name" FROM "ch_user" WHERE login =?', array($login));
+	}
 	public static function getUserId($name) {
 		 $id = Core::$db->fetchOne('SELECT "uid" FROM "ch_user" WHERE LOWER("login")=LOWER(?)',
 																	array($name));
@@ -107,7 +109,7 @@ class Main {
 		$id = \core\core::$db->fetchOne('SELECT "gid" FROM "ch_group" WHERE LOWER("name")=LOWER(?)',array($name));
 		return ($id) ? (int)$id : NULL;
 	}
-
+	
 	public static function delGroup($group) {
 		self::delAllGroupAssignation($group);
 		if (is_int($group))

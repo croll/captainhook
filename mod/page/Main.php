@@ -126,7 +126,6 @@ class Main {
 	if (!\mod\user\Main::userHasRight('Manage page')) {
 			return false;
 	}
-	var_dump($params);
 	$db=\core\Core::$db;
 	$dbParams= array();
 	$dbParams[]=$params['lang'];
