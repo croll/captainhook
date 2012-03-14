@@ -36,7 +36,6 @@ class Marker {
 	}
 
 	public static function buildIcon($params) {
-		\core\Core::log($params);
 		require_once(dirname(__FILE__).'/MarkerBuilder.php');
 		$className = '\\mod\\map\\Marker'.ucfirst($params['shape']);
 		try {
