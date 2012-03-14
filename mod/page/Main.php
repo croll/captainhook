@@ -104,7 +104,11 @@ class Main {
 		//get lang 
 		$lang=\mod\lang\Main::getCurrentLang();
 		$ll= array();
-		$ll['lang']=$lang;
+		if (isset($pid)) {
+			$ll['lang']=$view['lang'];
+		} else {
+			$ll['lang']=$lang;
+		}
 		$idReferences = self::idLangReference($ll);
 		$page->smarty->assign('lang', $lang);
 		$page->smarty->assign('idRefs', $idReferences);
@@ -122,6 +126,7 @@ class Main {
 	if (!\mod\user\Main::userHasRight('Manage page')) {
 			return false;
 	}
+	var_dump($params);
 	$db=\core\Core::$db;
 	$dbParams= array();
 	$dbParams[]=$params['lang'];
