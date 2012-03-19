@@ -21,6 +21,9 @@ class Ajax {
   public static function idLangReference($params) {
 	return \mod\page\Main::idLangReference($params);
   }
+  public static function getTranslated($params) {
+	return \mod\page\Main::getTranslated($params['sysname'], $params['lang']);
+  }
   public static function render($params	) {
 
 	// check perm 
