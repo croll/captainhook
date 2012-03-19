@@ -14,7 +14,6 @@ var CHWysiwyg = new Class({
 			this.setOptions(options);
         		var editor1 = CKEDITOR.replace('editor1', {
 				contentsCss : 'assets/output_xhtml.css',
-				extraPlugins : 'autogrow',
 				language: 'fr',
 				//toolbar_Basic:[[ 'Source', '-', 'Bold', 'Italic' ], ],
 				//toolbar: 'basic',
