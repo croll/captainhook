@@ -41,6 +41,16 @@ var Page = new Class({
 		});
 
 	},
+	getTranslated: function(name, lang) {
+		new Request.JSON({
+			'url': '/ajax/call/page/getTranslated',
+			'onSuccess': function(resJSON, resText) {
+				 var res = '/page/'+resJSON;
+				 console.log(res);
+				 return res;
+			}
+		}).get({'sysname': name, 'lang': lang});
+	},
 	setPage: function(name) {
 		new Request.JSON({
 			'url': '/ajax/call/page/render',

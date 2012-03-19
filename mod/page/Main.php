@@ -19,6 +19,7 @@ class Main {
 		// assign data to the smarty template 
 		$page->smarty->assign('lang', $lang);
 		$page->smarty->assign('page', $view);
+		$page->smarty->assign('page_name', $sysname);
 		$page->smarty->assign('page_mode', 'view');
                 // as this function to be available both for http and ajax request set both layout options 
 		//return $matches;
@@ -28,6 +29,53 @@ class Main {
                         $page->setLayout('page/page');
                         $page->display();
                 }
+  }
+  public static function getTranslated($sysname, $lang) {
+
+	// check perm 
+	if (!\mod\user\Main::userHasRight('View page')) {
+			return false;
+	}
+	$db=\core\Core::$db;
+	// check if page is a translation of a page or a reference page 
+	$ilr=$db->fetchAll('SELECT "pid", "sysname", "id_lang_reference", "lang"  FROM "ch_page" WHERE "sysname"=?', array($sysname));
+	$ilr = $ilr[0];
+	// if lang == lang then return sysname 
+	if ($ilr['lang'] == $params['lang']) {
+		return $params['sysname']; 
+	}	
+	$dbParams=array();
+	if ($ilr['id_lang_reference'] == 0) {
+		// if idLangReference == 0 -> reference page 
+		$dbParams[]= $ilr['pid'];
+		$dbParams[]= $lang;
+		$trans= $db->fetchOne('SELECT "sysname" FROM "ch_page" WHERE "id_lang_reference"=? AND "lang"=?', $dbParams);
+		if($trans) {
+			return $trans;
+		} else {
+			return $sysname;
+		}
+	} else {	
+		// else -> is translation of a page
+		// get reference page 
+		$myref= $db->fetchAll('SELECT "pid", "sysname", "id_lang_reference", "lang"  FROM "ch_page" WHERE "pid"=?', array($ilr['id_lang_reference']));
+		if ($myref) {
+			return $sysname;
+		}
+		$myref=$myref[0];
+		if ($myref['lang'] == $lang) {
+			return $myref['sysname'];
+		} else {
+			$dbParams[]= $myref['pid'];
+			$dbParams[]= $lang;
+			$tt = $db->fetchOne('SELECT "sysname" FROM "ch_page" WHERE "id_lang_reference"=? AND "lang"=?', $dbParams); 
+			if (!$tt) {
+				return $sysname;
+			} else {
+				return $tt;
+			}
+		}
+	}
   }
    public static function hook_mod_page_create($hookname, $userdata, $matches, $flags) {
 		\mod\user\Main::redirectIfNotLoggedIn();
