@@ -15,6 +15,10 @@ class Marker {
 		$this->_marker['geometry'] = $params['geometry'];
 	}
 
+	function setId($id) {
+		$this->_marker['id'] = $id;
+	}
+
 	function setIconParams($params) {
 		$filename = md5(serialize($params)).'.png';
 		$cachedImage = CH_MODDIR.'/map/cache/'.$filename;
