@@ -124,7 +124,7 @@ var CHMyPaginate = new Class({
 			while (i <= maxpage ) {
 				var newOffset= (i-1) * options.maxrow;
 				var myText= 'page '+ i ;
-				var myUrl= '/page/list/offset/'+ newOffset+'/maxrow/'+options.maxrow+'/';
+				var myUrl= options.path+'offset/'+ newOffset+'/maxrow/'+options.maxrow+'/';
 				var myO = new Element('option');
 				myO.set('value', myUrl);
 				myO.set('html', myText);
@@ -145,14 +145,14 @@ var CHMyPaginate = new Class({
 			while (i <= options.quant ) {
 				var newMaxRow= i;
 				var myText= i;
-				var myUrl= '/page/list/offset/0/maxrow/'+ i +'/';
+				var myUrl= options.path+'offset/0/maxrow/'+ i +'/';
 				var myO = new Element('option');
 				myO.set('value', myUrl);
 				myO.set('html', myText);
 				myO.inject(myMaxRow);
 				i = (i+(options.quant/5));
 			}	
-			var listAll = new Element('option').set('html', 'All results on 1 page').set('value', '/page/list/offset/0/maxrow/'+ options.quant +'/').inject(myMaxRow);	
+			var listAll = new Element('option').set('html', 'All results on 1 page').set('value', options.path+'offset/0/maxrow/'+ options.quant +'/').inject(myMaxRow);	
 			
 			myMaxRow.inject(myConf);
 			myMaxRow.addEvent('click', function(event){
