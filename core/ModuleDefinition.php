@@ -127,6 +127,7 @@ abstract class ModuleDefinition {
         require_once($moddir.'/Main.php');
         $classname='\\mod\\'.$this->name.'\\Main';
         $methods = get_class_methods($classname);
+				if (sizeof($methods) < 1) return false;
         foreach($methods as $method) {
           if (!strncmp("hook_", $method, 5))
             \core\Hook::registerHookListener(substr($method, 5), '\\mod\\'.$this->name.'\\Main::'.$method, null, $this->id);

@@ -42,6 +42,7 @@ namespace mod\smarty {
 				require_once($moddir.'/Main.php');
 				$classname='\\mod\\'.$module_definition->name.'\\Main';
 				$methods = get_class_methods($classname);
+				if (sizeof($methods) < 1) return false;
 				foreach($methods as $method) {
 					if (!strncmp("smartyFunction_", $method, 15))
 						self::registerPlugin($module_definition->id, substr($method, 15), 'function',

@@ -24,6 +24,7 @@ CREATE TABLE "ch_group" (
 INSERT INTO "ch_group" VALUES (1,'Admin',1);
 INSERT INTO "ch_group" VALUES (2,'Registered',1);
 INSERT INTO "ch_group" VALUES (3,'Anonymous',1);
+ALTER SEQUENCE ch_group_gid_seq RESTART WITH 4; 
     
 CREATE TABLE "ch_user_group" (
                            "ugid" serial NOT NULL,
@@ -34,6 +35,7 @@ CREATE TABLE "ch_user_group" (
 CREATE INDEX "ch_user_group_uid_idx" ON "ch_user_group" ("uid");
 CREATE INDEX "ch_user_group_gid_idx" ON "ch_user_group" ("gid");
 INSERT INTO "ch_user_group" ("uid", "gid") VALUES (1, 1);
+ALTER SEQUENCE ch_user_group_ugid_seq RESTART WITH 2; 
 
 CREATE TABLE "ch_right" (
                            "rid" serial NOT NULL,
@@ -45,6 +47,7 @@ CREATE INDEX "ch_right_name_idx" ON "ch_right" ("name");
 
 INSERT INTO "ch_right" ("rid", "name", "description") VALUES (1,'View rights','Allow user to see rights in admin panel.');
 INSERT INTO "ch_right" ("rid", "name", "description") VALUES (2,'Manage rights','User can add/edit/delete rights.');
+ALTER SEQUENCE ch_right_rid_seq RESTART WITH 3; 
     
 CREATE TABLE "ch_group_right" (
                            "grid" serial NOT NULL,
@@ -58,3 +61,4 @@ CREATE INDEX "ch_group_right_rid_idx" ON "ch_group_right" ("rid");
     
 INSERT INTO "ch_group_right" ("gid", "rid") VALUES (1, 1);
 INSERT INTO "ch_group_right" ("gid", "rid") VALUES (1, 2);
+ALTER SEQUENCE ch_group_right_grid_seq RESTART WITH 3; 
