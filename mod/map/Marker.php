@@ -23,6 +23,9 @@ class Marker {
 		$filename = md5(serialize($params)).'.png';
 		$cachedImage = CH_MODDIR.'/map/cache/'.$filename;
 		if (!is_file($cachedImage)) {
+			if (!is_writable(CH_MODDIR.'/map/cache/')) {
+				throw new \Exception('Unable to store markers in '.CH_MODDIR.'/map/cache/');
+			}
 			$params['filename'] = $filename;
 			$markerImage = self::buildIcon($params);
 		} else
