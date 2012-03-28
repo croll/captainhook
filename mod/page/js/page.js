@@ -18,8 +18,6 @@ var Page = new Class({
 		}).get({'pid': param});
 	},
 	listIdLangReference: function(sysname, lang, update) {
-		console.log(sysname);
-		console.log(lang);
 		new Request.JSON({
 			'url': '/ajax/call/page/idLangReference',
 			'onSuccess': function(resJSON, resText) {
