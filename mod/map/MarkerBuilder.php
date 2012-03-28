@@ -7,7 +7,9 @@ class MarkerBuilder {
 	protected $_imaObj;
 	protected $_drawObj;
 	protected $_verticalOffset = 1;
+	protected $_horizontalOffset = 0;
 	protected $_params;
+	protected $_rotation;
 
 	function __construct($params) {
 		$this->_params = $params;
@@ -17,8 +19,8 @@ class MarkerBuilder {
 		$this->_drawObj->setFillColor($params['color']);
 
 		if (isset($params['alpha'])) {
-			$this->_drawObj->setFillAlpha($params['alpha']);
-			$this->_drawObj->setStrokeAlpha($params['alpha']);
+			$this->_drawObj->setFillOpacity($params['alpha']);
+			$this->_drawObj->setStrokeOpacity($params['alpha']);
 		}
 
 
@@ -36,9 +38,11 @@ class MarkerBuilder {
 			$this->_drawObj->setFillColor('#ffffff');
 			$this->_drawObj->setStrokeColor('transparent');
 			$metrics = $this->_imgObj->queryFontMetrics($this->_drawObj, $params['text']);
-			$this->_drawObj->annotation(($params['size'][0]/2)-($metrics['textWidth']/2), ($params['size'][1]/2)-$metrics['descender']+$this->_verticalOffset, $params['text']);
+			$this->_drawObj->annotation(($params['size'][0]/2)-($metrics['textWidth']/2)+$this->_horizontalOffset, ($params['size'][1]/2)-$metrics['descender']+$this->_verticalOffset, $params['text']);
 		}
 		$this->_imgObj->drawImage($this->_drawObj);
+		if ($this->_rotation)
+			$this->_imgObj->rotateImage(new \ImagickPixel('none'), $this->_rotation);
 	}
 
 	function getIconPath() {
@@ -61,10 +65,26 @@ class MarkerCircle extends MarkerBuilder {
 
 }
 
+class MarkerSquare extends MarkerBuilder {
+
+	function draw() {
+		$this->_drawObj->rectangle(0, 0, $this->_params['size'][0]-$this->_params['strokewidth'], $this->_params['size'][1]-$this->_params['strokewidth']);  
+	}
+
+}
+
 class MarkerRectangle extends MarkerBuilder {
 
 	function draw() {
-		$this->_drawObj->rectangle($this->_params['strokewidth'], $this->_params['strokewidth'], $this->_params['size'][0]-$this->_params['strokewidth'], $this->_params['size'][1]-$this->_params['strokewidth']);  
+		$this->_drawObj->rectangle(0, ($this->_params['size'][1]-$this->_params['strokewidth']/5), $this->_params['size'][0]-$this->_params['strokewidth'], $this->_params['size'][1]-$this->_params['strokewidth']-($this->_params['size'][1]-$this->_params['strokewidth']/5));  
+	}
+
+}
+
+class MarkerRoundrectangle extends MarkerBuilder {
+
+	function draw() {
+		$this->_drawObj->roundrectangle($this->_params['strokewidth'], $this->_params['strokewidth'], $this->_params['size'][0]-$this->_params['strokewidth'], $this->_params['size'][1]-$this->_params['strokewidth'], 2, 2);  
 	}
 
 }
@@ -73,7 +93,7 @@ class MarkerDiamond extends MarkerBuilder {
 
 	function draw() {
 		$this->_drawObj->rectangle($this->_params['strokewidth'], $this->_params['strokewidth'], $this->_params['size'][0]-$this->_params['strokewidth'], $this->_params['size'][1]-$this->_params['strokewidth']);  
-		$this->_drawObj->rotate(45);
+		$this->_rotation = 45;
 	}
 
 }
@@ -91,39 +111,45 @@ class MarkerTriangle extends MarkerBuilder {
 
 }
 
-class MarkerStar extends MarkerBuilder {
+class MarkerTrianglerectangle extends MarkerBuilder {
 
 	function draw() {
-		$coordinates = array();
-		$angel = 360 / $spikes ;
-		$outer_shape = array();
-		for($i=0; $i<$spikes; $i++){
-			$outer_shape[$i]['x'] = $x + ($radius * cos(deg2rad(270 - $angel*$i)));
-			$outer_shape[$i]['y'] = $y + ($radius * sin(deg2rad(270 - $angel*$i)));
-		}
-		$inner_shape = array();
-		for($i=0; $i<$spikes; $i++){
-			$inner_shape[$i]['x'] = $x + (0.5*$radius * cos(deg2rad(270-180 - $angel*$i)));
-			$inner_shape[$i]['y'] = $y + (0.5*$radius * sin(deg2rad(270-180 - $angel*$i)));
-		}
-		foreach($inner_shape as $key => $value){
-			if($key == (floor($spikes/2)+1))
-				break;
-			$inner_shape[] = $value;
-			unset($inner_shape[$key]);
-		}
-		$i=0;
-		foreach($inner_shape as $value){
-			$inner_shape[$i] = $value;
-			$i++;
-		}
-		foreach($outer_shape as $key => $value){
-			$coordinates[] = $outer_shape[$key]['x'];
-			$coordinates[] = $outer_shape[$key]['y'];
-			$coordinates[] = $inner_shape[$key]['x'];
-			$coordinates[] = $inner_shape[$key]['y'];
-		}
-		$this->_drawObj->polygon($coordinates);
+		$this->_verticalOffset = 3;
+		$this->_horizontalOffset = -3;
+		$coords = array();
+		$coords[] = array('x' => $this->_params['strokewidth'], 'y' => $this->_params['strokewidth']);
+		$coords[] = array('x' => $this->_params['size'][0]-$this->_params['strokewidth'], 'y' => $this->_params['size'][1]-$this->_params['strokewidth']);
+		$coords[] = array('x' => $this->_params['strokewidth'], 'y' => $this->_params['size'][1]-$this->_params['strokewidth']);
+		$this->_drawObj->polygon($coords);
+	}
+
+}
+
+class MarkerTrianglerectangleinverted extends MarkerBuilder {
+
+	function draw() {
+		$this->_verticalOffset = 3;
+		$this->_horizontalOffset = -3;
+		$coords = array();
+		$coords[] = array('x' => $this->_params['strokewidth'], 'y' => $this->_params['strokewidth']);
+		$coords[] = array('x' => $this->_params['size'][0]-$this->_params['strokewidth'], 'y' => $this->_params['size'][1]-$this->_params['strokewidth']);
+		$coords[] = array('x' => $this->_params['strokewidth'], 'y' => $this->_params['size'][1]-$this->_params['strokewidth']);
+		$this->_drawObj->polygon($coords);
+		$this->_rotation = 180;
+	}
+
+}
+
+class MarkerParallelogram extends MarkerBuilder {
+
+	function draw() {
+		$this->_horizontalOffset = -3;
+		$coords = array();
+		$coords[] = array('x' => 0, 'y' => $this->_params['strokewidth']);
+		$coords[] = array('x' => (($this->_params['size'][0]/3)*2)-$this->_params['strokewidth'], 'y' => $this->_params['strokewidth']);
+		$coords[] = array('x' => $this->_params['size'][0]-$this->_params['strokewidth'], 'y' => $this->_params['size'][1]-$this->_params['strokewidth']);
+		$coords[] = array('x' => ($this->_params['size'][0]/3), 'y' => $this->_params['size'][1]-$this->_params['strokewidth']);
+		$this->_drawObj->polygon($coords);
 	}
 
 }
