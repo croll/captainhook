@@ -92,7 +92,7 @@ class Main {
     $paf=array('d' => $d, 'm' => $m);
     for ($i=2; $i<func_num_args(); $i++)
       $paf['$'.($i-2)]=func_get_arg($i);
-    return ch_t($paf);
+    return self::t($paf);
   }
 
   public static function getCurrentLang() {
