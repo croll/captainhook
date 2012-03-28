@@ -91,6 +91,8 @@ class Core {
 	 * @return void
 	 */
 	public static function init() {
+    error_reporting(E_ALL ^ E_STRICT);
+
 		if (!empty($_GET["page"]) && !preg_match("/^[a-zA-Z]+$/", $_GET["page"])) die("No way");
 		if (!is_file(CH_ROOTDIR.'/conf/general.conf'))
 			die('Config file '.CH_ROOTDIR.'/conf/general.conf'.' does not exist. Take a look at '.CH_ROOTDIR.'/conf/general.conf.dist');
