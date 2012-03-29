@@ -25,7 +25,7 @@ CaptainHook.Message = {
 					icon: icon,
 					title: 'Information',
 					message: txt,
-					offset: 150,
+					offset: 50,
 					centered: true,
 					width: 480,
 					top: true,
