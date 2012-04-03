@@ -60,6 +60,9 @@ class Main {
 	public static function getUserFullName($login) {
 		return Core::$db->fetchOne('SELECT "full_name" FROM "ch_user" WHERE login =?', array($login));
 	}
+	public static function getUserFullNameById($id) {
+		return Core::$db->fetchOne('SELECT "full_name" FROM "ch_user" WHERE uid =?', array((int)$id));
+	}
 	public static function getUserId($name) {
 		 $id = Core::$db->fetchOne('SELECT "uid" FROM "ch_user" WHERE LOWER("login")=LOWER(?)',
 																	array($name));
