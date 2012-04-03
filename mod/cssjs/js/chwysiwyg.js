@@ -7,18 +7,15 @@ var CHWysiwyg = new Class({
 			ckConfig: 'chooseme',
 			extraPlugins: 'selected',
 			ckLang: 'fr',
-			ckSkin: 'kama',
+			ckSkin: 'BootstrapCK-Skin',
 			onComplete: null
 		},
 		initialize: function(options) {
 			this.setOptions(options);
         		var editor1 = CKEDITOR.replace('editor1', {
-				contentsCss : 'assets/output_xhtml.css',
+				contentsCss : '/mod/cssjs/ext/twitter-bootstrap/css/bootstrap.css',
 				language: 'fr',
-				//toolbar_Basic:[[ 'Source', '-', 'Bold', 'Italic' ], ],
-				//toolbar: 'basic',
-				skin : 'kama',
-				uiColor: '#CCC'
+				skin : 'BootstrapCK-Skin'
 			});
 		},
 		insertHTML: function(options, ckInstance) {
