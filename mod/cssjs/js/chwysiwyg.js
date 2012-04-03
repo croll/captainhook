@@ -1,4 +1,30 @@
 //  -*- mode:js; tab-width:2; c-basic-offset:2; -*-
+CKEDITOR.stylesSet.add('captainhookStyles', [
+  { name: 'Label', element: 'div', attributes: {'class': 'label'} },
+  { name: 'Label success', element: 'div', attributes: {'class': 'label label-success'} },
+  { name: 'Label info', element: 'div', attributes: {'class': 'label label-info'} },
+  { name: 'Label warning', element: 'div', attributes: {'class': 'label label-warning'} },
+  { name: 'Label error', element: 'div', attributes: {'class': 'label label-error'} },
+  { name: 'Label inverse', element: 'div', attributes: {'class': 'label label-inverse'} },
+  { name: 'Badge', element: 'div', attributes: {'class': 'badge'} },
+  { name: 'Badge success', element: 'div', attributes: {'class': 'badge badge-success'} },
+  { name: 'Badge inverse', element: 'div', attributes: {'class': 'badge badge-inverse'} },
+  { name: 'Badge info', element: 'div', attributes: {'class': 'badge badge-info'} },
+  { name: 'Badge warning', element: 'div', attributes: {'class': 'badge badge-warning'} },
+  { name: 'Badge error', element: 'div', attributes: {'class': 'badge badge-error'} },
+  { name: 'Button', element: 'span', attributes: {'class': 'btn'} },
+  { name: 'Alert success', element: 'div', attributes: {'class': 'alert alert-success'} },
+  { name: 'Alert info', element: 'div', attributes: {'class': 'alert alert-info'} },
+  { name: 'Alert warning', element: 'div', attributes: {'class': 'alert alert-warning'} },
+  { name: 'Alert error', element: 'div', attributes: {'class': 'alert alert-error'} },
+  { name: 'Button primary', element: 'span', attributes: {'class': 'btn btn-primary'} },
+  { name: 'Button info', element: 'span', attributes: {'class': 'btn btn-info'} },
+  { name: 'Button success', element: 'span', attributes: {'class': 'btn btn-success'} },
+  { name: 'Button warning', element: 'span', attributes: {'class': 'btn btn-warning'} },
+  { name: 'Button danger', element: 'span', attributes: {'class': 'btn btn-danger'} },
+  { name: 'Button inverse', element: 'span', attributes: {'class': 'btn btn-inverse'} }
+]);
+
 var CHWysiwyg = new Class({
 		Implements: [Options,Events],
 		options: {
@@ -14,6 +40,7 @@ var CHWysiwyg = new Class({
 			this.setOptions(options);
         		var editor1 = CKEDITOR.replace('editor1', {
 				contentsCss : '/mod/cssjs/ext/twitter-bootstrap/css/bootstrap.css',
+				stylesSet: 'captainhookStyles',
 				language: 'fr',
 				skin : 'BootstrapCK-Skin'
 			});
