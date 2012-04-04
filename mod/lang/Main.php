@@ -35,7 +35,6 @@ class Main {
 		\mod\cssjs\Main::addJs($webpage, '/mod/lang/js/lang.js');
 		\mod\cssjs\Main::addJsCode($webpage, "ch_lang='$ch_lang';");
     $langfile=CH_MODDIR.'/lang/cache/'.$GLOBALS['ch_lang'].'.js';
-    error_log("LANG FILE : ".$langfile);
     if (is_file($langfile)) \mod\cssjs\Main::addJs($webpage, '/mod/lang/cache/'.$GLOBALS['ch_lang'].'.js');
 	}
 

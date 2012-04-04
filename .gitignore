@@ -3,3 +3,4 @@ mod/smarty/cache/*
 mod/smarty/templates_c/*
 conf/general.conf
 *~
+.htaccess
