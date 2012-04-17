@@ -32,6 +32,7 @@ function dep_line_to_array($dependencies) {
   $avail=deps_available();
   foreach($deps as $dep) {
     $dep=trim($dep);
+		if (empty($dep)) return '';
     if (!in_array($dep, $avail)) throw new \Exception("module '$dep' don't exists"); 
     $deps2[]="'".$dep."'";
   }
