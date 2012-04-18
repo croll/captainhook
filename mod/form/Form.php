@@ -10,6 +10,7 @@ class Form {
 	private $_smarty=NULL;
 	private $_validators=array();
 	private $_datas=array();
+	private $_errors=array();
 	
 	public function __construct($params, $smarty=NULL) {
 		$this->_file = $params['file'];
@@ -120,19 +121,23 @@ class Form {
 		}
 	}
 
-	public function validate() {
-		$res = array();
-		foreach($this->fields as $field) {
-			$fv = $field->validate();
-			if ($fv !== true) $res[$field->name] = $fv;
-		}
-		return (sizeof($res)) ? $res : true;
-	}
-
 	public function getValue($name) {
 		if (!isset($this->fields[$name]))
 			throw new \Exception("Field $name not found");
 		else return $this->fields[$name]->getValue();
+	}
+
+	public function validate() {
+		$this->_errors = array();
+		foreach($this->fields as $field) {
+			$fv = $field->validate();
+			if ($fv !== true) $this->_errors[$field->name] = $fv;
+		}
+		return (sizeof($this->_errors)) ? false : true;
+	}
+
+	public function getValidationErrors() {
+		return $this->_errors;
 	}
 
 }
