@@ -130,7 +130,7 @@ class Form {
 	public function getFieldValues() {
 		$values = array();
 		foreach($this->fields as $field) {
-			$values[$field->name] = $field->value;
+			$values[$field->name] = $field->getValue();
 		}
 		return $values;
 	}
