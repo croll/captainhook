@@ -127,6 +127,14 @@ class Form {
 		else return $this->fields[$name]->getValue();
 	}
 
+	public function getFieldValues() {
+		$values = array();
+		foreach($this->fields as $field) {
+			$values[$field->name] = $field->value;
+		}
+		return $values;
+	}
+
 	public function validate() {
 		$this->_errors = array();
 		foreach($this->fields as $field) {
