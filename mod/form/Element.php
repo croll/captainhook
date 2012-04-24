@@ -5,6 +5,7 @@ namespace mod\form;
 class Element {
 	public $name;
 	public $value;
+	public $definedValue;
 	public $params;
 	private $validators=array();
 
@@ -15,7 +16,10 @@ class Element {
 			else
 				$this->name=$params['name'];
 		}
-		if ($params['type']) $this->value=isset($params['value']) ? $params['value'] : '';
+		if ($params['type']) {
+			$this->value=((isset($params['value'])) ? $params['value'] : '');
+			$this->definedValue=((isset($params['definedValue'])) ? $params['definedValue'] : '');
+		}
 		$this->params=$params;
 		$this->form=$form;
 	}
@@ -50,7 +54,13 @@ class Element {
 	}
 
 	public function getValue() {
-		return (isset($_REQUEST[$this->name])) ? $_REQUEST[$this->name] : ((isset($this->params['value'])) ? $this->params['value'] : '');
+		if (isset($_REQUEST[$this->name]))
+			return $_REQUEST[$this->name];
+		else if (isset($this->definedValue))
+			return $this->definedValue;
+		else if (isset($this->params['value']))
+			return $this->params['value'];
+		else return '';
 	}
 
 	public function getMootoolsValidatorsString() {
@@ -104,9 +114,10 @@ class Radio extends Element {
 									 );
 	}
 	public function is_checked() {
-		if (isset($_REQUEST[$this->name]) && ($_REQUEST[$this->name] == $this->params['value']))
+		if ( (isset($_REQUEST[$this->name]) && $_REQUEST[$this->name] == $this->params['value']) || (isset($this->definedValue) && $this->definedValue == $this->params['value']) )
 			return true;
-		if (isset($this->params['checked'])) return true;
+		if (isset($this->params['checked'])) 
+			return true;
 		return false;
 	}
 }
@@ -119,13 +130,10 @@ class Checkbox extends Element {
 									 );
 	}
 	public function is_checked() {
-		if (isset($_POST[$this->name])) {
-			if ($_POST[$this->name] == $this->params['value'])
+		if ( (isset($_REQUEST[$this->name]) && $_REQUEST[$this->name] == $this->params['value']) || (isset($this->definedValue) && $this->definedValue == $this->params['value']) )
 				return true;
-		} else {
-			if (isset($this->params['checked']))
-				return true;
-		}
+		if (isset($this->params['checked']))
+			return true;
 		return false;
 	}
 }
@@ -161,6 +169,8 @@ class Select extends Element {
 	
 	public function addOption($option) {
 		$option['parent'] = $this->params['name'];
+		if (isset($this->params['definedValue']))
+			$option['parentDefinedValue'] = $this->params['definedValue'];
 		$this->_options[]=new Option($option);
 	}
 
@@ -189,13 +199,10 @@ class Option extends Element {
 	}
 
 	public function is_selected($parentName) {
-		if (isset($_REQUEST[$parentName])) {
-			if ($_REQUEST[$parentName] == $this->params['value'])
+		if ((isset($_REQUEST[$parentName]) && $_REQUEST[$parentName] == $this->params['value']) || (isset($this->params['parentDefinedValue']) && $this->params['parentDefinedValue'] == $this->params['value']) )
+			return true;
+		if (isset($this->params['selected']))
 				return true;
-		} else {
-			if (isset($this->params['selected']))
-				return true;
-		}
 		return false;
 	}
 }

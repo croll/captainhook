@@ -10,6 +10,7 @@ class Form {
 	private $_smarty=NULL;
 	private $_validators=array();
 	private $_datas=array();
+	private $_defaultValues=array();
 	private $_errors=array();
 	
 	public function __construct($params, $smarty=NULL) {
@@ -20,6 +21,9 @@ class Form {
 		if (!is_file($file) || !is_readable($file)) {
 			throw new \Exception('json file not found or is not readdable');
 		}
+		if (isset($params['defaultValues'])) {
+			$this->_defaultValues = $params['defaultValues'];
+		}
 		try {
 			$this->_datas = $this->_myjson_decode(trim(file_get_contents($file)));
 		} catch (\Exception $e) {
@@ -28,7 +32,7 @@ class Form {
 		if (!isset($this->_datas['id']))
 			throw new \Exception('Form ID is not set.');
 		$this->_id = $this->_datas['id'];
-		$this->processElements($this->_datas['elements']);
+		$this->_processElements($this->_datas['elements']);
 	}
 
 	private function _myjson_decode($json) {
@@ -104,12 +108,15 @@ class Form {
 		$this->_smarty->assign('ch_form_'.$this->_id, $this);
 	}
 
-	private function processElements($elements) {
+	private function _processElements($elements) {
 		foreach($elements as $el) {
 			$className = '\\mod\\form\\'.ucfirst($el['type']);
 			try {
 				if (class_exists($className)) {
 					try {
+						if (isset($this->_defaultValues[$el['name']])) {
+							$el['definedValue'] = $this->_defaultValues[$el['name']];
+						}
 						$this->fields[$el['name']] = new $className($el, $this);
 					} catch (\Exception $e) {
 						throw new \Exception($e->getMessage());
@@ -119,6 +126,10 @@ class Form {
 				throw new \Exception($e->getMessage());
 			}
 		}
+	}
+
+	public function setDefaultValues($datas) {
+		$this->_defaultValues = $datas;
 	}
 
 	public function getValue($name) {
