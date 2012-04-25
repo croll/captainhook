@@ -78,7 +78,7 @@ class Element {
 	protected function getParamsStr($exclude=array()) {
 		$str='';
 		foreach($this->params as $k => $v)
-			if (!in_array($k, $exclude) && !in_array($k, array('validators', 'children')))
+			if (!in_array($k, $exclude) && !in_array($k, array('validators', 'children', 'definedValue', 'parentDefinedValue')))
 				$str.=($str ? ' ' : '').$k."='$v'";
 		return $str;
 	}
