@@ -56,10 +56,10 @@ class Element {
 	public function getValue() {
 		if (isset($_REQUEST[$this->name]))
 			return $_REQUEST[$this->name];
-		else if (isset($this->definedValue))
-			return $this->definedValue;
 		else if (isset($this->params['value']))
 			return $this->params['value'];
+		else if (isset($this->definedValue))
+			return $this->definedValue;
 		else return '';
 	}
 
