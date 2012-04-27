@@ -272,7 +272,9 @@ class Main {
 		$page->smarty->assign('lang', $lang);
 
 		$page->smarty->assign('list', $list);
-		$page->smarty->assign('filter', $filter);
+		if (isset($filter)) {
+			$page->smarty->assign('filter', $filter);
+		}
 		$page->smarty->assign('sort', $sort);
 		$page->smarty->assign('offset', $offset);
 		$page->smarty->assign('maxrow', $maxrow);
