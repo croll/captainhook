@@ -1,9 +1,13 @@
 {extends tplextends('webpage/webpage_main')}
 {block name='webpage_head' append}
 	{js file="/mod/cssjs/js/captainhook.js"}
+	{js file="/mod/user/js/user.js"}
+	{js file="/mod/user/js/group.js"}
+	{js file="/mod/user/js/perm.js"}
 		
 	{css file="/mod/cssjs/css/captainhook.css"}
 	{css file="/mod/cssjs/css/bootstrap.css"}
+	{css file="/mod/user/css/user.css"}
 {/block}
 {block name='webpage_body' }
 <div class="topbar">
