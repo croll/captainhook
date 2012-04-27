@@ -31,7 +31,6 @@ class Main {
                 }
   }
   public static function getTranslated($sysname, $lang) {
-
 	// check perm 
 	if (!\mod\user\Main::userHasRight('View page')) {
 			return false;
@@ -41,8 +40,8 @@ class Main {
 	$ilr=$db->fetchAll('SELECT "pid", "sysname", "id_lang_reference", "lang"  FROM "ch_page" WHERE "sysname"=?', array($sysname));
 	$ilr = $ilr[0];
 	// if lang == lang then return sysname 
-	if ($ilr['lang'] == $params['lang']) {
-		return $params['sysname']; 
+	if ($ilr['lang'] == $lang) {
+		return $sysname; 
 	}	
 	$dbParams=array();
 	if ($ilr['id_lang_reference'] == 0) {
