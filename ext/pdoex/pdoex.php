@@ -52,14 +52,14 @@ class PDOEX extends PDO
      * @param mixed $value The value to quote
      * @return mixed An SQL-safe quoted string
      */
-	public function quote($value)
+	public function quote($value, $parameter_type = PDO::PARAM_STR)
 	{
 		if(is_int($value))		return (string) $value;
 		if(is_null($value))		return 'NULL';
 		if(is_bool($value))		return (string) intval($value);
 		if(is_float($value))	return sprintf('%F', $value);
 		if(is_array($value))	return $this->quoteArray($value);
-		return parent::quote($value);
+		return parent::quote($value, $parameter_type);
 	}
 	
 	public function quoteArray($items)

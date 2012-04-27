@@ -262,7 +262,6 @@ var Group = new Class({
 		}).get({'gid': gid});
 	},
 	assignMembers: function(users, gid) {
-		console.log(users);
 		var myContainer = new Element('div');
 		var myList = new Element('ul', {'id': 'amember_edit'});
 		users.each(function(value, key) {

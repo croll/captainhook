@@ -1,4 +1,0 @@
-RewriteEngine on
-RewriteCond %{REQUEST_URI} !^/doc/$
-RewriteCond %{REQUEST_FILENAME} !\.(js|JS|css|CSS|jpg|JPG|png|gif|GIF|PNG|avi|AVI|mov|MOV|zip|ZIP|pdf|PDF)$
-RewriteRule ^.*$ index.php [L]

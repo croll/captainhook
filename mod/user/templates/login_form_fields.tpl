@@ -10,7 +10,7 @@
 	</div>
 </div>
 <div>
-	{Field phpclass='\mod\field\Submit' name='submit' value='Identification'}
+	{Field phpclass='\mod\field\Submit' name='submit' value='Identification' class='btn btn-primary'}
 </div>
 
 <script>

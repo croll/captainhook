@@ -4,7 +4,7 @@ namespace mod\form;
 
 class Main {
 
-  public static function smartyBlock_form($params, $content, $smarty, &$repeat) {
+  public static function smartyBlock_form($params, $content, &$smarty, &$repeat) {
 		foreach(array('mod', 'file') as $p) {
 			if (empty($params[$p]))
 				throw new \Exception("param $p is  not provided");

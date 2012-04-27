@@ -46,23 +46,23 @@ class Validator {
 	}
 
 	public static function validate_integer($str) {
-		return (is_null(self::required($str)) && is_int($str)) ? NULL : 'Please enter an integer in this field. Numbers with decimals (e.g. 1.25) are not permitted.';
+		return (is_null(self::required($str)) && preg_match("/^[0-9]+$/", $str)) ? NULL : 'Please enter an integer in this field. Numbers with decimals (e.g. 1.25) are not permitted.';
 	}
 
 	public static function validate_numeric($str) {
-		return (is_null(self::required($str)) && is_numeric($str)) ? NULL : 'Please enter an integer in this field. Numbers with decimals (e.g. 1.25) are not permitted.';
+		return (is_null(self::required($str)) && preg_match("/^[0-9]+\.?[0-9]*$/", $str)) ? NULL : 'Please enter an integer in this field. Numbers with decimals (e.g. 1.25) are not permitted.';
 	}
 
 	public static function validate_digits($str) {
-		return (is_null(self::required($str)) && preg_match("/^[\d() .:\-\+#]+$/")) ? NULL : 'Please use numbers and punctuation only in this field (for example, a phone number with dashes or dots is permitted).';
+		return (is_null(self::required($str)) && preg_match("/^[\d() .:\-\+#]+$/", $str)) ? NULL : 'Please use numbers and punctuation only in this field (for example, a phone number with dashes or dots is permitted).';
 	}
 
 	public static function validate_alpha($str) {
-		return (is_null(self::required($str)) && preg_match("/^[a-zA-Z]+$/")) ? NULL : 'Please use only letters (a-z) within this field. No spaces or other characters are allowed.';
+		return (is_null(self::required($str)) && preg_match("/^[a-zA-Z]+$/", $str)) ? NULL : 'Please use only letters (a-z) within this field. No spaces or other characters are allowed.';
 	}
 
 	public static function validate_alphanum($str) {
-		return (is_null(self::required($str)) && preg_match("/^[a-zA-Z0-9]+$/")) ? NULL : 'Please use only letters (a-z) or numbers (0-9) in this field. No spaces or other characters are allowed.';
+		return (is_null(self::required($str)) && preg_match("/^[a-zA-Z0-9]+$/", $str)) ? NULL : 'Please use only letters (a-z) or numbers (0-9) in this field. No spaces or other characters are allowed.';
 	}
 
 	public static function validate_date($str) {
@@ -76,11 +76,11 @@ class Validator {
 	}
 
 	public static function validate_email($str) {
-		return (is_null(self::required($str)) && preg_match("/^(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]\.?){0,63}[a-z0-9!#$%&'*+\/=?^_`{|}~-]@(?:(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\])$/i")) ? NULL : 'Please enter a valid email address. For example "fred@domain.com".';
+		return (is_null(self::required($str)) && preg_match("/^(?:[a-z0-9!#$%&'*+\/=?^_`{|}~-]\.?){0,63}[a-z0-9!#$%&'*+\/=?^_`{|}~-]@(?:(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)*[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\])$/i", $str)) ? NULL : 'Please enter a valid email address. For example "fred@domain.com".';
 	}
 
 	public static function validate_url($str) {
-		return (is_null(self::required($str)) && preg_match("/^(https?|ftp|rmtp|mms):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i")) ? NULL : 'Please enter a valid URL such as http://www.example.com.';
+		return (is_null(self::required($str)) && preg_match("/^(https?|ftp|rmtp|mms):\/\/(([A-Z0-9][A-Z0-9_-]*)(\.[A-Z0-9][A-Z0-9_-]*)+)(:(\d+))?\/?/i", $str)) ? NULL : 'Please enter a valid URL such as http://www.example.com.';
 	}
 
 }
