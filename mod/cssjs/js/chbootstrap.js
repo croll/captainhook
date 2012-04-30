@@ -26,7 +26,7 @@ CaptainHook.Bootstrap = {
 		if (tabs) {
 			tabs.each(function(el) {
 				el.addEvent('click', function(e) {
-					e.stopPropagation();
+					e.preventDefault();
 					self.setActiveTab(el, tabs);
 				});
 				if (selected && el.get('href').indexOf(selected) != -1)

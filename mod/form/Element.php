@@ -18,7 +18,7 @@ class Element {
 		}
 		if ($params['type']) {
 			$this->value=((isset($params['value'])) ? $params['value'] : '');
-			$this->definedValue=((isset($params['definedValue'])) ? $params['definedValue'] : '');
+			$this->definedValue=((isset($params['definedValue'])) ? $params['definedValue'] : null);
 		}
 		$this->params=$params;
 		$this->form=$form;
@@ -56,10 +56,10 @@ class Element {
 	public function getValue() {
 		if (isset($_REQUEST[$this->name]))
 			return $_REQUEST[$this->name];
+		else if (isset($this->definedValue) && !is_null($this->definedValue))
+			return $this->definedValue;
 		else if (isset($this->params['value']))
 			return $this->params['value'];
-		else if (isset($this->definedValue))
-			return $this->definedValue;
 		else return '';
 	}
 
