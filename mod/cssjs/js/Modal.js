@@ -53,7 +53,7 @@ Modal.Overlay = new Class({
     Implements: [Events, Chain, Options],
 
     options: {
-        zIndex: 900000,
+        zIndex: 100,
         opacity: .3,
         backgroundColor: '#555',
         fx: {
