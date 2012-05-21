@@ -12,7 +12,7 @@ class Main {
 		$this->_datas['cels'] = array();
 	}
 
-	function addColumn($label, $type, $id=null, $pattern=null, $p) {
+	function addColumn($label, $type, $id=null, $pattern=null, $p=null) {
 		if (!in_array($type, array('boolean', 'number', 'string', 'date', 'datetime', 'timeofday'))) {
 			throw new \Exception('Data type invalid');
 		}
