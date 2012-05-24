@@ -48,6 +48,7 @@ CaptainHook.Bootstrap = {
 				if (el.get('id') == tabName) {
 					tab.getParent('li').addClass('active');
 					el.setStyle('display', 'block');
+					el.fireEvent('show');
 				} else {
 					el.setStyle('display', 'none');
 				}
