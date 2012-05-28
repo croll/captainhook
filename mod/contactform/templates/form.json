@@ -1,0 +1,54 @@
+{
+	"method" : "post",
+	"id" : "formContact",
+	"action" : "/contact/submit",
+	"class" : "form-horizontal",
+	"formValidatorOptions" : { "onFormValidate" : "CaptainHook.Contact.formPost" },
+	"elements" : 
+	[
+		{	"type" : "text",
+			"name" : "name",
+			"validators" : 
+			[ 
+				"required"
+			]
+		},
+		{	"type" : "text",
+			"name" : "email",
+			"validators" : 
+			[ 
+				"required",
+				"validate-email"
+			]
+		},
+		{	"type" : "text",
+			"name" : "company"
+		},
+		{	"type" : "text",
+			"name" : "phone",
+			"validators" : 
+			[ 
+				"validate-digits"
+			]
+		},
+		{	"type" : "text",
+			"name" : "subject",
+			"validators" : 
+			[ 
+				"required"
+			]
+		},
+		{	"type" : "textarea",
+			"name" : "message",
+			"validators" : 
+			[ 
+				"required"
+			]
+		},
+		{	"type" : "submit",
+			"name" : "submit",
+			"class" : "btn btn-primary",
+			"value" : "Submit"
+		}
+	]
+}

@@ -91,7 +91,7 @@ class Form {
 		$outp .= ">$content</form>";
 		// JS
 		$formJsObj = 'chForm_'.$this->_id;
-		$jsOutp.="var $formJsObj=document.id('".$this->_id."');\n";
+		$jsOutp="var $formJsObj=document.id('".$this->_id."');\n";
 		if (!isset($this->_datas['formValidatorOptions']) || empty($this->_datas['formValidatorOptions'])) {
 			$jsOutp.="var ${formJsObj}Validator = new Form.Validator.Inline($formJsObj, ".json_encode($this->_formValidatorDefaultOptions).");\n";
 		} else {
