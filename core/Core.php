@@ -93,6 +93,7 @@ class Core {
 	public static function init() {
     error_reporting(E_ALL ^ E_STRICT);
     ini_set('session.gc_maxlifetime', 24*3600);
+    ini_set('session.cookie_lifetime', 24*3600);
 
 		if (!empty($_GET["page"]) && !preg_match("/^[a-zA-Z]+$/", $_GET["page"])) die("No way");
 		if (!is_file(CH_ROOTDIR.'/conf/general.conf'))
