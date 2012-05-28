@@ -64,8 +64,8 @@ class Main {
 	}
 
 	public static function hook_mod_contact_admin($hookname, $userdata, $urlmatches) {
-		//if (!\mod\user\Main::userHasRight('Configure contactform module'))
-		//	die ('You are not allowed to configure this module');
+		if (!\mod\user\Main::userHasRight('Configure contactform module'))
+			die ('You are not allowed to configure this module');
 		$page = new \mod\webpage\Main();
 		$page->setLayout('contactform/admin');
 		$page->smarty->assign('config', self::parseConfig());
