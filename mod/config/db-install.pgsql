@@ -1,7 +1,7 @@
 CREATE TABLE "ch_config" (
        "id_module" INT NOT NULL,
        "name" VARCHAR(255) NOT NULL,
-       "value" VARCHAR(255) NOT NULL,
+       "value" TEXT NOT NULL,
        "id_user" INT NULL REFERENCES "ch_user" ON DELETE CASCADE,
 				UNIQUE ("id_module", "name", "id_user")
 );

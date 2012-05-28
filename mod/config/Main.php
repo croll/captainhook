@@ -33,14 +33,14 @@ class Main {
 
 	public static function get($module, $name, $defaultValue=null, $user=null) {
 
-		$noDefaultVaule = false;
+		$noDefaultValue = false;
 
     if (self::$_config === null) 
 			self::_cacheConfiguration();
 
 		extract(self::_checkParams($module, $user));
 
-		if (func_num_args() == 2 || (func_num_args == 3 && $user != null)) {
+		if (func_num_args() == 2 || (func_num_args() == 3 && $user != null)) {
 			$noDefaultValue = true;
 		}
 

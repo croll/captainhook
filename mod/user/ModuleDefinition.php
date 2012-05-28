@@ -8,7 +8,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
     $this->description = 'Manage users, rights, permissions.';
     $this->name = 'user';
     $this->version = '0.1';
-    $this->dependencies = array('ajax', 'cssjs', 'smarty', 'regroute', 'lang');
+    $this->dependencies = array('ajax', 'cssjs', 'smarty', 'regroute',);
     parent::__construct();
   }
   

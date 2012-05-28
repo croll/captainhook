@@ -9,9 +9,12 @@ class Form {
 	private $_file='';
 	private $_smarty=NULL;
 	private $_validators=array();
+	private $_formValidatorOptions=array();
+	private $_formValidatorDefaultOptions=array('evaluateFieldsOnChange' => false, 'evaluateFieldsOnBlur' => false, 'warningPrefix' => '', 'errorPrefix' => '');
 	private $_datas=array();
 	private $_defaultValues=array();
 	private $_errors=array();
+	private $_isJson=false;
 	
 	public function __construct($params, $smarty=NULL) {
 		$this->_file = $params['file'];
@@ -32,6 +35,10 @@ class Form {
 		if (!isset($this->_datas['id']))
 			throw new \Exception('Form ID is not set.');
 		$this->_id = $this->_datas['id'];
+		if (isset($this->_datas['json']) && ($this->_datas['json'])) {
+			$this->_isJson = true;
+		}
+		$this->_formValidatorOptions = $this->_datas['formValidatorOptions'];
 		$this->_processElements($this->_datas['elements']);
 	}
 
@@ -84,19 +91,33 @@ class Form {
 		$outp .= ">$content</form>";
 		// JS
 		$formJsObj = 'chForm_'.$this->_id;
-		$outp.="<script>window.addEvent('domready', function() { \n";
-		$outp.="var $formJsObj=document.id('".$this->_id."');\n";
-		$outp.="var ${formJsObj}Validator = new Form.Validator.Inline($formJsObj, { evaluateFieldsOnChange: false, evaluateFieldsOnBlur: false, warningPrefix: '', errorPrefix: '' });\n";
+		$jsOutp.="var $formJsObj=document.id('".$this->_id."');\n";
+		if (!isset($this->_datas['formValidatorOptions']) || empty($this->_datas['formValidatorOptions'])) {
+			$jsOutp.="var ${formJsObj}Validator = new Form.Validator.Inline($formJsObj, ".json_encode($this->_formValidatorDefaultOptions).");\n";
+		} else {
+			// HACK because jsonencode enclose everything with double quote (as it must be done) but it sucks with js function names
+			$uglyOpts = array();
+			$validatorOptions = array();
+			foreach ($this->_datas['formValidatorOptions'] as $k=>$v) {
+				if (preg_match('/on[A-Z]{1}[a-z]+Validate/', $k, $matches)) {
+					$uglyOpts[] = '"'.$k.'":'.$v;
+				} else {
+					$validatorOptions[$k] = $v;
+				}
+			}
+			$validatorOptions = array_merge($this->_formValidatorDefaultOptions, $validatorOptions);
+			$uglyStr = str_replace('}', ','.implode(',', $uglyOpts).'}', json_encode($validatorOptions));
+			$jsOutp.="var ${formJsObj}Validator = new Form.Validator.Inline($formJsObj, ".$uglyStr.");\n";
+		}
 		// Validators
 		if (isset($this->_datas['customValidators'])) {
 			foreach($this->_datas['customValidators'] as $validator) {
 				\mod\form\Validator::addCustomValidator($validator['name'], $validator['regexp'], $validator['errorMsg']);
 			}
-			$outp .= \mod\form\Validator::getMootoolsJs();
+			$jsOutp .= \mod\form\Validator::getMootoolsJs();
 		}
 		// End of JS
-		$outp.="});</script>";
-		return $outp;
+		return ($this->_isJson) ? $outp."<script>$jsOutp</script>" : $outp."<script>window.addEvent('domready', function() { $jsOutp })</script>";
 	}
 
 	public function assign() {

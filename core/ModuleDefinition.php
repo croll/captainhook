@@ -204,7 +204,6 @@ abstract class ModuleDefinition {
       if ($affected <= 0) throw new \Exception("Module was not found in database");
 		}
 
-
     function exec_dbfile($dbfile) {
       $sql=file_get_contents($dbfile);
       $sqls=explode(";\n", $sql);      
