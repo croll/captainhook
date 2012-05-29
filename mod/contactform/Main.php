@@ -7,7 +7,6 @@ class Main {
 	public static function hook_mod_contact_init($hookname, $userdata, $urlmatches) {
 		require_once(dirname(__FILE__).'/ext/recaptcha/recaptchalib.php');
 		$config = self::parseConfig();
-		\core\Core::log($config);
 		$page = new \mod\webpage\Main();
 		$page->setLayout('contactform/form');
 		$page->smarty->assign(array(
@@ -55,8 +54,11 @@ class Main {
 				}
 				$page->setLayout('contactform/mail_sent');
 			} else {
-				$page->smarty->assign('fields', $formFields);
-				$page->smarty->assign('error', $error);
+				$page->smarty->assign(array(
+					'fields' => $formFields,
+					'error' => $error,
+					'recaptcha' => recaptcha_get_html($config['key'])
+				));
 				$page->setLayout('contactform/form');
 			}
 		}
@@ -100,11 +102,9 @@ class Main {
 
 	public static function sendEmail($formFields) {
 		$config = self::parseConfig();
-		\core\Core::log($formFields);
-		\core\Core::log($config);
 		$body = '';
 		foreach($formFields as $field=>$value) {
-			if ($field != 'submit') {
+			if ($field != 'submit' && !empty($value)) {
 				$body.= $field.': '.$value."\n";
 			}
 		}

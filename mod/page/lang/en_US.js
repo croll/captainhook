@@ -1,4 +1,7 @@
 {
+  "Page" : "Page",
+  "List" : "List",
+  "Add" : "Add",
   "View" : "View",
   "Created %s by %s - last updated: %s" : "Created %s by %s - last updated: %s",
   "Translation" : "Translation",
@@ -14,9 +17,6 @@
   "Cancel" : "Cancel",
   "Captainhook page module demo" : "Captainhook page module demo",
   "Accueil" : "Accueil",
-  "Page" : "Page",
-  "List" : "List",
-  "Add" : "Add",
   "Previous" : "Previous",
   "Next" : "Next",
   "Pages list" : "Pages list",
@@ -27,8 +27,8 @@
   "Created" : "Created",
   "Updated" : "Updated",
   "Action" : "Action",
-  "yes" : "ja",
-  "no" : "nein",
+  "yes" : "yes",
+  "no" : "no",
   "Edit" : "Edit",
   "Del" : "Del"
 }

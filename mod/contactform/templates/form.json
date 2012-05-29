@@ -3,7 +3,6 @@
 	"id" : "formContact",
 	"action" : "/contact/submit",
 	"class" : "form-horizontal",
-	"formValidatorOptions" : { "onFormValidate" : "CaptainHook.Contact.formPost" },
 	"elements" : 
 	[
 		{	"type" : "text",
@@ -17,7 +16,6 @@
 			"name" : "email",
 			"validators" : 
 			[ 
-				"required",
 				"validate-email"
 			]
 		},
@@ -32,14 +30,11 @@
 			]
 		},
 		{	"type" : "text",
-			"name" : "subject",
-			"validators" : 
-			[ 
-				"required"
-			]
+			"name" : "subject"
 		},
 		{	"type" : "textarea",
 			"name" : "message",
+			"style" : "width:400px;height:200px",
 			"validators" : 
 			[ 
 				"required"
