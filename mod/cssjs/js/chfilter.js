@@ -21,7 +21,7 @@ var CHFilter = new Class({
 	createFilters: function(options) {
 		this.setOptions(options);
 		var filterForm = new Element('form', {'id': options.formElement, 
-				'html': '<h4>Filter By</h4>', class: 'form-inline'});
+				'html': '<h4>Filter By</h4>', 'class': 'form-inline'});
 		var filterEl = options.filters.each(function (item, index) {
 			clearDiv = this.createFilter(options, item).inject(filterForm);
 		}.bind(this));

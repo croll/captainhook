@@ -48,7 +48,7 @@ var CHCore = new Class({
 				this.callHookListener(options.hook);
 				return;
 			}
-			this.callPHP('cssjs', 'getScriptFiles', {mod: options.mod, class: options.script}, function(response) {
+			this.callPHP('cssjs', 'getScriptFiles', {mod: options.mod, 'class': options.script}, function(response) {
 				if (response == -1) {
 					return false;
 				} else {

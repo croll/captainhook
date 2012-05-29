@@ -60,7 +60,7 @@ var CHTable = new Class({
 					myTr.adopt(myTd);
 				}.bind(this));
 				if (options.rowActions) {	
-					var buttons ='<a class="btn" href="#" onclick="'+ options.rowActions.func + '(' + item.rid + ', '+ options.rowActions.params.gid+');"><i class="' + options.rowActions.class +'"></i>'+ options.rowActions.label +'</a>';
+					var buttons ='<a class="btn" href="#" onclick="'+ options.rowActions.func + '(' + item.rid + ', '+ options.rowActions.params.gid+');"><i class="' + options.rowActions['class'] +'"></i>'+ options.rowActions.label +'</a>';
 					var myTd= new Element('td', { 'html' : buttons});
 					myTr.adopt(myTd);
 				}
