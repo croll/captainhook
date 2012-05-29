@@ -57,7 +57,7 @@ class Main {
     return $langs;
   }
 
-  private function myjson_encode($blup, $offset='') {
+  private static function myjson_encode($blup, $offset='') {
     if (is_array($blup)) {
       $res='';
       $offset2=$offset.'  ';
