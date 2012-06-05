@@ -38,7 +38,7 @@ class Form {
 		if (isset($this->_datas['json']) && ($this->_datas['json'])) {
 			$this->_isJson = true;
 		}
-		$this->_formValidatorOptions = $this->_datas['formValidatorOptions'];
+		$this->_formValidatorOptions = (isset($this->_datas['formValidatorOptions']) ? $this->_datas['formValidatorOptions'] : null);
 		$this->_processElements($this->_datas['elements']);
 	}
 
