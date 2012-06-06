@@ -181,8 +181,7 @@ class Main {
 			else return false;
 		}
 		$uid = (is_string($user)) ? self::getUserId($user) : $user;
-		return (Core::$db->fetchOne('SELECT gr."gid" FROM "ch_group" gr LEFT JOIN "ch_user_group" ug ON gr."gid" = ug."gid" LEFT JOIN "ch_user" us ON ug."uid"=us."uid" WHERE us."uid"=? AND gr."name"=?',
-																	array((int)$uid, $group))) ? true : false;
+		return (Core::$db->fetchOne('SELECT gr."gid" FROM "ch_group" gr LEFT JOIN "ch_user_group" ug ON gr."gid" = ug."gid" LEFT JOIN "ch_user" us ON ug."uid"=us."uid" WHERE us."uid"=? AND UPPER(gr."name")=UPPER(?)', array((int)$uid, $group))) ? true : false;
 
 	}
 
