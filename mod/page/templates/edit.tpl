@@ -92,7 +92,7 @@ Second line of text preceded by two line breaks.</textarea>
 	*}
 
 <script>
-	var myeditor = new CHWysiwyg({ 'contentElement' : 'editor1',});
+	var myeditor = new CHWysiwyg({ 'contentElement' : 'editor1'});
 	var mypage = new Page();
 	$('page_edit_submit').addEvent('click', function(event){
 		event.stop(); //Prevents the browser from following the link.
