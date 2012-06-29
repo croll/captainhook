@@ -89,7 +89,7 @@ class Main {
 		
 		$dbParams=array();
 		$dbParams[]=$matches['name'];	
-		$dbParams[]= self::cleanString($matches['name']);	
+		$dbParams[]= self::cleanMyString($matches['name']);	
 		$dbParams[]=(int)$userId;	
 		$dbParams[]=(int)$matches['published'];	
 		$dbParams[]=$matches['lang'];	
@@ -119,7 +119,7 @@ class Main {
 		// prepare data for storage
 		$dbParams=array();
 		$dbParams[]=$matches['name'];	
-		$dbParams[]=\mod\page\Main::cleanString($matches['name']);;	
+		$dbParams[]=self::cleanMyString($matches['name']);;	
 		$dbParams[]=(int)$matches['published'];	
 		$dbParams[]=$matches['lang'];	
 		$dbParams[]=(int)$matches['id_lang_reference'];	
@@ -317,26 +317,36 @@ class Main {
 		$result = $db->query('SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.lang, p.id_lang_reference, p.created, p.updated, p.content FROM ch_page p, ch_user u WHERE pid=?', array($id));
     return $result->fetchRow();
   }
-  public static function cleanString($msg, $toUrl=false) { 
-    // clea a string to make it compliant with the use of system_name compliant with a clean web url encoded path        
-    if (empty($msg)) return false; 
-    $msg = self::removeAccents($msg); 
-    $msg = str_replace("'", '_', $msg); 
-    $msg = str_replace('%20', ' ', $msg); 
-    $msg = preg_replace('~[^\\pL0-9-]+~u', '_', $msg); 
-    $msg = trim($msg, "_"); 
-    $msg = strtolower($msg); 
-    $msg = preg_replace('~[^_a-z0-9-]+~', '', $msg); 
-    if ($toUrl) { 
-      $msg = iconv("utf-8", "us-ascii//TRANSLIT", $msg); 
-      $msg = str_replace('_', '-', $msg); 
-    } 
-    return $msg; 
-  }
+  /** 
+  * Clean my string.
+  *
+  * @param string String to be cleaned
+  * @return string Cleaned string
+  *
+  * It a simple function intended to be used to clean a string to make it compliant with the use of system_name compliant with a clean web url encoded path.
+  *
+  */
+
+  public static function cleanMyString($msg, $toUrl=false) { 
+  	if (empty($msg)) return false; 
+                $msg = self::removeAccents($msg); 
+                $msg = str_replace("'", '_', $msg); 
+                $msg = str_replace('%20', ' ', $msg); 
+                $msg = preg_replace('~[^\\pL0-9-]+~u', '_', $msg); 
+                $msg = trim($msg, "_"); 
+                $msg = strtolower($msg); 
+                $msg = preg_replace('~[^_a-z0-9-]+~', '', $msg); 
+                if ($toUrl) { 
+                        $msg = iconv("utf-8", "us-ascii//TRANSLIT", $msg); 
+                        $msg = str_replace('_', '-', $msg); 
+                } 
+                return $msg; 
+        }
   public static function removeAccents($msg) {
-    if (empty($msg)) return false;
-    $search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
-    $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
-    return str_replace($search, $replace, $msg);
-  }	
+                if (empty($msg)) return false;
+                $search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
+                $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
+                return str_replace($search, $replace, $msg);
+  }
+	
 }
