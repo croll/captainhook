@@ -12,7 +12,7 @@ class Main {
 
 	public static function checkAuth($login='',$password='') {
 		if ((!empty($login)) && (!empty($password))) {
-			if ( (preg_match("/^[a-zA-Z0-9-_]+$/",$login)) && (preg_match("/^[a-zA-Z0-9-_!]+$/",$password)) ) {
+			if ( (preg_match("/^[a-zA-Z0-9-_\.]+$/",$login)) && (preg_match("/^[a-zA-Z0-9-_!]+$/",$password)) ) {
 				$res = Core::$db->fetchAll('SELECT "full_name", "login" FROM "ch_user" WHERE UPPER("login")=UPPER(?) AND "pass"=md5(?) AND "status"=1', 
 																		array($login, $password));
 				if (count($res)) {
@@ -439,7 +439,7 @@ class Main {
 		// prepare data for storage
 		if ($matches['active'] == "on") $matches['active']=1;
 		$dbParams=array();
-		$login=self::cleanString($matches['login']);
+		$login=\core\Tools::cleanMyString($matches['login']);
 		$dbParams[]=$login;	
 		$dbParams[]=$matches['full_name'];	
 		$dbParams[]=(int)$matches['active'];	
@@ -476,7 +476,7 @@ class Main {
 					full_name=?,
 					status=?,
 					email=?,";
-		$login=self::cleanString($matches['login']);
+		$login=\core\Tools::cleanMyString($matches['login']);
 		$dbParams[]=$login;	
 		$dbParams[]=$matches['full_name'];	
 		$dbParams[]=(int)$matches['active'];	
@@ -501,26 +501,5 @@ class Main {
 		$q =" ORDER BY ".$sorted;
 		return $q;
    } 
-  public static function cleanString($msg, $toUrl=false) { 
-                // clea a string to make it compliant with the use of system_name compliant with a clean web url encoded path        
-                if (empty($msg)) return false; 
-                $msg = self::removeAccents($msg); 
-                $msg = str_replace("'", '_', $msg); 
-                $msg = str_replace('%20', ' ', $msg); 
-                $msg = preg_replace('~[^\\pL0-9-]+~u', '_', $msg); 
-                $msg = trim($msg, "_"); 
-                $msg = strtolower($msg); 
-                $msg = preg_replace('~[^_a-z0-9-]+~', '', $msg); 
-                if ($toUrl) { 
-                        $msg = iconv("utf-8", "us-ascii//TRANSLIT", $msg); 
-                        $msg = str_replace('_', '-', $msg); 
-                } 
-                return $msg; 
-   }
-   public static function removeAccents($msg) {
-                if (empty($msg)) return false;
-                $search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
-                $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
-                return str_replace($search, $replace, $msg);
-   }	
+  	
 }
