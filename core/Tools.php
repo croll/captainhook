@@ -66,5 +66,35 @@ class Tools {
 		$str = mb_convert_encoding($str, 'UTF-8', 'UTF-8');
 		return htmlentities($str, ENT_QUOTES, 'UTF-8');
 	}
+        /** 
+	 * Clean my string.
+	 *
+	 * @param string String to be cleaned
+	 * @return string Cleaned string
+	 *
+	 * It a simple function intended to be used to clean a string to make it compliant with the use of system_name compliant with a clean web url encoded path.
+	 *
+	 */
 
+        public static function cleanMyString($msg, $toUrl=false) { 
+                if (empty($msg)) return false; 
+                $msg = self::removeAccents($msg); 
+                $msg = str_replace("'", '_', $msg); 
+                $msg = str_replace('%20', ' ', $msg); 
+                $msg = preg_replace('~[^\\pL0-9-\.]+~u', '_', $msg); 
+                $msg = trim($msg, "_"); 
+                $msg = preg_replace('~[^_a-zA-Z0-9-\.]+~', '', $msg); 
+                if ($toUrl) { 
+                	$msg = strtolower($msg); 
+                        $msg = iconv("utf-8", "us-ascii//TRANSLIT", $msg); 
+                        $msg = str_replace('_', '-', $msg); 
+                } 
+                return $msg; 
+        }
+        public static function removeAccents($msg) {
+                if (empty($msg)) return false;
+                $search = explode(",","ç,æ,œ,á,é,í,ó,ú,à,è,ì,ò,ù,ä,ë,ï,ö,ü,ÿ,â,ê,î,ô,û,å,e,i,ø,u");
+                $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
+                return str_replace($search, $replace, $msg);
+        }
 }
