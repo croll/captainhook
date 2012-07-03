@@ -7,16 +7,20 @@ class Main {
   public static function hook_mod_langeditor_index($hookname, $userdata) {
 		$page = new \mod\webpage\Main();
 
+    $langs=self::loadLangsFiles();
+
     if (isset($_REQUEST['trad-submit'])) {
       $lang=$_REQUEST['lang'];
       $modname=$_REQUEST['modname'];
-      \core\Core::log($_REQUEST);
+      //\core\Core::log($_REQUEST);
 
       $langarray=array();
       foreach($_REQUEST as $k => $v) {
-        if (substr($k, 0, 1) == '_') {
-          $m=urldecode(substr($k, 1));
-          $langarray[$m]=$v;
+				foreach($langs[$modname][$lang] as $k2 => $v2) {
+					if (md5($k2) == $k) {
+						$langarray[$k2]=$v;
+						break;
+					}
         }
       }
 
@@ -25,6 +29,7 @@ class Main {
     }
 
     $langs=self::loadLangsFiles();
+
     $page->smarty->assign('langs', $langs);    
 		$page->setLayout('langeditor/index');
 		$page->display();
