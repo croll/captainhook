@@ -14,5 +14,12 @@
   "Save" : "Enregistrer",
   "Cancel" : "Annuler",
   "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)",
-  "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )"
+  "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )",
+  "Identification invalide" : "Identification invalide",
+  "Connexion" : "Connexion",
+  "Login failed" : "Login failed",
+  "Connection" : "Connection",
+  "Login successful, redirecting..." : "Login successful, redirecting...",
+  "Logout ok, redirecting..." : "Logout ok, redirecting...",
+  "You are already identified, redirecting..." : "You are already identified, redirecting..."
 }
