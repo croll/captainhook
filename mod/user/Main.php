@@ -366,13 +366,14 @@ class Main {
 
 	public static function hook_mod_user_login($hookname, $userdata, $urlmatches) {
 		$displayForm = true;
+		$params = array('mod' => 'user', 'file' => 'templates/loginForm.json');
+		$form = new \mod\form\Form($params);
 		$page = new \mod\webpage\Main();
-		$form = new \mod\field\FieldForm($page->smarty, 'user_loginform', 'user/login_form_fields');
 		$page->setLayout('user/login');
 		if (!self::userIsLoggedIn()) { 
-			if ($form->isPosted() && $form->isValid()) {
-				$l = \core\Tools::cleanString($form->getValue('login'));
-				$p = \core\Tools::cleanString($form->getValue('password'));
+			if ($form->isPosted() && $form->validate()) {
+				$l = $form->getValue('login');
+				$p = $form->getValue('password');
 				if(self::checkAuth($l, $p)) {
 					$displayForm = false;
 					$page->smarty->assign('login_ok', true);
@@ -385,8 +386,7 @@ class Main {
 			$page->smarty->assign('url_redirect', 'http://'.$_SERVER['HTTP_HOST']);
 			$displayForm = false;
 		}
-		if ($displayForm)
-			$page->smarty->assign('loginform', $form->getHtml($page));
+		$page->smarty->assign('displayForm', $displayForm);
 		$page->display();
 	}
 
