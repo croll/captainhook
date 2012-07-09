@@ -36,6 +36,7 @@ class Main {
 			return false;
     }
     $db=\core\Core::$db;
+
     // check if page is a translation of a page or a reference page 
     $ilr=$db->fetchAll('SELECT "pid", "sysname", "id_lang_reference", "lang"  FROM "ch_page" WHERE "sysname"=?', array($sysname));
     $ilr = $ilr[0];
@@ -58,7 +59,7 @@ class Main {
       // else -> is translation of a page
       // get reference page 
       $myref= $db->fetchAll('SELECT "pid", "sysname", "id_lang_reference", "lang"  FROM "ch_page" WHERE "pid"=?', array($ilr['id_lang_reference']));
-      if ($myref) {
+      if (!$myref) {
         return $sysname;
       }
       $myref=$myref[0];
