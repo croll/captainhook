@@ -13,5 +13,7 @@
   "User is active" : "L'utilisateur est actif",
   "Save" : "Enregistrer",
   "Cancel" : "Annuler",
-  "Se d\u00e9connecter" : "Se d\u00e9connecter"
+  "Se d\u00e9connecter" : "Se d\u00e9connecter",
+  "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)",
+  "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )"
 }

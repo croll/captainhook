@@ -12,5 +12,7 @@
   "Repeat password" : "R\u00e9p\u00e9ter le mot de passe",
   "User is active" : "Actif",
   "Save" : "Enregistrer",
-  "Cancel" : "Annuler"
+  "Cancel" : "Annuler",
+  "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)",
+  "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )"
 }
