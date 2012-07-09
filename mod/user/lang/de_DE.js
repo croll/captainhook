@@ -2,7 +2,7 @@
   "User" : "Utilisateur",
   "Manage users" : "G\u00e9rer les utilisateurs",
   "Add user" : "Ajouter un utilisateur",
-  "Logout" : "D\u00e9connexion",
+  "Logout" : "Ausloggen",
   "Login" : "Connexion",
   "View" : "Voir",
   "User login" : "Identifiant",
@@ -14,5 +14,10 @@
   "Save" : "Enregistrer",
   "Cancel" : "Annuler",
   "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)",
-  "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )"
+  "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )",
+  "Login failed" : "Login failed",
+  "Connection" : "Connection",
+  "Login successful, redirecting..." : "Login successful, redirecting...",
+  "Logout ok, redirecting..." : "Logout ok, redirecting...",
+  "You are already identified, redirecting..." : "You are already identified, redirecting..."
 }
