@@ -20,5 +20,7 @@
   "Connection" : "Connexion",
   "Login successful, redirecting..." : "Authentification ok, redirection...",
   "Logout ok, redirecting..." : "D\u00e9connexion ok, redir\u00e9ction...",
-  "You are already identified, redirecting..." : "Vous \u00eates d\u00e9j\u00e0 identif\u00e9, redirection..."
+  "You are already identified, redirecting..." : "Vous \u00eates d\u00e9j\u00e0 identif\u00e9, redirection...",
+  "Identification invalide" : "Identification invalide",
+  "Connexion" : "Connexion"
 }
