@@ -17,7 +17,7 @@
   "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)",
   "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )" : "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )",
   "Login failed" : "Authentification incorrect",
-  "Connection" : "Connection",
+  "Connection" : "Connexion",
   "Login successful, redirecting..." : "Authentification ok, redirection...",
   "Logout ok, redirecting..." : "D\u00e9connexion ok, redir\u00e9ction...",
   "You are already identified, redirecting..." : "Vous \u00eates d\u00e9j\u00e0 identif\u00e9, redirection..."
