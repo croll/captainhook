@@ -8,7 +8,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
 		$this->description = 'A simple contact form';
 		$this->name = 'contactform';
 		$this->version = '1.0';
-		$this->dependencies = array('ajax', 'config', 'cssjs', 'form', 'webpage');
+		$this->dependencies = array('ajax', 'config', 'cssjs', 'form', 'webpage', 'lang');
 		parent::__construct();
 	}
 
