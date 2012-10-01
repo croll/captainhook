@@ -88,7 +88,7 @@ class Form {
 		foreach(array('name', 'id', 'action', 'method', 'enctype', 'style', 'class') as $p) {
 			if (isset($this->_datas[$p])) $outp .= " $p=\"".$this->_datas[$p]."\"";
 		}
-		$outp .= ">$content</form>";
+		$outp .= "><input type=\"hidden\" name=\"hiddenFormId\" value=\"".$this->_id."\" />$content</form>";
 		// JS
 		$formJsObj = 'chForm_'.$this->_id;
 		$jsOutp="var $formJsObj=document.id('".$this->_id."');\n";
@@ -165,6 +165,10 @@ class Form {
 			$values[$field->name] = $field->getValue();
 		}
 		return $values;
+	}
+
+	public function isPosted() {
+		return (isset($_REQUEST['hiddenFormId']) && $_REQUEST['hiddenFormId'] == $this->_id) ? true : false;
 	}
 
 	public function validate() {

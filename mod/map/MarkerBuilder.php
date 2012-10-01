@@ -76,7 +76,7 @@ class MarkerSquare extends MarkerBuilder {
 class MarkerRectangle extends MarkerBuilder {
 
 	function draw() {
-		$this->_drawObj->rectangle(0, ($this->_params['size'][1]-$this->_params['strokewidth']/5), $this->_params['size'][0]-$this->_params['strokewidth'], $this->_params['size'][1]-$this->_params['strokewidth']-($this->_params['size'][1]-$this->_params['strokewidth']/5));  
+		$this->_drawObj->rectangle(0, ($this->_params['size'][1]/4)+$this->_params['strokewidth'], $this->_params['size'][0]-$this->_params['strokewidth'], ($this->_params['size'][1]-($this->_params['size'][1]/4))-$this->_params['strokewidth']);  
 	}
 
 }
@@ -84,7 +84,7 @@ class MarkerRectangle extends MarkerBuilder {
 class MarkerRoundrectangle extends MarkerBuilder {
 
 	function draw() {
-		$this->_drawObj->roundrectangle($this->_params['strokewidth'], $this->_params['strokewidth'], $this->_params['size'][0]-$this->_params['strokewidth'], $this->_params['size'][1]-$this->_params['strokewidth'], 2, 2);  
+		$this->_drawObj->rectangle(0, ($this->_params['size'][1]/4)+$this->_params['strokewidth'], $this->_params['size'][0]-$this->_params['strokewidth'], ($this->_params['size'][1]-($this->_params['size'][1]/4))-$this->_params['strokewidth']);  
 	}
 
 }

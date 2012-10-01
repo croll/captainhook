@@ -65,9 +65,9 @@ function scantemplates() {
 			echo "parsing: $tplfile ...\n";
 			$tplcontent=file_get_contents($tplfile);
 			$matches=array();
-			preg_match_all('/{t d=[\'"]([^\'"]*)[\'"] m="([^"]*)".*}/', $tplcontent, $matches);
+			preg_match_all('/{t d=[\'"]([^\'"]*)[\'"] m="([^"]*)"[^}]*}/', $tplcontent, $matches);
 			foreach($matches[1] as $k=>$domain) addstr($domain, $matches[2][$k]);
-			preg_match_all('/{t d=[\'"]([^\'"]*)[\'"] m=\'([^\']*)\'.*}/', $tplcontent, $matches);
+			preg_match_all('/{t d=[\'"]([^\'"]*)[\'"] m=\'([^\']*)\'[^}]*}/', $tplcontent, $matches);
 			foreach($matches[1] as $k=>$domain) addstr($domain, $matches[2][$k]);
 		}
 	}

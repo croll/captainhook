@@ -1,0 +1,4 @@
+{
+  "French" : "French",
+  "Deutsch" : "Deutsch"
+}

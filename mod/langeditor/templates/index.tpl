@@ -18,7 +18,7 @@
   }
   .trad {
   margin-bottom: 5px;
-  width: 100%;
+  width: 90%;
   }
   .
 </style>
@@ -35,8 +35,8 @@
           <input type='hidden' name='modname' value='{$modname|escape}'/>
           <input type='hidden' name='lang' value='{$lang|escape}'/>
           {foreach from=$trads item=trad key=m}
-            <div class='m'>{$m|escape}</div>
-            <input type='text' class='trad' name='_{urlencode($m)|escape}' value='{$trad|escape}'>
+            <div class='m'>({$modname|escape}) {$m|escape}</div>
+            {$lang|escape}: <input type='text' class='trad' name='{md5($m)}' value='{$trad|escape}'>
           {/foreach}
 	</form>
       {/foreach}

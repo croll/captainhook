@@ -13,6 +13,8 @@ class Main {
 			'config' => $config,
 			'recaptcha' => recaptcha_get_html($config['key'])
 		));
+    $lang=\mod\lang\Main::getCurrentLang();
+    $page->smarty->assign('lang', $lang);
 		$page->display();
 	}
 
@@ -22,6 +24,8 @@ class Main {
 		$config = self::parseConfig();
 		$page = new \mod\webpage\Main();
 		$page->smarty->assign('config', $config);
+    $lang=\mod\lang\Main::getCurrentLang();
+    $page->smarty->assign('lang', $lang);
 
 		if (is_null($config) || !isset($config['privateKey'])) {
 			$page->smarty->assign('configError', true);

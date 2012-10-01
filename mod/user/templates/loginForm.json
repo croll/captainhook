@@ -1,0 +1,26 @@
+{
+	"method" : "post",
+	"id" : "loginForm",
+	"action" : "/login",
+	"class" : "form-horizontal",
+	"enctype" : "multipart/form-data",
+	"elements" : 
+	[
+		{	"type" : "text",
+			"name" : "login",
+			"value" : "",
+			"validators" : 
+			[ 
+				"required"
+			]
+		},
+		{	"type" : "password",
+			"name" : "password",
+			"value" : "",
+			"validators" : 
+			[ 
+				"required"
+			]
+		}
+	]
+}

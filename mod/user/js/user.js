@@ -22,7 +22,7 @@ var User = new Class({
 				var btnLabel= el.getProperty('data-btn');
 				var btnClick= el.getProperty('data-bclick');
 				var btnIcon= el.getProperty('data-bicon');
-				var btn = new Element('span', {class:'float', html: '<a onclick="'+ btnClick +'" class="btn" href="#"><i class="'+ btnIcon +'"></i>'+ btnLabel +'</a>'});
+				var btn = new Element('span', {'class':'float', html: '<a onclick="'+ btnClick +'" class="btn" href="#"><i class="'+ btnIcon +'"></i>'+ btnLabel +'</a>'});
 				c.adopt(btn);
 
 			}
@@ -30,7 +30,6 @@ var User = new Class({
 			if (el.getProperty('data-actions')) {
 				var action = el.getProperty('data-actions');
 			}
-                        	
 			if (el.getProperty('data-id')) {
 				var aid = el.getProperty('data-id');
 			}
@@ -78,7 +77,7 @@ var User = new Class({
 				var btnLabel= this.getProperty('data-btn');
 				var btnClick= this.getProperty('data-bclick');
 				var btnIcon= this.getProperty('data-bicon');
-				var btn = new Element('span', {class:'float', html: '<a onclick="'+ btnClick +'" class="btn" href="#"><i class="'+ btnIcon +'"></i>'+ btnLabel +'</a>'});
+				var btn = new Element('span', {'class':'float', html: '<a onclick="'+ btnClick +'" class="btn" href="#"><i class="'+ btnIcon +'"></i>'+ btnLabel +'</a>'});
 				c.adopt(btn);
 
 			}
@@ -166,14 +165,14 @@ var User = new Class({
 		
 		var mypwRow = new Element('div', {'class': 'row'});
 		var mypwLabel = new Element('label', {'for': 'password', 'html': 'User password'});
-		var mypwName = new Element('input', {'type': 'password', 'name': 'password', 'value' : '', class: 'medium'});
+		var mypwName = new Element('input', {'type': 'password', 'name': 'password', 'value' : '', 'class': 'medium'});
 		mypwRow.adopt(mypwLabel);
 		mypwRow.adopt(mypwName);
 		myForm.adopt(mypwRow);
 			
 		var mywpRow = new Element('div', {'class': 'row'});
 		var mywpLabel = new Element('label', {'for': 'password2', 'html': 'Retype password'});
-		var mywpName = new Element('input', {'type': 'password', 'name': 'password2', 'value' : '', class: 'medium'});
+		var mywpName = new Element('input', {'type': 'password', 'name': 'password2', 'value' : '', 'class': 'medium'});
 		mywpRow.adopt(mywpLabel);
 		mywpRow.adopt(mywpName);
 		myForm.adopt(mywpRow);

@@ -55,6 +55,7 @@ class Main {
 
 	public static function smartyFunction_t($params, $template) {
     self::init();
+		$paf=array();
 		foreach($params as $k => $v)
 			if (!preg_match('/^p[0-9]+$/', $k))
 				$paf[$k]=$v;
