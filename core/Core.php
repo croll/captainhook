@@ -154,9 +154,13 @@ class Core {
 			$log .= ob_get_contents();
 			ob_end_clean();
 		}
-		$stderr = fopen('php://stderr', 'w'); 
+		if (!isset(self::$ini['general']) || !isset(self::$ini['general']['logfile']) || empty(self::$ini['general']['logfile'])) {
+			$stderr = fopen('php://stderr', 'w'); 
+		} else {
+			$stderr = fopen(dirname(__FILE__).'/../logs/'.self::$ini['general']['logfile'], 'a+'); 
+		} 
 		fwrite($stderr, $log."\n"); 
-    fclose($stderr); 
+   	fclose($stderr); 
 	}
 
 }

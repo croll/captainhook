@@ -4,7 +4,7 @@ namespace mod\webpage;
 
 class Main {
   public $title = "Captain Hook";
-  public $favicon = "mod/webpage/images/favicon.ico";
+  public $favicon = "/mod/webpage/images/favicon.ico";
 	public $layout = 'webpage/webpage_main';
   public $csss = array();
   public $scripts = array();
