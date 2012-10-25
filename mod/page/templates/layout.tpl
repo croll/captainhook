@@ -10,6 +10,7 @@
 	
 	{css file="/mod/cssjs/css/captainhook.css"}
 	{css file="/mod/cssjs/ext/twitter-bootstrap/css/bootstrap.css"}
+	{css file="/mod/cssjs/ext/twitter-bootstrap/css/bootstrap-responsive.css"}
 	{css file="/mod/cssjs/css/meioautocomplete.css"}
 	{css file="/mod/cssjs/css/message.css"}
 	{css file="/mod/cssjs/css/mooniform.css"}
@@ -19,13 +20,19 @@
 	{css file="/mod/page/css/icon.css"}
 {/block}
 {block name='webpage_body' }
-<div class="topbar">
-      <div class="fill">
+<div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
         <div class="container">
-          <a class="brand" href="/page/list/">{t d='page' m='Captainhook page module demo'}</a>
-		<ul class="nav">
-		<li ><a  class="top-btn" href="/"><i class="icon-home glyph-white"></i>  {t d='page' m='Accueil'}</a></li>
-	   {if \mod\user\Main::userHasRight('Manage page')}
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="/page/list">Page module démo</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li ><a  class="top-btn" href="/"><i class="icon-home glyph-white"></i>  {t d='page' m='Accueil'}</a></li>
+	      {if \mod\user\Main::userHasRight('Manage page')}
   		<li class="dropdown active" onclick="this.toggleClass('open');">
     		<a href="#"
           		class="dropdown-toggle"
@@ -40,13 +47,13 @@
                 {/block}
     		</ul>
   		</li>
-	    {/if}
-            	<li ><a  class="top-btn" href="/user/"><i class="icon-user glyph-white"></i>  {t d='user' m='User'}</a></li>
-	</ul>
-           </div>
+	      {/if}
+              <li ><a  class="top-btn" href="/user/"><i class="icon-user glyph-white"></i>  {t d='user' m='User'}</a></li>
+	    </ul>
+          </div>
+        </div>
       </div>
-</div>
-
+</div> 
 <div class="container">
 	<div id="page_content">
 	{block name='page_content'}
