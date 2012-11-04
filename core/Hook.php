@@ -119,7 +119,7 @@ class Hook {
    * @return void
    */
   public static function call($name) {
-    Core::log("Hook: call: ".$name);
+    //Core::log("Hook: call: ".$name);
 
     $args=func_get_args();
     array_unshift($args, $name);
