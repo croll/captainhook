@@ -12,7 +12,6 @@
   "Publish" : "Publish",
   "Save" : "Save",
   "Cancel" : "Cancel",
-  "Captainhook page module demo" : "Captainhook page module demo",
   "Accueil" : "Accueil",
   "Page" : "Page",
   "List" : "List",
@@ -30,5 +29,7 @@
   "yes" : "ja",
   "no" : "nein",
   "Edit" : "Edit",
-  "Del" : "Del"
+  "Del" : "Del",
+  "Manage pages" : "Manage pages",
+  "Add page" : "Add page"
 }

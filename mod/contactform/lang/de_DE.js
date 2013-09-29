@@ -9,7 +9,6 @@
   "Add" : "hinzuf\u00fcgen",
   "Del" : "l\u00f6schen",
   "T\u00e9l" : "Tel",
-  "M\u00e9l" : "Mail-Adresse",
   "Contact form" : "Kontakt formular",
   "Name" : "Name",
   "Email" : "Mail-Adresse",

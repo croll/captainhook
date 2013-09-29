@@ -3,7 +3,6 @@
   "Manage users" : "Benutzerverwaltung",
   "Add user" : "Benutzer hinzuf\u00fcgen ",
   "Logout" : "Abmelden",
-  "Login" : "Anmelden",
   "View" : "Einblenden",
   "User login" : "Benutzer Passwort",
   "User full name" : "Bentuzer Name",

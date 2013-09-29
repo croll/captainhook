@@ -9,7 +9,6 @@
   "Add" : "Ajouter",
   "Del" : "Effacer",
   "T\u00e9l" : "T\u00e9l",
-  "M\u00e9l" : "M\u00e9l",
   "Contact form" : "Formulaire de contact",
   "Name" : "Nom",
   "Email" : "M\u00e9l",
@@ -21,6 +20,5 @@
   "Phone" : "T\u00e9l",
   "Subject" : "Sujet",
   "Captcha is invalid" : "Code de v\u00e9rification invalide.",
-  "You have to define your recapcha api key in the contact module interface, default link is \/contact\/admin_" : "You have to define your recapcha api key in the contact module interface, default link is \/contact\/admin.",
   "You have to define your recapcha api key in the contact module interface, default link is \/contact\/admin." : "You have to define your recapcha api key in the contact module interface, default link is \/contact\/admin."
 }
