@@ -73,8 +73,8 @@ class Main {
 	}
 
 	public static function delUser($user) {
-		if (is_int($user))
-      $uid=$user;
+		if (((int)$user) > 0)
+      $uid=(int)$user;
 		else {
       $uid = \core\core::$db->fetchOne('SELECT "uid" FROM "ch_user" WHERE "login"=?',array($user));
     }
