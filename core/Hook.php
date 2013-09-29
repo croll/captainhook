@@ -15,12 +15,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CaptainHook is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with CaptainHook.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,7 +28,7 @@
 namespace core;
 
 /**
- * This class is both the heart and the brain of the Captain. 
+ * This class is both the heart and the brain of the Captain.
  *
  * @category  CaptainHook
  * @package   Core
@@ -91,7 +91,7 @@ class Hook {
    */
 	public static function checkHookListener($name, $callback, $id_module = NULL) {
 		$exist = Core::$db->fetchOne('SELECT hid FROM "ch_hook" WHERE "name"=? AND "callback"=? AND "mid"=?',
-																 array($name, $callback, $id_module));	
+																 array($name, $callback, $id_module));
 		return ($exist) ? true : false;
 	}
 
@@ -118,18 +118,32 @@ class Hook {
 	 *
    * @return void
    */
-  public static function call($name) {
+  public static function call($name, &$a=null, &$b=null, &$c=null, &$d=null, &$e=null, &$f=null, &$g=null, &$h=null) {
     //Core::log("Hook: call: ".$name);
 
     $args=func_get_args();
-    array_unshift($args, $name);
+
+    $vargs=array();
+    $vargs[]=$name;
+
+    $vargs[]='';
+    $argc=count($args);
+    if ($argc>1) $vargs[]=&$a;
+    if ($argc>2) $vargs[]=&$b;
+    if ($argc>3) $vargs[]=&$c;
+    if ($argc>4) $vargs[]=&$d;
+    if ($argc>5) $vargs[]=&$e;
+    if ($argc>6) $vargs[]=&$f;
+    if ($argc>7) $vargs[]=&$g;
+    if ($argc>8) $vargs[]=&$h;
+    //foreach($args as $k=>&$v) $vargs[]=&$v;
 
     if (!self::$callbacks) self::_initCache();
     if (isset(self::$callbacks[$name])) {
       foreach(self::$callbacks[$name] as $row) {
 				//Core::log("Hook: calling: ".$row['callback']);
-        $args[1]=$row['userdata'];
-				if (call_user_func_array($row['callback'], $args) == 'stop')
+        $vargs[1]=$row['userdata'];
+				if (call_user_func_array($row['callback'], $vargs) == 'stop')
 					return;
       }
     }
