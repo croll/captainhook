@@ -30,7 +30,16 @@ class Main {
 
     $langs=self::loadLangsFiles();
 
-    $page->smarty->assign('langs', $langs);    
+    $languages=array();
+    foreach($langs as $modname => $mod) {
+      foreach($mod as $language => $v) {
+        if (!in_array($language, $languages))
+          $languages[]=$language;
+      }
+    }
+    $page->smarty->assign('languages', $languages);
+
+    $page->smarty->assign('langs', $langs);
 		$page->setLayout('langeditor/index');
 		$page->display();
 	}
@@ -41,7 +50,7 @@ class Main {
     foreach(scandir(CH_MODDIR) as $modname) {
       if (substr($modname, 0, 1) == '.') continue;
       if (!is_dir(CH_MODDIR.'/'.$modname)) continue;
-      
+
       $langdir=CH_MODDIR.'/'.$modname.'/lang';
       if (!file_exists($langdir) || !is_dir($langdir)) continue;
 
@@ -52,7 +61,7 @@ class Main {
         if (substr($langname, 0, 1) == '.') continue;
         if (substr($langname, 0, -3) == '.js') continue;
         if (!is_file($langfile)) continue;
-        
+
         $langname=substr($langname, 0, -3); // remove '.js'
 
         $langs[$modname][$langname]=json_decode(file_get_contents($langfile), true);
@@ -74,5 +83,5 @@ class Main {
       return $res;
     } else return json_encode($blup);
   }
-  
+
 }

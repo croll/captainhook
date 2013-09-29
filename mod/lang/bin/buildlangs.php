@@ -8,12 +8,20 @@ require(dirname(__FILE__).'/../../../core/Core.php');
 
 $lang='C';
 $langs=array();
+$seens=array();
 
 function addstr($d, $m) {
 	global $langs;
-  echo "found: $d/$m\n";
+  global $seens;
+
+  if (!isset($seens[$d])) $seens[$d]=array();
+  $seens[$d][$m]=true;
+
 	if (!isset($langs[$d])) $langs[$d]=array();
-	if (!isset($langs[$d][$m])) $langs[$d][$m]=$m;
+	if (!isset($langs[$d][$m])) {
+    echo "adding: $d/$m\n";
+    $langs[$d][$m]=null;
+  }
 }
 
 function scanlangs() {
@@ -33,12 +41,33 @@ function scanlangs() {
 		$langs[$modname]=array();
 		$langs[$modname]=json_decode(file_get_contents($langfile), true);
 	}
+
+}
+
+function removeoldlangs() {
+	global $seens;
+	global $langs;
+  foreach($langs as $modname => $lang) {
+    if (!isset($langs[$modname])) {
+      if (!isset($seens[$modname])) {
+        echo "removing mod: $modname\n";
+        unset($langs[$modname]);
+        continue;
+      }
+    }
+    foreach($lang as $vo => $vt) {
+      if (!isset($seens[$modname][$vo])) {
+        echo "removing: $modname/$vo (".$langs[$modname][$vo].")\n";
+        unset($langs[$modname][$vo]);
+      }
+    }
+  }
 }
 
 function writelangs() {
 	global $langs;
 	global $lang;
-	
+
 	foreach($langs as $modname => $langd) {
 		$langdir=CH_MODDIR.'/'.$modname.'/lang';
 		if (!file_exists($langdir) || !is_dir($langdir)) mkdir($langdir);
@@ -62,7 +91,7 @@ function scantemplates() {
 			if (substr($tplname, 0, 1) == '.') continue;
 			if (!is_file($tplfile)) continue;
 
-			echo "parsing: $tplfile ...\n";
+			//echo "parsing: $tplfile ...\n";
 			$tplcontent=file_get_contents($tplfile);
 			$matches=array();
 			preg_match_all('/{t d=[\'"]([^\'"]*)[\'"] m="([^"]*)"[^}]*}/', $tplcontent, $matches);
@@ -86,7 +115,7 @@ function scanjavascripts() {
 			if (substr($jsname, 0, 1) == '.') continue;
 			if (!is_file($jsfile)) continue;
 
-			echo "parsing: $jsfile ...\n";
+			//echo "parsing: $jsfile ...\n";
 			$jscontent=file_get_contents($jsfile);
 			$matches=array();
 			preg_match_all('/ch_t\([\'"]([^\'"]*)[\'"], "([^"]*)".*\)/', $jscontent, $matches);
@@ -111,7 +140,7 @@ function scanphps() {
 			if (!substr($phpname, -4) == '.php') continue;
 			if (!is_file($phpfile)) continue;
 
-			echo "parsing: $phpfile ...\n";
+			//echo "parsing: $phpfile ...\n";
 			$phpcontent=file_get_contents($phpfile);
 			$matches=array();
 			preg_match_all('/ch_t\([\'"]([^\'"]*)[\'"], "([^"]*)".*\)/', $phpcontent, $matches);
@@ -142,5 +171,6 @@ scanlangs();
 scantemplates();
 scanjavascripts();
 scanphps();
+removeoldlangs();
 //print_r($langs);
 writelangs();

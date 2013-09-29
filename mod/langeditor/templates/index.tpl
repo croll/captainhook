@@ -2,45 +2,93 @@
 
 {block name='webpage_head' append}
 <style>
-  .module_title {
-  margin-top: 10px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  }
-  .langname {
-  margin-top: 10px;
-  font-weight: bold;
-  margin-bottom: 10px;
-  }
-  .m {
-  margin-top: 5px;
-  font-weight: normal;
-  }
   .trad {
   margin-bottom: 5px;
   width: 90%;
   }
-  .
+  .langbutton, .modbutton {
+  font-weight: bold;
+  padding: 5px;
+  background: #aaa;
+  cursor: pointer;
+  border: solid 1px white;
+  }
+  .selected {
+  background: #eee;
+  border: solid 1px black;
+  }
+  .color-1 {
+    background: #eee;
+  }
+  .color--1 {
+    background: #bbb;
+  }
 </style>
 {/block}
 
 {block name='webpage_body'}
-<ul>
-  {foreach from=$langs item=mod key=modname}
-    <li class='module_title'>Module: {$modname|escape}</li>
-    <ul>
-      {foreach from=$mod item=trads key=lang}
+  <div style="margin: 15px">
+    {foreach from=$languages item=l}
+      <span class='langbutton' id='langbutton-{$l}' onclick='showlanguage("{$l}")'>{$l|escape}</span>
+    {/foreach}
+  </div>
+
+  {foreach from=$languages item=l}
+    <div class="langcontent" id="lang-{$l}" style="display: none">
+      <div style="margin: 15px">
+        {foreach from=$langs item=mod key=modname}
+          <span class='modbutton modbutton-{$modname}' onclick='showmod("{$modname}")'>{$modname|escape}</span>
+        {/foreach}
+      </div>
+
+      {foreach from=$langs item=mod key=modname}
+        <div class="modcontent modcontent-{$modname}" style="display: none">
         <form method='POST'>
-          <li class='langname'>Language: {$lang|escape} <input type='submit' name='trad-submit' value='Submit this traduction'></li>
-          <input type='hidden' name='modname' value='{$modname|escape}'/>
-          <input type='hidden' name='lang' value='{$lang|escape}'/>
-          {foreach from=$trads item=trad key=m}
-            <div class='m'>({$modname|escape}) {$m|escape}</div>
-            {$lang|escape}: <input type='text' class='trad' name='{md5($m)}' value='{$trad|escape}'>
+          <input type="hidden" name="lang" value="{$l}"/>
+          <input type="hidden" name="modname" value="{$modname}"/>
+          {$color=1}
+          {foreach from=$mod[$l] item=trad key=m}
+            <div class='color-{$color}'>
+              <div class='m'>{$m|escape}</div>
+              <input {if $trad === null} style='background: #fdd'{/if} type='text' class='trad' name='{md5($m)}' value='{$trad|escape}'>
+            </div>
+            <br />
+            {$color=-$color}
           {/foreach}
-	</form>
+          <input type='submit' name='trad-submit' value='Submit this traduction'>
+        </form>
+        </div>
       {/foreach}
-    </ul>
+    </div>
   {/foreach}
-</ul>
+
+  <div>
+    <br />
+  </div>
+
+
+
+{literal}
+<script>
+function showlanguage(l) {
+         $$('.langcontent').setStyle('display', 'none');
+         $('lang-'+l).setStyle('display', '');
+
+         $$('.langbutton').removeClass('selected');
+         $('langbutton-'+l).addClass('selected');
+         console.log("show "+l);
+}
+
+function showmod(mod) {
+         $$('.modcontent').setStyle('display', 'none');
+         $$('.modcontent-'+mod).setStyle('display', '');
+
+         $$('.modbutton').removeClass('selected');
+         $$('.modbutton-'+mod).addClass('selected');
+         console.log("show "+mod);
+}
+</script>
+{/literal}
+
+
 {/block}

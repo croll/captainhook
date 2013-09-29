@@ -22,6 +22,7 @@ class ModuleDefinition extends \core\ModuleDefinition {
 	function uninstall() {
     // do things here by default (before parent::uninstall)
 
+  	\mod\regroute\Main::unregister($this->id);
 		parent::uninstall();
 	}
 }
