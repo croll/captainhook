@@ -13,7 +13,7 @@ class Main {
 	public static function checkAuth($login='',$password='') {
 		if ((!empty($login)) && (!empty($password))) {
 			if ( (preg_match("/^[a-zA-Z0-9-_\.]+$/",$login)) && (preg_match("/^[a-zA-Z0-9-_!]+$/",$password)) ) {
-				$res = Core::$db->fetchAll('SELECT "full_name", "login" FROM "ch_user" WHERE UPPER("login")=UPPER(?) AND "pass"=md5(?) AND "status"=1', 
+				$res = Core::$db->fetchAll('SELECT "full_name", "login" FROM "ch_user" WHERE UPPER("login")=UPPER(?) AND "pass"=md5(?) AND "status"=1',
 																		array($login, $password));
 				if (count($res)) {
 					$row = $res[0];
@@ -48,14 +48,17 @@ class Main {
 	}
 
 	public static function addUser($name, $login, $password, $status=1) {
-		return Core::$db->exec_returning('INSERT INTO "ch_user" ("full_name", "login", "pass", "status") VALUES (?,?,MD5(?),?)', 
+		return Core::$db->exec_returning('INSERT INTO "ch_user" ("full_name", "login", "pass", "status") VALUES (?,?,MD5(?),?)',
 												array($name, $login, $password, $status), 'uid');
 	}
 
 	public static function getUserInfos($id) {
 		$result = Core::$db->query('SELECT * FROM "ch_user" WHERE "uid"=?',
 																	array((int)$id));
-		return $result->fetchRow();
+    $user=$result->fetchRow();
+    $user['mod']=array();
+    \core\Hook::call('mod_user_getUserInfos_post', $user);
+		return $user;
 	}
 	public static function getUserFullName($login) {
 		return Core::$db->fetchOne('SELECT "full_name" FROM "ch_user" WHERE login =?', array($login));
@@ -71,11 +74,14 @@ class Main {
 
 	public static function delUser($user) {
 		if (is_int($user))
-			Core::$db->query('DELETE FROM "ch_user" WHERE "uid" = ?', 
-												array($user));
-		else
-			Core::$db->query('DELETE FROM "ch_user" WHERE "login" = ?', 
-												array($user));
+      $uid=$user;
+		else {
+      $uid = \core\core::$db->fetchOne('SELECT "uid" FROM "ch_user" WHERE "login"=?',array($user));
+    }
+    \core\Hook::call('mod_user_delete_pre', $uid);
+    Core::$db->query('DELETE FROM "ch_user" WHERE "uid" = ?', array($uid));
+    Core::$db->query('DELETE FROM "ch_user_group" WHERE "uid" = ?', array($uid));
+    \core\Hook::call('mod_user_delete_post', $uid);
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
 	}
 
@@ -95,7 +101,7 @@ class Main {
 	}
 
 	public static function addGroup($name, $status=1) {
-		return Core::$db->exec_returning('INSERT INTO "ch_group" ("name", "status") VALUES (?, ?)', 
+		return Core::$db->exec_returning('INSERT INTO "ch_group" ("name", "status") VALUES (?, ?)',
 												array($name, (int)$status), 'gid');
 	}
 	public static function renameGroup($old, $new) {
@@ -112,14 +118,14 @@ class Main {
 		$id = \core\core::$db->fetchOne('SELECT "gid" FROM "ch_group" WHERE LOWER("name")=LOWER(?)',array($name));
 		return ($id) ? (int)$id : NULL;
 	}
-	
+
 	public static function delGroup($group) {
 		self::delAllGroupAssignation($group);
 		if (is_int($group))
-			Core::$db->query('DELETE FROM "ch_group" WHERE "gid" = ?', 
+			Core::$db->query('DELETE FROM "ch_group" WHERE "gid" = ?',
 												array($group));
 		else
-			Core::$db->query('DELETE FROM "ch_group" WHERE "name" = ?', 
+			Core::$db->query('DELETE FROM "ch_group" WHERE "name" = ?',
 												array($group));
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
 	}
@@ -130,12 +136,12 @@ class Main {
 		else {
 			try {
 				$gid = self::getGroupId($group);
-			} catch (\Exception $e) { 
+			} catch (\Exception $e) {
 				throw new \Exception("Unable to assign user to group. Group $group not found");
 				return false;
 			}
 		}
-		Core::$db->query('DELETE FROM "ch_user_group" WHERE "gid" = ?', 
+		Core::$db->query('DELETE FROM "ch_user_group" WHERE "gid" = ?',
 											array($gid));
 		return (isset(Core::$db->Affected_Rows)) ? true : false;
 	}
@@ -191,7 +197,7 @@ class Main {
 		else {
 			try {
 				$uid = self::getUserId($login);
-			} catch (\Exception $e) { 
+			} catch (\Exception $e) {
 				throw new \Exception("Unable to assign user to group. User $login not found");
 				return false;
 			}
@@ -201,7 +207,7 @@ class Main {
 		else {
 			try {
 				$gid = self::getGroupId($group);
-			} catch (\Exception $e) { 
+			} catch (\Exception $e) {
 				throw new \Exception("Unable to assign user to group. Group $group not found");
 				return false;
 			}
@@ -209,7 +215,7 @@ class Main {
 		return (Core::$db->exec_returning('INSERT INTO "ch_user_group" (uid, gid) VALUES (?,?)',
 																	array((int)$uid, (int)$gid), 'ugid')) ? true : false;
 	}
-	
+
 	public static function removeUserFromAllGroups($user) {
 		$groups =self::getUserGroups($user, 'name');
 		for ($i=0; $i < count($groups); $i++) {
@@ -222,7 +228,7 @@ class Main {
 		else {
 			try {
 				$uid = self::getUserId($login);
-			} catch (\Exception $e) { 
+			} catch (\Exception $e) {
 				throw new \Exception("Unable to assign user to group. User $login not found");
 				return false;
 			}
@@ -232,7 +238,7 @@ class Main {
 		else {
 			try {
 				$gid = self::getGroupId($group);
-			} catch (\Exception $e) { 
+			} catch (\Exception $e) {
 				throw new \Exception("Unable to assign user to group. Group $group not found");
 				return false;
 			}
@@ -244,9 +250,9 @@ class Main {
 		$right = self::getRightId($name);
 		if (!is_null($right)) {
 			throw new \Exception("A right with name $name already exist");
-			return false; 
+			return false;
 		} else {
-			return Core::$db->exec_returning('INSERT INTO "ch_right" ("name", "description") VALUES (?,?)', 
+			return Core::$db->exec_returning('INSERT INTO "ch_right" ("name", "description") VALUES (?,?)',
 												array($name, $description),'rid');
 		}
 	}
@@ -276,7 +282,7 @@ class Main {
 		else {
 			try {
 				$gid = self::getGroupId($group);
-			} catch (\Exception $e) { 
+			} catch (\Exception $e) {
 				throw new \Exception("Unable to assign right. Group $group not found");
 				return false;
 			}
@@ -309,7 +315,7 @@ class Main {
 	public static function delRightAssignation($right, $group=NULL) {
 		if (is_int($right))
 			$rid = $right;
-		else 
+		else
 			$rid = self::getRightId($right);
 
 		if (is_null($group)) {
@@ -347,14 +353,14 @@ class Main {
 	public static function userHasRight($right, $user=NULL) {
 			if (is_null($user)) {
 				if (!empty($_SESSION['login'])) $user = $_SESSION['login'];
-				else return self::groupHasRight('anonymous',$right); 
+				else return self::groupHasRight('anonymous',$right);
 			}
 			$uid = (is_string($user)) ? self::getUserId($user) : $user;
 			if (!isset(self::$_cache) || is_null(self::$_cache['u']) || !isset(self::$_cache['u'][$uid]) || is_null(self::$_cache['u'][$uid])) {
 				self::$_cache['u'][$uid] = self::getUserRights($uid);
 			}
 			return (is_array(self::$_cache['u'][$uid]) && in_array($right, self::$_cache['u'][$uid])) ? true : false;
-	}	
+	}
 
 	public static function groupHasRight($group, $right) {
 			$gid = (is_string($group)) ? self::getGroupId($group) : $group;
@@ -362,7 +368,7 @@ class Main {
 				self::$_cache['g'][$gid] = self::getGroupRights($gid);
 			}
 			return (is_array(self::$_cache['g'][$gid]) && in_array($right, self::$_cache['g'][$gid])) ? true : false;
-	}	
+	}
 
 	public static function hook_mod_user_login($hookname, $userdata, $urlmatches) {
 		$displayForm = true;
@@ -370,7 +376,7 @@ class Main {
 		$form = new \mod\form\Form($params);
 		$page = new \mod\webpage\Main();
 		$page->setLayout('user/login');
-		if (!self::userIsLoggedIn()) { 
+		if (!self::userIsLoggedIn()) {
 			if ($form->isPosted() && $form->validate()) {
 				$l = $form->getValue('login');
 				$p = $form->getValue('password');
@@ -407,17 +413,17 @@ class Main {
 		// get lang
 		$lang=\mod\lang\Main::getCurrentLang();
 		$page->smarty->assign('lang', $lang);
-		
+
 		$page->setLayout('user/admin/default');
 		$page->display();
 	}
   public static function hook_mod_user_edit($hookname, $userdata, $matches, $flags) {
 		self::redirectIfNotLoggedIn();
-		// check perm 
+		// check perm
 		if (!self::userHasRight('Manage rights')) {
 			return false;
 		}
-		$uid=$matches[1]; 
+		$uid=$matches[1];
 		$view = self::getUserInfos($uid);
                 $page = new \mod\webpage\Main();
 		$page->smarty->assign('user', $view);
@@ -431,7 +437,7 @@ class Main {
   }
   public static function hook_mod_user_create($hookname, $userdata, $matches, $flags) {
                 \mod\user\Main::redirectIfNotLoggedIn();
-		// check perm 
+		// check perm
 		if (!self::userHasRight('Manage rights')) {
 			return false;
 		}
@@ -440,55 +446,61 @@ class Main {
 		if ($matches['active'] == "on") $matches['active']=1;
 		$dbParams=array();
 		$login=\core\Tools::cleanMyString($matches['login']);
-		$dbParams[]=$login;	
-		$dbParams[]=$matches['full_name'];	
-		$dbParams[]=(int)$matches['active'];	
-		$dbParams[]=$matches['email'];	
-		$dbParams[]=$matches['password'];	
-		$dbParams[]=date("Y-m-d H:i:s");	
-		$dbParams[]=date("Y-m-d H:i:s");	
+		$dbParams[]=$login;
+		$dbParams[]=$matches['full_name'];
+		$dbParams[]=(int)$matches['active'];
+		$dbParams[]=$matches['email'];
+		$dbParams[]=$matches['password'];
+		$dbParams[]=date("Y-m-d H:i:s");
+		$dbParams[]=date("Y-m-d H:i:s");
 
-		return $db->exec_returning("INSERT INTO ch_user (
-				login, 
-				full_name, 
-				status, 
-				email, 
-				pass, 
-				created, 
-				updated) VALUES 
+    \core\Hook::call('mod_user_create_pre');
+		$uid=$db->exec_returning("INSERT INTO ch_user (
+				login,
+				full_name,
+				status,
+				email,
+				pass,
+				created,
+				updated) VALUES
 					(?,?,?,?,md5(?),?,?)", $dbParams, 'uid');
-		// commented While missing some optionality for drirect 
+
+    \core\Hook::call('mod_user_create_post', $uid);
+    return $uid;
+		// commented While missing some optionality for drirect
 		// assignement to groups after user creation
 		// return self::assignUserToGroup($login, "Registered");
   }
 
   public static function hook_mod_user_update($hookname, $userdata, $matches, $flags) {
                 self::redirectIfNotLoggedIn();
-		// check perm 
+		// check perm
 		if (!self::userHasRight('Manage rights')) {
 			return false;
 		}
 		$db=\core\Core::$db;
 		// prepare data for storage
 		$dbParams=array();
-		$q ="UPDATE ch_user 
+		$q ="UPDATE ch_user
 				    SET login=?,
 					full_name=?,
 					status=?,
 					email=?,";
 		$login=\core\Tools::cleanMyString($matches['login']);
-		$dbParams[]=$login;	
-		$dbParams[]=$matches['full_name'];	
-		$dbParams[]=(int)$matches['active'];	
+		$dbParams[]=$login;
+		$dbParams[]=$matches['full_name'];
+		$dbParams[]=(int)$matches['active'];
 		$dbParams[]=$matches['email'];;
 		if ($matches['password']) {
-			$dbParams[]=$matches['password'];	
+			$dbParams[]=$matches['password'];
 			$q .=" pass=md5(?),";
 		}
-		$dbParams[]=date("Y-m-d H:i:s");	
+		$dbParams[]=date("Y-m-d H:i:s");
 		$q .=" updated=? WHERE uid=?";
-		$dbParams[]=(int)$matches['uid'];	
+		$dbParams[]=(int)$matches['uid'];
+    \core\Hook::call('mod_user_update_pre', $matches['uid']);
 		$query= $db->query($q, $dbParams);
+    \core\Hook::call('mod_user_update_post', $matches['uid']);
 		return $matches['uid'];
 	}
   private static function dbSort($sort) {
@@ -500,6 +512,6 @@ class Main {
 		$sorted = self::dbSort($sort);
 		$q =" ORDER BY ".$sorted;
 		return $q;
-   } 
-  	
+   }
+
 }
