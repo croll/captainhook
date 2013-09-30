@@ -19,8 +19,8 @@ function addstr($d, $m) {
 
 	if (!isset($langs[$d])) $langs[$d]=array();
 	if (!isset($langs[$d][$m])) {
-    echo "adding: $d/$m\n";
-    $langs[$d][$m]=null;
+    echo "adding: '$d'/'$m'\n";
+    $langs[$d][$m]=false;
   }
 }
 
@@ -69,6 +69,7 @@ function writelangs() {
 	global $lang;
 
 	foreach($langs as $modname => $langd) {
+    ksort($langd, SORT_STRING);
 		$langdir=CH_MODDIR.'/'.$modname.'/lang';
 		if (!file_exists($langdir) || !is_dir($langdir)) mkdir($langdir);
 		file_put_contents($langdir.'/'.$lang.'.js', myjson_encode($langd));
@@ -97,6 +98,12 @@ function scantemplates() {
 			preg_match_all('/{t d=[\'"]([^\'"]*)[\'"] m="([^"]*)"[^}]*}/', $tplcontent, $matches);
 			foreach($matches[1] as $k=>$domain) addstr($domain, $matches[2][$k]);
 			preg_match_all('/{t d=[\'"]([^\'"]*)[\'"] m=\'([^\']*)\'[^}]*}/', $tplcontent, $matches);
+			foreach($matches[1] as $k=>$domain) addstr($domain, $matches[2][$k]);
+
+      // also check for js
+			preg_match_all('/ch_t\([\'"]([^\'"]*)[\'"], "([^"]*)".*\)/', $tplcontent, $matches);
+			foreach($matches[1] as $k=>$domain) addstr($domain, $matches[2][$k]);
+			preg_match_all('/ch_t\([\'"]([^\'"]*)[\'"], \'([^\']*)\'.*\)/', $tplcontent, $matches);
 			foreach($matches[1] as $k=>$domain) addstr($domain, $matches[2][$k]);
 		}
 	}
