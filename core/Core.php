@@ -5,7 +5,7 @@
  * PHP Version 5
  *
  * @category  CaptainHook
- * @package   Core 
+ * @package   Core
  * @author    Christophe Beveraggi (beve) and Nicolas Dimitrijevic (niclone)
  * @copyright 2011-2012 CROLL (http://www.croll.fr)
  * @link      http://github.com/croll/captainhook
@@ -15,12 +15,12 @@
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * CaptainHook is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with CaptainHook.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -62,7 +62,7 @@ function __autoload_custom($className) {
 spl_autoload_register('\core\__autoload_custom');
 
 /**
- * This class provides a bootstrap for all modules who wish to interface 
+ * This class provides a bootstrap for all modules who wish to interface
  * with CaptainHook.
  *
  * @category  CaptainHook
@@ -84,7 +84,7 @@ class Core {
 	/**
 	 * Convenience method that does the complete initialization for CaptainHook.
 	 *
-	 * This method will load and init AdoDB, set up timezone and trigger main hooks. 
+	 * This method will load and init AdoDB, set up timezone and trigger main hooks.
 	 *
 	 * @api
 	 *
@@ -95,7 +95,6 @@ class Core {
     //ini_set('session.gc_maxlifetime', 30*60); // half hour
     //ini_set('session.cookie_lifetime', 30*60); // half hour
 
-		if (!empty($_GET["page"]) && !preg_match("/^[a-zA-Z]+$/", $_GET["page"])) die("No way");
 		if (!is_file(CH_ROOTDIR.'/conf/general.conf'))
 			die('Config file '.CH_ROOTDIR.'/conf/general.conf'.' does not exist. Take a look at '.CH_ROOTDIR.'/conf/general.conf.dist');
     self::$ini = parse_ini_file(CH_ROOTDIR.'/conf/general.conf', true);
@@ -133,7 +132,7 @@ class Core {
 	/**
 	 * Logs the string passed as argument into apache error log (or stderr if executed from a shell).
 	 *
-	 * This method is useful to perform quick debug/trace. 
+	 * This method is useful to perform quick debug/trace.
 	 * Logs are stored in the standard website error log.
 	 *
 	 * @param string $msg
@@ -155,12 +154,12 @@ class Core {
 			ob_end_clean();
 		}
 		if (!isset(self::$ini['general']) || !isset(self::$ini['general']['logfile']) || empty(self::$ini['general']['logfile'])) {
-			$stderr = fopen('php://stderr', 'w'); 
+			$stderr = fopen('php://stderr', 'w');
 		} else {
-			$stderr = fopen(dirname(__FILE__).'/../logs/'.self::$ini['general']['logfile'], 'a+'); 
-		} 
-		fwrite($stderr, $log."\n"); 
-   	fclose($stderr); 
+			$stderr = fopen(dirname(__FILE__).'/../logs/'.self::$ini['general']['logfile'], 'a+');
+		}
+		fwrite($stderr, $log."\n");
+   	fclose($stderr);
 	}
 
 }
