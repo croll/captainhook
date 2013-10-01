@@ -4,7 +4,7 @@
 <style>
   .trad {
   margin-bottom: 5px;
-  width: 90%;
+  width: 93%;
   }
   .langbutton, .modbutton {
   font-weight: bold;
@@ -50,7 +50,8 @@
           {foreach from=$mod[$l] item=trad key=m}
             <div class='color-{$color}'>
               <div class='m'>{$m|escape}</div>
-              <input {if $trad === null} style='background: #fdd'{/if} type='text' class='trad' name='{md5($m)}' value='{$trad|escape}'>
+              <input {if $trad !== false}checked{/if} type='checkbox' name='check-{md5($m)}' value='1'>
+              <input {if $trad === false} style='background: #fdd'{/if} type='text' class='trad' name='{md5($m)}' value='{$trad|escape}'>
             </div>
             <br />
             {$color=-$color}

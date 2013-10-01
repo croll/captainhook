@@ -72,7 +72,7 @@ class Main {
 
 		$m=$paf['m'];
 
-    if (isset($ch_langs[$ch_lang]) && isset($ch_langs[$ch_lang][$paf['d']]) && isset($ch_langs[$ch_lang][$paf['d']][$paf['m']]))
+    if (isset($ch_langs[$ch_lang]) && isset($ch_langs[$ch_lang][$paf['d']]) && isset($ch_langs[$ch_lang][$paf['d']][$paf['m']]) && $ch_langs[$ch_lang][$paf['d']][$paf['m']] != false)
 			$m=$ch_langs[$ch_lang][$paf['d']][$paf['m']];
 
 		$tag=isset($paf['tag']) ? $paf['tag'] : '';
