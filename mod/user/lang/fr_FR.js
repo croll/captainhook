@@ -1,8 +1,8 @@
 {
   "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )" : false,
   "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)" : false,
-  "Add user" : false,
-  "Cancel" : false,
+  "Add user" : "Ajouter un utilisateur",
+  "Cancel" : "Annuler",
   "Connection" : false,
   "Connexion" : false,
   "Identification invalide" : false,
@@ -17,7 +17,7 @@
   "User email" : false,
   "User full name" : false,
   "User is active" : false,
-  "User login" : false,
+  "User login" : "Identifiant",
   "User password" : false,
   "View" : false,
   "You are already identified, redirecting..." : false
