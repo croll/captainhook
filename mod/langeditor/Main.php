@@ -18,7 +18,10 @@ class Main {
       foreach($_REQUEST as $k => $v) {
 				foreach($langs[$modname][$lang] as $k2 => $v2) {
 					if (md5($k2) == $k) {
-						$langarray[$k2]=$v;
+            if (isset($_REQUEST['check-'.md5($k2)]))
+              $langarray[$k2]=$v;
+            else
+              $langarray[$k2]=false;
 						break;
 					}
         }
