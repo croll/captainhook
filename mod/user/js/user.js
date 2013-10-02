@@ -258,8 +258,7 @@ setUser: function(resJSON,uid) {
 		}).send(myForm);
 	},
 	delUser: function(param) {
-		new CaptainHook.Message.Ask({
-			element: 'users',
+		CaptainHook.DialogConfirm.show('users', {
 			onConfirm: function() {
 				new Request.JSON({
 					'url': '/ajax/call/user/deleteUser',
