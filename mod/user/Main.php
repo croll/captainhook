@@ -12,7 +12,7 @@ class Main {
 
 	public static function checkAuth($login='',$password='') {
 		if ((!empty($login)) && (!empty($password))) {
-			if ( (preg_match("/^[a-zA-Z0-9-_\.]+$/",$login)) && (preg_match("/^[a-zA-Z0-9-_!]+$/",$password)) ) {
+			if ( (preg_match("/^[a-zA-Z0-9-_\.]+$/",$login)) && (preg_match("/^[a-zA-Z0-9-_!\.]+$/",$password)) ) {
 				$res = Core::$db->fetchAll('SELECT "full_name", "login" FROM "ch_user" WHERE UPPER("login")=UPPER(?) AND "pass"=md5(?) AND "status"=1',
 																		array($login, $password));
 				if (count($res)) {
