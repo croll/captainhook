@@ -27,6 +27,9 @@
 {/block}
 
 {block name='webpage_body'}
+  <div style="color: red; font-weight: bold">
+    {foreach from=$errors item=error}<p>{$error|escape}</p>{/foreach}
+  </div>
   <div style="margin: 15px">
     {foreach from=$languages item=l}
       <span class='langbutton' id='langbutton-{$l}' onclick='showlanguage("{$l}")'>{$l|escape}</span>

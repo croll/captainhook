@@ -8,6 +8,7 @@ class Main {
 		$page = new \mod\webpage\Main();
 
     $langs=self::loadLangsFiles();
+    $errors=Array();
 
     if (isset($_REQUEST['trad-submit'])) {
       $lang=$_REQUEST['lang'];
@@ -28,8 +29,12 @@ class Main {
       }
 
       $file=CH_MODDIR.'/'.$_REQUEST['modname'].'/lang/'.$_REQUEST['lang'].'.js';
-      file_put_contents($file, self::myjson_encode($langarray));
+      if (file_put_contents($file, self::myjson_encode($langarray)) === FALSE) {
+        $errors[]="Write FAILED on $file !";
+      }
     }
+
+    $page->smarty->assign('errors', $errors);
 
     $langs=self::loadLangsFiles();
 
