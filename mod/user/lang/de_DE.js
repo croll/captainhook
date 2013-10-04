@@ -1,5 +1,6 @@
 {
-  "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et ! )" : "(Gross- oder Kleinbuchstaben ohne Akzente, Zahlen, _ und .)",
+  "(Les mots de passe forts contiennent de 7 \u00e0 16 caract\u00e8res, ne comportent pas de mots ni de noms courants, et associent majuscules, minuscules, chiffres et symboles (_ .)." : false,
+  "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et !)" : false,
   "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)" : "(Gross- oder Kleinbuchstaben ohne Akzente, Zahlen, _ und .)",
   "Add user" : "Benutzer hinzuf\u00fcgen ",
   "Cancel" : "L\u00f6schen",
