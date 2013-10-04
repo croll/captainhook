@@ -18,7 +18,7 @@
   "User email" : "Benutzer e-Mail",
   "User full name" : "Bentuzer Name",
   "User is active" : "Benutzer aktiv",
-  "User login" : "Benutzer Passwort",
+  "User login" : "Benutzer login",
   "User password" : "Benutzer Passwort",
   "View" : "Einblenden",
   "You are already identified, redirecting..." : "You are already identified, redirecting..."
