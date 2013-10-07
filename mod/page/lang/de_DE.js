@@ -1,7 +1,7 @@
 {
-  "Accueil" : "Accueil",
+  "Accueil" : "Startseite",
   "Action" : "Action",
-  "Add" : "Add",
+  "Add" : "Hinzuf\u00fcgen",
   "Add page" : "Add page",
   "Cancel" : "Cancel",
   "Created" : "Created",
