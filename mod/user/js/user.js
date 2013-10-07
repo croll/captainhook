@@ -259,7 +259,6 @@ setUser: function(resJSON,uid) {
 	delUser: function(param) {
 		CaptainHook.DialogConfirm.show('users', {
 			onConfirm: function() {
-				console.log("ici");
 				new Request.JSON({
 					'url': '/ajax/call/user/deleteUser',
 					'onSuccess': function(resJSON, resText) {
