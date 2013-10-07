@@ -1,0 +1,222 @@
+/*
+    UI Tabs
+*/
+
+* {
+    margin :                    0px;
+    padding :                   0px;
+    font-family :               Verdana;
+    font-size :                 11px;
+}
+
+body {
+    padding :                   5px;
+}
+
+.ui-tabs {
+    position :                  relative;
+    overflow :                  hidden;
+    width :                     100%;
+    height :                    100%;
+}
+
+.ui-tabs .ui-tabs-container {
+    padding :                   0px 0px 2px 0px;
+    background :                transparent url('tabs/tab-bg.gif') repeat-x scroll left top;
+    border-bottom :             1px solid #8DB2E3;
+/*    overflow :                  hidden;*/
+}
+
+.ui-tabs .ui-scroller-left {
+    background :                transparent url('tabs/scroll-left.gif') no-repeat scroll -18px 0px;
+    border-bottom :             1px solid #8DB2E3;
+    cursor :                    pointer;
+    position :                  absolute;
+    top :                       0px;
+    left :                      0px;
+    width :                     18px;
+    height :                    21px;
+    z-index :                   10;
+    visibility :                hidden;
+}
+
+.ui-tabs .ui-scroller-left.over {
+    background-position :       0px 0px;
+}
+
+.ui-tabs .ui-scroller-left.visible {
+    visibility :                visible;
+}
+
+.ui-tabs .ui-scroller-right {
+    background :                transparent url('tabs/scroll-right.gif') no-repeat scroll;
+    border-bottom :             1px solid #8DB2E3;
+    cursor :                    pointer;
+    position :                  absolute;
+    top :                       0px;
+    right :                     0px;
+    width :                     18px;
+    height :                    21px;
+    z-index :                   10;
+    visibility :                hidden;
+}
+
+.ui-tabs .ui-scroller-right.visible {
+    visibility :                visible;
+}
+
+.ui-tabs .ui-scroller-right.over {
+    background-position :       -18px 0px;
+}
+
+.ui-tabs ul {
+    list-style :                none;
+    display :                   block;
+    height :                    21px;
+    width :                     5000px;
+    padding :                   0px 0px 0px 3px;
+    border-bottom :             1px solid #8DB2E3;
+}
+.ui-tabs ul.scroll {
+    padding :                   0px 0px 0px 18px;
+}
+
+.ui-tabs li {
+    float :                     left;
+    margin :                    1px 0px 0px 0px;
+    position :                  relative;
+}
+
+.ui-tabs li.ui-tab {
+    cursor :                    pointer;
+    background :                transparent;
+    font-family :               tahoma,verdana,helvetica;
+    font-size :                 11px;
+    border-left :               1px solid transparent;
+    border-right :              1px solid transparent;
+    padding :                   0px;
+}
+
+/* PANELS */
+
+.ui-tabs .ui-tabs-panels {
+    height :                    100%;
+}
+
+.ui-tabs .ui-tab-panel {
+    visibility :                hidden;
+    position :                  absolute;
+    overflow :                  auto;
+}
+
+.ui-tabs .ui-tab-panel.visible {
+    visibility :                visible;
+    position :                  relative;
+}
+
+/* TABS */
+
+li.ui-tab.disable {
+    cursor :                    default;
+}
+
+li.ui-tab span.left {
+    float :                     left;
+    padding :                   0 0 0 3px;
+    background :                url('tabs/tabs-sprite.gif') no-repeat left -50px;
+}
+
+li.ui-tab span.right {
+    float :                     left;
+    padding :                   0 3px 0 0;
+    background :                url('tabs/tabs-sprite.gif') no-repeat right -350px;
+}
+
+li.ui-tab span.middle {
+    float :                     left;
+    height :                    20px;
+    line-height :               20px;
+    padding :                   0px;
+    background :                url('tabs/tabs-sprite.gif') repeat-x 0px -200px;
+}
+
+li.ui-tab span.text {
+    float :                     none;
+    background :                transparent;
+    display :                   block;
+    padding :                   0px 3px;
+    margin :                    2px;
+    height :                    16px;
+    line-height :               16px;
+    color :                     #416AA3;
+}
+
+li.ui-tab span.text img {
+    vertical-align :            top;
+    margin :                    0px 3px 0px 0px;
+}
+
+li.ui-tab.over span.left {
+    background-position :       left -100px;
+}
+
+li.ui-tab.over span.right {
+    background-position :       right -400px;
+}
+
+li.ui-tab.over span.middle {
+    background-position :       0px -250px;
+}
+
+li.ui-tab.over span.text {
+    background :                transparent none;
+    color :                     #15428B;
+}
+
+/* ACTIVE */
+
+li.ui-tab.active.over span.left {
+    background-position :       left 0px;
+}
+
+li.ui-tab.active.over span.right {
+    background-position :       right -300px;
+}
+
+li.ui-tab.active.over span.middle {
+    background-position :       0px -150px;
+}
+
+li.ui-tab.active span.middle {
+    height :                    21px;
+    line-height :               20px;
+}
+
+li.ui-tab.active span.text {
+    display :                   block;
+    margin :                    2px;
+    height :                    16px;
+    line-height :               16px;
+
+    color :                     #15428B;
+    font-weight :               bold;
+}
+
+/* CLOSABLE + CLOSE BUTTON */
+
+li.ui-tab.closable span.text {
+    padding :                   0px 20px 0px 0px;
+}
+li.ui-tab .ui-tab-btn-close {
+    background-image :          url('tabs/tab-close.gif');
+    background-repeat :         no-repeat;
+    position :                  absolute;
+    cursor :                    pointer;
+    display :                   block;
+    height :                    11px;
+    opacity :                   0.6;
+    right :                     3px;
+    top :                       3px;
+    width :                     11px;
+    z-index :                   2;
+}
