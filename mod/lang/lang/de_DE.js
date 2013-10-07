@@ -1,4 +1,4 @@
 {
   "Deutsch" : "Deutsch",
-  "French" : "French"
+  "French" : "Franz\u00f6sische"
 }

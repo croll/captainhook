@@ -10,7 +10,7 @@
   "Del" : "Del",
   "Deutsch" : "Deutsch",
   "Edit" : "Edit",
-  "French" : "French",
+  "French" : "Franz\u00f6sische",
   "Is translation of" : "Is translation of",
   "Lang" : "Lang",
   "List" : "List",
