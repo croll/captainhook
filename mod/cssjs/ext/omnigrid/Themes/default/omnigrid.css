@@ -4,7 +4,7 @@
 
 .omnigrid{
 	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	font-size: 11px;
+	font-size: 9px;
 	position: relative;
 	border: 0px solid #eee;
 	overflow:hidden; /* za debug iskljuci */

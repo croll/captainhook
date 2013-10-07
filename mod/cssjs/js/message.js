@@ -73,17 +73,22 @@ CaptainHook.DialogConfirm.buildDialog = function(options) {
 	}
 	CaptainHook.DialogConfirm.dialog.setTitle(options.title);
 	CaptainHook.DialogConfirm.dialog.setBody(options.message);
+	if ($('#footerHack')) {
+		$('#footerHack').destroy();
+	}
+	CaptainHook.DialogConfirm.dialog.setFooter('<div id="footerHack"></div>');
 	var footer = new Element('div');
-	new Element('a')
-		.addClass('btn primary')
+	var a = new Element('a')
+		.addClass('btn btn-primary')
 		.set('text', options.labelOk)
-		.addEvent('click', function() {
-			console.log('ici');
+		.addEvent('click', function(e) {
+			e.preventDefault();
 			if (typeof options.onConfirm == 'function') options.onConfirm();
 			CaptainHook.DialogConfirm.dialog.fireEvent('confirm');
 			CaptainHook.DialogConfirm.dialog.hide();
 		})
 		.inject(footer);
+
 	new Element('a')
 		.addClass('btn')
 		.set('text', options.labelCancel)
@@ -92,7 +97,7 @@ CaptainHook.DialogConfirm.buildDialog = function(options) {
 			CaptainHook.DialogConfirm.dialog.hide();
 		})
 		.inject(footer);	
-	CaptainHook.DialogConfirm.dialog.setFooter(footer.innerHTML);
+		footer.inject($('footerHack'));
 
 	CaptainHook.DialogConfirm.dialog.show();
 };

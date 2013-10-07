@@ -99,7 +99,6 @@ setTabs: function(tabElement) {
 				var title= new Element('h3', {'html': this.getProperty('data-title')});
 				c.adopt(title);
 			}
-
 			if (url && this.getProperty('data-update')) {
 				var tab = new Request.JSON({
 					'url': url,
@@ -260,6 +259,7 @@ setUser: function(resJSON,uid) {
 	delUser: function(param) {
 		CaptainHook.DialogConfirm.show('users', {
 			onConfirm: function() {
+				console.log("ici");
 				new Request.JSON({
 					'url': '/ajax/call/user/deleteUser',
 					'onSuccess': function(resJSON, resText) {
