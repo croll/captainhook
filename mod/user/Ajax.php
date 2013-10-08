@@ -162,11 +162,11 @@ class Ajax {
 			return false;
 	}
 	$db=\core\Core::$db;
-	$dbParams= array();
 	// select right list that are not assignated to group admin
 	$q='SELECT u."uid", u."login", u."full_name", u."email", u."created", u."updated", u.status FROM "ch_user" u';
 	return $db->fetchAll($q, NULL);
   }
+
   public static function membersList($params) {
 	\mod\user\Main::redirectIfNotLoggedIn();
 	// check perm
@@ -202,6 +202,17 @@ class Ajax {
 	}
 	return \mod\user\Main::getUserInfos($params['uid']);
   }
+
+  public static function getUserListSimple($params) {
+	\mod\user\Main::redirectIfNotLoggedIn();
+	$q='SELECT "full_name" FROM "ch_user"';
+	$ret = array();
+	foreach(\core\Core::$db->fetchAll($q, NULL) as $u) {
+		$ret[] = $u['full_name'];
+	}
+	return $ret;
+  }
+  
   public static function getGroup($params) {
 	\mod\user\Main::redirectIfNotLoggedIn();
 	// check perm
