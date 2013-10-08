@@ -1,16 +1,16 @@
 {
-  "(Les mots de passe forts contiennent de 7 \u00e0 16 caract\u00e8res, ne comportent pas de mots ni de noms courants, et associent majuscules, minuscules, chiffres et symboles (_ .)." : false,
+  "(Les mots de passe forts contiennent de 7 \u00e0 16 caract\u00e8res, ne comportent pas de mots ni de noms courants, et associent majuscules, minuscules, chiffres et symboles (_ .)." : "Sichere Kennw\u00f6rter sind 7-16 Zeichen lang, enthalten keine h\u00e4ufigen W\u00f6rter oder Namen und bestehen aus mindestens drei der folgenden Zeichentypen: Grossbuchstaben, Kleinbuchstaben, Zahlen und Symbole(_ .).",
   "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et !)" : "(Gross- oder Kleinbuchstaben ohne Akzente, Zahlen, _ und .)",
   "(caract\u00e8res autoris\u00e9s lettres minuscules et majuscules, chiffres, _ et .)" : "(Gross- oder Kleinbuchstaben ohne Akzente, Zahlen, _ und .)",
   "Add user" : "Benutzer hinzuf\u00fcgen ",
   "Cancel" : "L\u00f6schen",
   "Connection" : "Anmelden",
   "Connexion" : "Anmelden",
-  "Identification invalide" : "Identification invalide",
-  "Login failed" : "Login failed",
-  "Login successful, redirecting..." : "Login successful, redirecting...",
+  "Identification invalide" : "Ung\u00fcltiger Login",
+  "Login failed" : "Login Fehlgeschlagen",
+  "Login successful, redirecting..." : "Erfolgreiche Anmeldung, weiterleitung...",
   "Logout" : "Abmelden",
-  "Logout ok, redirecting..." : "Logout ok, redirecting...",
+  "Logout ok, redirecting..." : "Erfolgreiche Abmeldung, weiterleitung...",
   "Manage users" : "Benutzerverwaltung",
   "Repeat password" : "Passwort wiederholen",
   "Save" : "Speichern",
@@ -21,5 +21,5 @@
   "User login" : "Benutzer login",
   "User password" : "Benutzer Passwort",
   "View" : "Einblenden",
-  "You are already identified, redirecting..." : "You are already identified, redirecting..."
+  "You are already identified, redirecting..." : "Sie sind bereits Angemeldet, weiterleitung..."
 }
