@@ -1,5 +1,5 @@
 {
-  "Add" : "hinzuf\u00fcgen",
+  "Add" : "Hinzuf\u00fcgen",
   "Captcha is invalid" : "Captcha ist falsch",
   "Categories" : "Anwendungsklasse",
   "Category" : "Kategorie",
