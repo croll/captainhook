@@ -100,6 +100,7 @@ Modal.Base = new Class({
 
     options: {
         id: "modal",
+        customclass: false,
         margin: 20,
         overlay: true,
         anyClose: true,
@@ -161,6 +162,7 @@ Modal.Base = new Class({
 
         // save references
         this.element = proxy.getFirst().store('modal', this).inject(this.container);
+        if (this.options.customclass) this.element.addClass(this.options.customclass);
         this.box = this.element.getElement('div.modal-box').set('morph', this.options.fx).setStyles({
             'opacity': 0
         });
