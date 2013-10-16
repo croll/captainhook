@@ -30,7 +30,7 @@
 */
 UI.Tabs= new Class ({
 
-    Implements : [ Options ],
+    Implements : [ Options, Events ],
 
     options : {
             container   : null
@@ -237,6 +237,9 @@ UI.Tabs= new Class ({
 
         if ( this.showScroll ) this.refreshScroll.delay( 20, this );
 
+        this.fireEvent('close', {
+            id: id
+        });
     },
 
 /*
