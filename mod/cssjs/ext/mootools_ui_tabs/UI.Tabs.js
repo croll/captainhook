@@ -424,7 +424,9 @@ UI.Tabs= new Class ({
     },
 
     shiftTab: function( fromId ) {
-        this.activateTab( this.tabs[ this.tabs[ ( this.tabs.indexOf( this.activeTab ) + 1 == this.tabs.length ? this.tabs.indexOf( this.activeTab ) - 1 : this.tabs.indexOf( fromId ) + 1 ) ] ].id );
+        var toactive=this.tabs[ this.tabs[ ( this.tabs.indexOf( this.activeTab ) + 1 == this.tabs.length ? this.tabs.indexOf( this.activeTab ) - 1 : this.tabs.indexOf( fromId ) + 1 ) ] ];
+        if (toactive)
+            this.activateTab(toactive.id);
     }
 
 } );
