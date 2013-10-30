@@ -5,23 +5,23 @@ namespace mod\page;
 class Main {
 
   public static function hook_mod_page_render($hookname, $userdata, $matches, $flags) {
-		// check perm 
+		// check perm
 		if (!\mod\user\Main::userHasRight('View page')) {
 			return false;
 		}
-		//get lang 
+		//get lang
 		$lang=\mod\lang\Main::getCurrentLang();
 		// get function params
-		$sysname=$matches[1]; 
-		// get page 
+		$sysname=$matches[1];
+		// get page
 		$view = \mod\page\Main::getPageBySysName($sysname);
 		$page = new \mod\webpage\Main();
-		// assign data to the smarty template 
+		// assign data to the smarty template
 		$page->smarty->assign('lang', $lang);
 		$page->smarty->assign('page', $view);
 		$page->smarty->assign('page_name', $sysname);
 		$page->smarty->assign('page_mode', 'view');
-    // as this function to be available both for http and ajax request set both layout options 
+    // as this function to be available both for http and ajax request set both layout options
 		//return $matches;
 		if ($flags & \mod\regroute\Main::flag_xmlhttprequest) {
 			$page->smarty->fetch('page/page');
@@ -31,22 +31,22 @@ class Main {
     }
   }
   public static function getTranslated($sysname, $lang) {
-    // check perm 
+    // check perm
     if (!\mod\user\Main::userHasRight('View page')) {
 			return false;
     }
     $db=\core\Core::$db;
 
-    // check if page is a translation of a page or a reference page 
+    // check if page is a translation of a page or a reference page
     $ilr=$db->fetchAll('SELECT "pid", "sysname", "id_lang_reference", "lang"  FROM "ch_page" WHERE "sysname"=?', array($sysname));
     $ilr = $ilr[0];
-    // if lang == lang then return sysname 
+    // if lang == lang then return sysname
     if ($ilr['lang'] == $lang) {
-      return $sysname; 
-    }	
+      return $sysname;
+    }
     $dbParams=array();
     if ($ilr['id_lang_reference'] == 0) {
-      // if idLangReference == 0 -> reference page 
+      // if idLangReference == 0 -> reference page
       $dbParams[]= $ilr['pid'];
       $dbParams[]= $lang;
       $trans= $db->fetchOne('SELECT "sysname" FROM "ch_page" WHERE "id_lang_reference"=? AND "lang"=?', $dbParams);
@@ -55,9 +55,9 @@ class Main {
       } else {
         return $sysname;
       }
-    } else {	
+    } else {
       // else -> is translation of a page
-      // get reference page 
+      // get reference page
       $myref= $db->fetchAll('SELECT "pid", "sysname", "id_lang_reference", "lang"  FROM "ch_page" WHERE "pid"=?', array($ilr['id_lang_reference']));
       if (!$myref) {
         return $sysname;
@@ -68,7 +68,7 @@ class Main {
       } else {
         $dbParams[]= $myref['pid'];
         $dbParams[]= $lang;
-        $tt = $db->fetchOne('SELECT "sysname" FROM "ch_page" WHERE "id_lang_reference"=? AND "lang"=?', $dbParams); 
+        $tt = $db->fetchOne('SELECT "sysname" FROM "ch_page" WHERE "id_lang_reference"=? AND "lang"=?', $dbParams);
         if (!$tt) {
           return $sysname;
         } else {
@@ -79,57 +79,57 @@ class Main {
   }
   public static function hook_mod_page_create($hookname, $userdata, $matches, $flags) {
 		\mod\user\Main::redirectIfNotLoggedIn();
-		// check perm 
+		// check perm
 		if (!\mod\user\Main::userHasRight('Manage page')) {
 			return false;
 		}
 		$db=\core\Core::$db;
 		// prepare data for storage
-		
+
 		$userId= \mod\user\Main::getUserId($_SESSION['login']);
-		
+
 		$dbParams=array();
-		$dbParams[]=$matches['name'];	
-		$dbParams[]= self::cleanMyString($matches['name']);	
-		$dbParams[]=(int)$userId;	
-		$dbParams[]=(int)$matches['published'];	
-		$dbParams[]=$matches['lang'];	
-		$dbParams[]=(int)$matches['id_lang_reference'];	
-		$dbParams[]=stripslashes(html_entity_decode($matches['content']));	
-		$dbParams[]=date("Y-m-d H:i:s");	
-		$dbParams[]=date("Y-m-d H:i:s");	
+		$dbParams[]=$matches['name'];
+		$dbParams[]= self::cleanMyString($matches['name']);
+		$dbParams[]=(int)$userId;
+		$dbParams[]=(int)$matches['published'];
+		$dbParams[]=$matches['lang'];
+		$dbParams[]=(int)$matches['id_lang_reference'];
+		$dbParams[]=stripslashes(html_entity_decode($matches['content']));
+		$dbParams[]=date("Y-m-d H:i:s");
+		$dbParams[]=date("Y-m-d H:i:s");
 		return $db->exec_returning("INSERT INTO ch_page (
-				name, 
-				sysname, 
-				authorid, 
-				published, 
-				lang, 
-				id_lang_reference, 
-				content, 
-				created, 
-				updated) VALUES 
+				name,
+				sysname,
+				authorid,
+				published,
+				lang,
+				id_lang_reference,
+				content,
+				created,
+				updated) VALUES
 					(?,?,?,?,?,?,?,?,?)", $dbParams, 'pid');
   }
   public static function hook_mod_page_update($hookname, $userdata, $matches, $flags) {
     \mod\user\Main::redirectIfNotLoggedIn();
-		// check perm 
+		// check perm
 		if (!\mod\user\Main::userHasRight('Manage page')) {
 			return false;
 		}
 		$db=\core\Core::$db;
 		// prepare data for storage
 		$dbParams=array();
-		$dbParams[]=$matches['name'];	
-		$dbParams[]=self::cleanMyString($matches['name']);;	
-		$dbParams[]=(int)$matches['published'];	
-		$dbParams[]=$matches['lang'];	
-		$dbParams[]=(int)$matches['id_lang_reference'];	
+		$dbParams[]=$matches['name'];
+		$dbParams[]=self::cleanMyString($matches['name']);;
+		$dbParams[]=(int)$matches['published'];
+		$dbParams[]=$matches['lang'];
+		$dbParams[]=(int)$matches['id_lang_reference'];
 
 		$dbParams[]=stripslashes(html_entity_decode($matches['content']));
-		$dbParams[]=date("Y-m-d H:i:s");	
-		$dbParams[]=(int)$matches['pid'];	
+		$dbParams[]=date("Y-m-d H:i:s");
+		$dbParams[]=(int)$matches['pid'];
 
-		$query= $db->query("UPDATE ch_page 
+		$query= $db->query("UPDATE ch_page
 				    SET name=?,
 					sysname=?,
 					published=?,
@@ -142,14 +142,14 @@ class Main {
 	}
   public static function hook_mod_page_edit($hookname, $userdata, $matches, $flags) {
     \mod\user\Main::redirectIfNotLoggedIn();
-		// check perm 
+		// check perm
 		if (!\mod\user\Main::userHasRight('Manage page')) {
 			return false;
 		}
-		$pid=$matches[1]; 
+		$pid=$matches[1];
 		$view = self::getPageById($pid);
     $page = new \mod\webpage\Main();
-		//get lang 
+		//get lang
 		$lang=\mod\lang\Main::getCurrentLang();
 		$ll= array();
 		if (isset($pid)) {
@@ -170,7 +170,7 @@ class Main {
     }
   }
   public static function idLangReference($params) {
-    // check perm 
+    // check perm
     if (!\mod\user\Main::userHasRight('Manage page')) {
 			return false;
     }
@@ -179,16 +179,16 @@ class Main {
     $dbParams[]=$params['lang'];
     return $db->fetchAll("SELECT pid, sysname, name, lang FROM ch_page WHERE lang != ?", $dbParams);
   }
-  
+
   public static function hook_mod_page_list($hookname, $userdata, $matches, $flags) {
 		\mod\user\Main::redirectIfNotLoggedIn();
-		
-		// check perm 
+
+		// check perm
 		if (!\mod\user\Main::userHasRight('Manage page')) {
 			return false;
 		}
-		// check for optionals parameters 
-		if (isset($matches[1])) {	
+		// check for optionals parameters
+		if (isset($matches[1])) {
 			$check=split('/', $matches[1]);
 			$params=array();
 			for ($i=0; $i <= count($check); $i++) {
@@ -200,7 +200,7 @@ class Main {
 			}
 			if ($params["sort"]) {
 				$sort = $params["sort"];
-			}	
+			}
 			if ($params["maxrow"] && (int)$params["maxrow"]) {
 				$maxrow=$params["maxrow"];
 			}
@@ -210,10 +210,10 @@ class Main {
 			if ($params["filter"]) {
 				$filter=$params["filter"];
 			}
-		}	
-		// set default list parameter 
-		if (!isset($sort)) $sort="updated_desc";		
-		if (!isset($maxrow)) $maxrow= 10;		
+		}
+		// set default list parameter
+		if (!isset($sort)) $sort="updated_desc";
+		if (!isset($maxrow)) $maxrow= 10;
 		if (!isset($offset)) $offset= 0;
     $page = new \mod\webpage\Main();
 		$db=\core\Core::$db;
@@ -226,17 +226,17 @@ class Main {
 				//var_dump($filters);
 				$fd=split(':', $filters[$i]);
 				if ($fd[0] == 'login') {
-				 	$mid .=" AND u.login = ?";	
+				 	$mid .=" AND u.login = ?";
 					$dbParams[]=$fd[1];
 				} else if ($fd[0] == 'name') {
-				 	$mid .=" AND p.name = ?";	
+				 	$mid .=" AND p.name = ?";
 					$dbParams[]=$fd[1];
 
 				} else if ($fd[0] == 'published') {
-				 	$mid .=" AND p.published = ?";	
+				 	$mid .=" AND p.published = ?";
 					$dbParams[]=(int)$fd[1];
 				} else if ($fd[0] == 'lang') {
-				 	$mid .=" AND p.lang = ?";	
+				 	$mid .=" AND p.lang = ?";
 					if ($fd[1]==0) {
 						$dbParams[]="fr_FR";
 					} else {
@@ -244,9 +244,9 @@ class Main {
 					}
 				} else if ($fd[0] == 'id_lang_reference') {
 					if ($fd[1]==0) {
-				 		$mid .=" AND p.id_lang_reference = ?";	
+				 		$mid .=" AND p.id_lang_reference = ?";
 					} else {
-				 		$mid .=" AND p.id_lang_reference != ?";	
+				 		$mid .=" AND p.id_lang_reference != ?";
 					}
 					$dbParams[]=0;
 				}
@@ -254,18 +254,18 @@ class Main {
 		}
 		$dbParams[]=(int)$maxrow;
 		$dbParams[]=(int)$offset;
-		
-		// mysql version	
+
+		// mysql version
 		//$q="SELECT p.`pid`, p.`sysname`, p.`name`, p.`authorId`, u.`login`, u.`full_name`, p.`published`, p.`created`, p.`updated` FROM `ch_page` p, `ch_user` u WHERE p.`authorId` = u.`uid` ORDER BY ? LIMIT ?,?".$mid;
 		$q="SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.lang, p.id_lang_reference, p.created, p.updated FROM ch_page p, ch_user u WHERE p.authorid = u.uid";
 		$q .= $mid;
 		$q .= self::order_by($sort);
 		$q .=" LIMIT ? OFFSET ?";
-		$list = $db->fetchAll($q, $dbParams); 
-		
-		// quant mysql version 
+		$list = $db->fetchAll($q, $dbParams);
+
+		// quant mysql version
 		//$q2="SELECT count(p.`pid`) as `quant` FROM `ch_page` p, `ch_user` u WHERE p.`authorId` = u.`uid`";
-		
+
 		$q2="SELECT count(p.pid) as quant FROM ch_page p, ch_user u WHERE p.authorid = u.uid";
 		$quant= $db->fetchOne($q2, NULL);
 		// get lang
@@ -297,7 +297,7 @@ class Main {
 		$sorted = self::dbSort($sort);
 		$q =" ORDER BY ".$sorted;
 		return $q;
-  }  
+  }
   public static function getPageBySysName($name) {
 		if (!\mod\user\Main::userHasRight('View page')) {
 			return false;
@@ -314,11 +314,11 @@ class Main {
 		//mysql
 		//$result = $db->query('SELECT p.`pid`, p.`sysname`, p.`name`, p.`authorId`, u.`login`, u.`full_name`, p.`published`, p.`created`, p.`updated`, p.`content` FROM `ch_page` p, ch_user u WHERE `pid`=?', array((int)$id));
 		//postgresql
-		
-		$result = $db->query('SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.lang, p.id_lang_reference, p.created, p.updated, p.content FROM ch_page p, ch_user u WHERE pid=?', array($id));
+
+		$result = $db->query('SELECT p.pid, p.sysname, p.name, p.authorid, u.login, u.full_name, p.published, p.lang, p.id_lang_reference, p.created, p.updated, p.content FROM ch_page p LEFT JOIN ch_user u ON u.uid = p.authorid WHERE pid=?', array($id));
     return $result->fetchRow();
   }
-  /** 
+  /**
   * Clean my string.
   *
   * @param string String to be cleaned
@@ -328,20 +328,20 @@ class Main {
   *
   */
 
-  public static function cleanMyString($msg, $toUrl=false) { 
-  	if (empty($msg)) return false; 
-                $msg = self::removeAccents($msg); 
-                $msg = str_replace("'", '_', $msg); 
-                $msg = str_replace('%20', ' ', $msg); 
-                $msg = preg_replace('~[^\\pL0-9-]+~u', '_', $msg); 
-                $msg = trim($msg, "_"); 
-                $msg = strtolower($msg); 
-                $msg = preg_replace('~[^_a-z0-9-]+~', '', $msg); 
-                if ($toUrl) { 
-                        $msg = iconv("utf-8", "us-ascii//TRANSLIT", $msg); 
-                        $msg = str_replace('_', '-', $msg); 
-                } 
-                return $msg; 
+  public static function cleanMyString($msg, $toUrl=false) {
+  	if (empty($msg)) return false;
+                $msg = self::removeAccents($msg);
+                $msg = str_replace("'", '_', $msg);
+                $msg = str_replace('%20', ' ', $msg);
+                $msg = preg_replace('~[^\\pL0-9-]+~u', '_', $msg);
+                $msg = trim($msg, "_");
+                $msg = strtolower($msg);
+                $msg = preg_replace('~[^_a-z0-9-]+~', '', $msg);
+                if ($toUrl) {
+                        $msg = iconv("utf-8", "us-ascii//TRANSLIT", $msg);
+                        $msg = str_replace('_', '-', $msg);
+                }
+                return $msg;
         }
   public static function removeAccents($msg) {
                 if (empty($msg)) return false;
@@ -349,5 +349,5 @@ class Main {
                 $replace = explode(",","c,ae,oe,a,e,i,o,u,a,e,i,o,u,a,e,i,o,u,y,a,e,i,o,u,a,e,i,o,u");
                 return str_replace($search, $replace, $msg);
   }
-	
+
 }
