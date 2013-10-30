@@ -1,1 +1,1 @@
-{l s='Home'}
+{t mod='smarty' s='Home'}
