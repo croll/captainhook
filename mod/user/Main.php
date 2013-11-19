@@ -375,6 +375,8 @@ class Main {
 		$params = array('mod' => 'user', 'file' => 'templates/loginForm.json');
 		$form = new \mod\form\Form($params);
 		$page = new \mod\webpage\Main();
+		$lang=\mod\lang\Main::getCurrentLang();
+		$page->smarty->assign('lang', $lang);
 		$page->setLayout('user/login');
 		if (!self::userIsLoggedIn()) {
 			if ($form->isPosted() && $form->validate()) {
@@ -399,6 +401,10 @@ class Main {
 	public static function hook_mod_user_logout() {
 		self::logout();
 		$page = new \mod\webpage\Main();
+		$lang=\mod\lang\Main::getCurrentLang();
+		$page->smarty->assign('lang', $lang);
+
+		echo 'ICI';
 		$page->setLayout('user/login');
 		$page->smarty->assign('logout', true);
 		$page->smarty->assign('url_redirect', 'http://'.$_SERVER['HTTP_HOST']);
@@ -410,7 +416,6 @@ class Main {
 			return "error Manage user ";
 		}
 		$page = new \mod\webpage\Main();
-		// get lang
 		$lang=\mod\lang\Main::getCurrentLang();
 		$page->smarty->assign('lang', $lang);
 
